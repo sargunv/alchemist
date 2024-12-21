@@ -119,13 +119,31 @@ class SaturatingLongTest {
     }
 
     @Test
-    fun dividing_positive_infinity_by_a_value_produces_positive_infinity() {
+    fun dividing_positive_infinity_by_a_positive_value_produces_positive_infinity() {
         assertEquals(POSITIVE_INFINITY, POSITIVE_INFINITY / 2L)
     }
 
     @Test
-    fun dividing_negative_infinity_by_a_value_produces_negative_infinity() {
+    fun dividing_positive_infinity_by_negative_value_produces_negative_infinity() {
+        assertEquals(NEGATIVE_INFINITY, POSITIVE_INFINITY / -1L)
+    }
+
+    @Test
+    fun dividing_negative_infinity_by_a_positive_value_produces_negative_infinity() {
         assertEquals(NEGATIVE_INFINITY, NEGATIVE_INFINITY / 2L)
+    }
+
+    @Test
+    fun dividing_negative_infinity_by_negative_value_produces_positive_infinity() {
+        assertEquals(POSITIVE_INFINITY, NEGATIVE_INFINITY / -1L)
+    }
+
+    @Test
+    fun dividing_finite_value_by_infinite_value_produces_zero() {
+        assertEquals(0L.saturated, (Long.MAX_VALUE - 1).saturated / POSITIVE_INFINITY)
+        assertEquals(0L.saturated, (Long.MAX_VALUE - 1).saturated / NEGATIVE_INFINITY)
+        assertEquals(0L.saturated, (Long.MIN_VALUE + 1).saturated / POSITIVE_INFINITY)
+        assertEquals(0L.saturated, (Long.MIN_VALUE + 1).saturated / NEGATIVE_INFINITY)
     }
 
     @Test

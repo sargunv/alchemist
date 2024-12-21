@@ -82,7 +82,8 @@ public value class SaturatingLong internal constructor(internal val rawValue: Lo
         isInfinite() && other.isInfinite() -> {
             throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
-        isInfinite() -> this
+        isInfinite() -> this * other.sign
+        other.isInfinite() -> SaturatingLong(0)
         else -> SaturatingLong(rawValue / other.rawValue)
     }
 
@@ -98,7 +99,8 @@ public value class SaturatingLong internal constructor(internal val rawValue: Lo
         isInfinite() && other.isInfinite() -> {
             throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
-        isInfinite() -> this
+        isInfinite() -> this * other.sign
+        other.isInfinite() -> SaturatingLong(0)
         else -> SaturatingLong(rawValue % other.rawValue)
     }
 

@@ -7,7 +7,7 @@ import kotlin.time.Duration
  * Represents a measure of distance and is capable of storing ±9.2 million kilometers at nanometer precision.
  */
 @JvmInline
-public value class Distance internal constructor(private val rawNanometers: SaturatingLong) : Comparable<Distance> {
+public value class Distance internal constructor(internal val rawNanometers: SaturatingLong) : Comparable<Distance> {
 
     /**
      * Returns the constant [Velocity] required to travel this distance in the specified [duration].
@@ -189,15 +189,19 @@ public value class Distance internal constructor(private val rawNanometers: Satu
      * Returns a string representation of this distance expressed in its [metric][DistanceUnit.International] components.
      */
     public override fun toString(): String {
-        val largestUnit = DistanceUnit.International.entries.asReversed().first { unit ->
+        val largestUnit = DistanceUnit.International.entries.asReversed().firstOrNull { unit ->
             rawNanometers.absoluteValue / unit.nanometerScale > 0
         }
-        return toString(largestUnit)
+        return toString(largestUnit ?: DistanceUnit.International.Nanometer)
     }
 
     public override fun compareTo(other: Distance): Int {
         return rawNanometers.compareTo(other.rawNanometers)
     }
+
+    public fun isInfinite(): Boolean = this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
+
+    public fun isFinite(): Boolean = !isInfinite()
 
     public companion object {
 
