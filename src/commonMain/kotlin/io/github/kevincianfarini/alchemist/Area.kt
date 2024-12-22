@@ -11,7 +11,7 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     /**
      * Returns the resulting length after dividing this area by the specified [length].
      *
-     * This operation attempts to retain precision, but for sufficiently large values of either this area some precision
+     * This operation attempts to retain precision, but for sufficiently large values of this area some precision
      * may be lost.
      *
      * @throws IllegalArgumentException if both this area and [length] are infinite.
