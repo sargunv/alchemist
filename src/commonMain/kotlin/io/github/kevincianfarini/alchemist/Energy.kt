@@ -239,10 +239,10 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
     }
 
     public override fun toString(): String {
-        val largestUnit = EnergyUnit.International.entries.asReversed().first { unit ->
+        val largestUnit = EnergyUnit.International.entries.asReversed().firstOrNull { unit ->
             rawMillijoules.absoluteValue / unit.millijouleScale > 0
         }
-        return toString(largestUnit)
+        return toString(largestUnit ?: EnergyUnit.International.Millijoule)
     }
 
     public override fun compareTo(other: Energy): Int {

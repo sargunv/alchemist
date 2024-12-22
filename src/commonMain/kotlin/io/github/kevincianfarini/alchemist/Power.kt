@@ -106,10 +106,10 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
     }
 
     override fun toString(): String {
-        val largestUnit = PowerUnit.International.entries.asReversed().first { unit ->
+        val largestUnit = PowerUnit.International.entries.asReversed().firstOrNull() { unit ->
             rawMicrowatts.absoluteValue / unit.microwattScale > 0
         }
-        return toString(largestUnit)
+        return toString(largestUnit ?: PowerUnit.International.Microwatt)
     }
 
     public override fun compareTo(other: Power): Int {
