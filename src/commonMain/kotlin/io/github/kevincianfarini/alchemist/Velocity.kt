@@ -37,9 +37,9 @@ public value class Velocity internal constructor(private val rawNanometersPerSec
     public operator fun plus(other: Velocity): Velocity = TODO()
 
     /**
-     * Returns the [Distance] traveled at this velocity for the specified [duration].
+     * Returns the [Length] traveled at this velocity for the specified [duration].
      */
-    public operator fun times(duration: Duration): Distance = TODO()
+    public operator fun times(duration: Duration): Length = TODO()
 
     /**
      * Returns a velocity whose value is multiplied by the specified [scale].

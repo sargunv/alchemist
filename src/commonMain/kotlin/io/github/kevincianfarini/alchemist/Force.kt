@@ -36,9 +36,9 @@ public value class Force internal constructor(private val foo: Long) {
     public operator fun plus(other: Force): Force = TODO()
 
     /**
-     * Returns the amount of [Energy] required to apply this force over the specified [distance].
+     * Returns the amount of [Energy] required to apply this force over the specified [length].
      */
-    public operator fun times(distance: Distance): Energy = TODO()
+    public operator fun times(length: Length): Energy = TODO()
 
     /**
      * Returns a force whose value is multiplied by the specified [scale].

@@ -158,7 +158,7 @@ public fun Long.toPower(unit: PowerUnit): Power {
 }
 
 /**
- * A unit of distance precise to the microwatt.
+ * A unit of power precise to the microwatt.
  */
 public interface PowerUnit {
 

@@ -9,14 +9,14 @@ import kotlin.jvm.JvmInline
 public value class Area internal constructor(private val rawMillimetersSquared: SaturatingLong) : Comparable<Area> {
 
     /**
-     * Returns the resulting distance after dividing this area by the specified [distance].
+     * Returns the resulting length after dividing this area by the specified [length].
      *
      * This operation attempts to retain precision, but for sufficiently large values of either this area some precision
      * may be lost.
      *
-     * @throws IllegalArgumentException if both this area and [distance] are infinite.
+     * @throws IllegalArgumentException if both this area and [length] are infinite.
      */
-    public operator fun div(distance: Distance): Distance {
+    public operator fun div(length: Length): Length {
         // Try to find the right level which we can perform this operation at without losing precision.
         // --------------------------------------------------------------------------------------------
         // 1 nanometer² / 1 nanometer is 1 nanometer
@@ -24,10 +24,10 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
         // 1 millimeter² / 1 nanometer is 1,000,000,000,000 nanometers.
         // --------------------------------------------------------------------------------------------
         val nano2 = rawMillimetersSquared * 1_000_000_000_000
-        if (nano2.isFinite()) return Distance(nano2 / distance.rawNanometers)
+        if (nano2.isFinite()) return Length(nano2 / length.rawNanometers)
         val micro2 = rawMillimetersSquared * 1_000_000
-        if (micro2.isFinite()) return Distance((micro2 / distance.rawNanometers) * 1_000_000)
-        return Distance((rawMillimetersSquared / distance.rawNanometers) * 1_000_000_000_000)
+        if (micro2.isFinite()) return Length((micro2 / length.rawNanometers) * 1_000_000)
+        return Length((rawMillimetersSquared / length.rawNanometers) * 1_000_000_000_000)
     }
 
     /**
@@ -58,9 +58,9 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     public operator fun plus(other: Area): Area = Area(rawMillimetersSquared + other.rawMillimetersSquared)
 
     /**
-     * Returns the resulting [Volume] after applying this area over the specified [distance].
+     * Returns the resulting [Volume] after applying this area over the specified [length].
      */
-    public operator fun times(distance: Distance): Volume = TODO()
+    public operator fun times(length: Length): Volume = TODO()
 
     /**
      * Returns an area whose value is multiplied by the specified [scale].

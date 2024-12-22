@@ -5,49 +5,49 @@ import kotlin.test.*
 class AreaTest {
 
     @Test
-    fun infinite_area_div_finite_distance_is_infinite() {
-        assertEquals(Distance.POSITIVE_INFINITY, Area.POSITIVE_INFINITY / 1.nanometers)
-        assertEquals(Distance.NEGATIVE_INFINITY, Area.POSITIVE_INFINITY / (-1).nanometers)
-        assertEquals(Distance.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY / 1.nanometers)
-        assertEquals(Distance.POSITIVE_INFINITY, Area.NEGATIVE_INFINITY / (-1).nanometers)
+    fun infinite_area_div_finite_length_is_infinite() {
+        assertEquals(Length.POSITIVE_INFINITY, Area.POSITIVE_INFINITY / 1.nanometers)
+        assertEquals(Length.NEGATIVE_INFINITY, Area.POSITIVE_INFINITY / (-1).nanometers)
+        assertEquals(Length.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY / 1.nanometers)
+        assertEquals(Length.POSITIVE_INFINITY, Area.NEGATIVE_INFINITY / (-1).nanometers)
     }
 
     @Test
-    fun finite_area_div_infinite_distance_is_zero() {
-        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / Distance.POSITIVE_INFINITY)
-        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / Distance.NEGATIVE_INFINITY)
-        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / Distance.POSITIVE_INFINITY)
-        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / Distance.NEGATIVE_INFINITY)
+    fun finite_area_div_infinite_length_is_zero() {
+        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / Length.POSITIVE_INFINITY)
+        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / Length.NEGATIVE_INFINITY)
+        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / Length.POSITIVE_INFINITY)
+        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / Length.NEGATIVE_INFINITY)
     }
 
     @Test
-    fun infinite_area_div_infinite_distance_throws() {
+    fun infinite_area_div_infinite_length_throws() {
         assertFailsWith<IllegalArgumentException> {
-            Area.POSITIVE_INFINITY / Distance.POSITIVE_INFINITY
+            Area.POSITIVE_INFINITY / Length.POSITIVE_INFINITY
         }
         assertFailsWith<IllegalArgumentException> {
-            Area.NEGATIVE_INFINITY / Distance.POSITIVE_INFINITY
+            Area.NEGATIVE_INFINITY / Length.POSITIVE_INFINITY
         }
         assertFailsWith<IllegalArgumentException> {
-            Area.NEGATIVE_INFINITY / Distance.NEGATIVE_INFINITY
+            Area.NEGATIVE_INFINITY / Length.NEGATIVE_INFINITY
         }
         assertFailsWith<IllegalArgumentException> {
-            Area.POSITIVE_INFINITY / Distance.NEGATIVE_INFINITY
+            Area.POSITIVE_INFINITY / Length.NEGATIVE_INFINITY
         }
     }
 
     @Test
-    fun nano2_precision_div_distance_is_accurate() {
+    fun nano2_precision_div_length_is_accurate() {
         assertEquals(123_000_000_000_000.nanometers, 123.mm2 / 1.nanometers)
     }
 
     @Test
-    fun micro2_precision_div_distance_is_accurate() {
+    fun micro2_precision_div_length_is_accurate() {
         assertEquals(9_223_373.millimeters, 9_223_373.mm2 / 1.millimeters)
     }
 
     @Test
-    fun milli2_precision_div_distance_is_accurate() {
+    fun milli2_precision_div_length_is_accurate() {
         assertEquals(1.kilometers, 9_223_373_000_000.mm2 / 9_223_373_000_000.nanometers)
     }
 

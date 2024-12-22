@@ -5,13 +5,13 @@ physical quantities defined in the [International System of Units](https://en.wi
 
 ```kt
 val time: Duration = 10.seconds
-val distance: Distance = 10.kilometers
-val velocity: Velocity = distance / time
+val length: Length = 10.kilometers
+val velocity: Velocity = length / time
 val acceleration: Acceleration = velocity / time
 val mass: Mass = 10.kilograms
 val force: Force = acceleration * mass
-val energy: Energy = force * distance
+val energy: Energy = force * length 
 val power: Power = energy / time
-val area: Area = distance * distance
-val volume: Volume = distance * distance * distance
+val area: Area = length * length 
+val volume: Volume = length * length * length 
 ```

@@ -6,14 +6,14 @@ import kotlin.jvm.JvmInline
 public value class Volume internal constructor(private val foo: Long) {
 
     /**
-     * Returns the resulting [Distance] after dividing this volume over the specified [area].
+     * Returns the resulting [Length] after dividing this volume over the specified [area].
      */
-    public operator fun div(area: Area): Distance = TODO()
+    public operator fun div(area: Area): Length = TODO()
 
     /**
-     * Returns the resulting [Area] after dividing this volume over the specified [distance].
+     * Returns the resulting [Area] after dividing this volume over the specified [length].
      */
-    public operator fun div(distance: Distance): Area = TODO()
+    public operator fun div(length: Length): Area = TODO()
 
     /**
      * Returns the number that is the ratio of this and the [other] volume value.

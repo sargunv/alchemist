@@ -12,9 +12,9 @@ import kotlin.time.Duration.Companion.nanoseconds
 public value class Energy internal constructor(private val rawMillijoules: SaturatingLong) : Comparable<Energy> {
 
     /**
-     * Returns the constant [Force] applied over the specified [distance] required to expend this amount of energy.
+     * Returns the constant [Force] applied over the specified [length] required to expend this amount of energy.
      */
-    public operator fun div(distance: Distance): Force = TODO()
+    public operator fun div(length: Length): Force = TODO()
 
     /**
      * Returns the constant [Power] applied over the specified [duration] to generate this amount of energy.
