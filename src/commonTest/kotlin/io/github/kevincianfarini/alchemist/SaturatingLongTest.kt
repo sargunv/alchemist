@@ -83,6 +83,16 @@ class SaturatingLongTest {
     }
 
     @Test
+    fun adding_to_negative_infinity_produces_negative_infinity() {
+        assertEquals(NEGATIVE_INFINITY, NEGATIVE_INFINITY + 50_000L.saturated)
+    }
+
+    @Test
+    fun subtracting_from_positive_infinity_produces_positive_infinity() {
+        assertEquals(POSITIVE_INFINITY, POSITIVE_INFINITY - 50_000L.saturated)
+    }
+
+    @Test
     fun subtracting_from_negative_infinity_produces_negative_infinity() {
         assertEquals(NEGATIVE_INFINITY, NEGATIVE_INFINITY - 50_000L.saturated)
     }

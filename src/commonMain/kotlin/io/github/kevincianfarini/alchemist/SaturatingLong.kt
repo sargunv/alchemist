@@ -19,6 +19,7 @@ public value class SaturatingLong internal constructor(internal val rawValue: Lo
     internal operator fun plus(other: SaturatingLong): SaturatingLong = when {
         isInfinite() && isPositive() && other.isInfinite() && other.isPositive() -> POSITIVE_INFINITY
         isInfinite() && isNegative() && other.isInfinite() && other.isNegative() -> NEGATIVE_INFINITY
+        isInfinite() && other.isFinite() -> this
         isInfinite() && other.isInfinite() -> {
             throw IllegalArgumentException("Summing infinite values of different signs yields an undefined result.")
         }

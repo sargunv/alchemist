@@ -11,6 +11,9 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     /**
      * Returns the resulting distance after dividing this area by the specified [distance].
      *
+     * This operation attempts to retain precision, but for sufficiently large values of either this area some precision
+     * may be lost.
+     *
      * @throws IllegalArgumentException if both this area and [distance] are infinite.
      */
     public operator fun div(distance: Distance): Distance {
@@ -86,8 +89,8 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
             millimetersSquared: Long,
         ) -> T,
     ): T {
-        val mega = rawMillimetersSquared / AreaUnit.International.MeterSquared.millimetersSquaredScale
-        val megaRemainder = rawMillimetersSquared % AreaUnit.International.MeterSquared.millimetersSquaredScale
+        val mega = rawMillimetersSquared / AreaUnit.International.MegameterSquared.millimetersSquaredScale
+        val megaRemainder = rawMillimetersSquared % AreaUnit.International.MegameterSquared.millimetersSquaredScale
         val kilo = megaRemainder / AreaUnit.International.KilometerSquared.millimetersSquaredScale
         val kiloRemainder = megaRemainder % AreaUnit.International.KilometerSquared.millimetersSquaredScale
         val meters = kiloRemainder / AreaUnit.International.MeterSquared.millimetersSquaredScale
@@ -103,10 +106,10 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     }
 
     public override fun toString(): String {
-        val largestUnit = AreaUnit.International.entries.asReversed().first { unit ->
+        val largestUnit = AreaUnit.International.entries.asReversed().firstOrNull { unit ->
             rawMillimetersSquared.absoluteValue / unit.millimetersSquaredScale > 0
         }
-        return toString(largestUnit)
+        return toString(largestUnit ?: AreaUnit.International.MillimeterSquared)
     }
 
     public override fun compareTo(other: Area): Int {
@@ -115,7 +118,7 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
 
     public fun isInfinite(): Boolean = this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
 
-    public fun isfinite(): Boolean = !isInfinite()
+    public fun isFinite(): Boolean = !isInfinite()
 
     public companion object {
         public val POSITIVE_INFINITY: Area = Area(SaturatingLong.POSITIVE_INFINITY)
