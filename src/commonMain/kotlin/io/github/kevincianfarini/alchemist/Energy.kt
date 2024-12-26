@@ -41,7 +41,7 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
         val nanojoules = microjoules * 1_000
         val picojoules = nanojoules * 1_000
         val femtojoules = picojoules * 1_000
-        val durationPreciseToNanosecond = duration == duration.inWholeNanoseconds.nanoseconds
+        val durationPreciseToNanosecond = duration.isPreciseToNanosecond()
         return when {
             rawMillijoules.isInfinite() && duration.isInfinite() -> {
                 throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")

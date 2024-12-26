@@ -106,7 +106,7 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
     }
 
     override fun toString(): String {
-        val largestUnit = PowerUnit.International.entries.asReversed().firstOrNull() { unit ->
+        val largestUnit = PowerUnit.International.entries.asReversed().firstOrNull { unit ->
             rawMicrowatts.absoluteValue / unit.microwattScale > 0
         }
         return toString(largestUnit ?: PowerUnit.International.Microwatt)
@@ -203,10 +203,4 @@ private fun Duration.toEnergyComponents(
     val micros = millisRemainder.inWholeMicroseconds
     val nanos = (millisRemainder - micros.microseconds).inWholeNanoseconds
     return action(seconds / 1_000, seconds % 1_000, millis, micros, nanos)
-}
-
-private val Duration.sign: Int get() = when {
-    isPositive() -> 1
-    isNegative() -> -1
-    else -> 0
 }

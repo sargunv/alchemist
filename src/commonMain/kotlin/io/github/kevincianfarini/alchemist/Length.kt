@@ -11,8 +11,83 @@ public value class Length internal constructor(internal val rawNanometers: Satur
 
     /**
      * Returns the constant [Velocity] required to travel this length in the specified [duration].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this length or the
+     * other [duration], some precision may be lost.
+     *
+     * @throws IllegalArgumentException if both this length and [duration] are infinite.
      */
-    public operator fun div(duration: Duration): Velocity = TODO()
+    public operator fun div(duration: Duration): Velocity = when {
+        rawNanometers.isInfinite() && duration.isInfinite() ->  {
+            throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
+        }
+        rawNanometers.isInfinite() -> Velocity(rawNanometers * duration.sign)
+        duration.isInfinite() -> Velocity(0L.saturated)
+        else -> calculateVelocity(duration)
+    }
+
+    private fun calculateVelocity(duration: Duration): Velocity {
+        // Try to find the right level which we can perform this operation at without losing precision.
+        val picometers = rawNanometers * 1_000
+        val femtometers = picometers * 1_000
+        val attometers = femtometers * 1_000
+        val durationPreciseToNanosecond = duration.isPreciseToNanosecond()
+        if (durationPreciseToNanosecond) {
+            val ns = duration.inWholeNanoseconds
+            val attoPrecision = attometersPerNs(attometers, ns)
+            if (attoPrecision.isFinite()) return attoPrecision
+            val femtoPrecision = femtosPerNs(femtometers, ns)
+            if (femtoPrecision.isFinite()) return femtoPrecision
+            val picoNsPrecision = picosPerNs(picometers, ns)
+            if (picoNsPrecision.isFinite()) return picoNsPrecision
+            val nanosNsPrecision = nanosPerNs(rawNanometers, ns)
+            if (nanosNsPrecision.isFinite()) return nanosNsPrecision
+        }
+        val ms = duration.inWholeMilliseconds
+        val picoMsPrecision = picosPerMs(picometers, ms)
+        if (picoMsPrecision.isFinite()) return picoMsPrecision
+        val nanosMsPrecision = nanosPerMs(rawNanometers, ms)
+        if (nanosMsPrecision.isFinite()) return nanosMsPrecision
+        return Velocity((rawNanometers / ms) * 1_000)
+    }
+
+    private fun nanosPerMs(nanos: SaturatingLong, ms: Long): Velocity {
+        // 1 nanometer per 1 millisecond is 1,000 nanometers / second.
+        val nanosPerMs = nanos / ms
+        val picoRemainder = (nanos % ms) * 1_000
+        return (nanosPerMs * 1_000).nmPerSecond + picosPerMs(picoRemainder, ms)
+    }
+
+    private fun picosPerMs(picos: SaturatingLong, ms: Long): Velocity {
+        // 1 picometer per 1 millisecond is 1 nanometer / second.
+        return Velocity(picos / ms)
+    }
+
+    private fun nanosPerNs(nanos: SaturatingLong, ns: Long): Velocity {
+        // 1 nanometer per 1 nanosecond is 1,000,000,000 nanometers / second.
+        val nanosPerNs = nanos / ns
+        val picoRemainder = (nanos % ns) * 1_000
+        return (nanosPerNs * 1_000_000_000).nmPerSecond + picosPerNs(picoRemainder, ns)
+    }
+
+    private fun picosPerNs(picos: SaturatingLong, ns: Long): Velocity {
+        // 1 picometer per 1 nanosecond is 1,000,000 nanometers / second.
+        val picosPerNs = picos / ns
+        val femtoRemainder = (picos % ns) * 1_000
+        return (picosPerNs * 1_000_000).nmPerSecond + femtosPerNs(femtoRemainder, ns)
+    }
+
+    private fun femtosPerNs(femtos: SaturatingLong, ns: Long): Velocity {
+        // 1 femtometer per 1 nanosecond is 1,000 nanometers / second.
+        val femtosPerNs = femtos / ns
+        val attoRemainder = (femtos % ns) * 1_000
+        return (femtosPerNs * 1_000).nmPerSecond + attometersPerNs(attoRemainder, ns)
+    }
+
+    private fun attometersPerNs(attos: SaturatingLong, ns: Long): Velocity {
+        // 1 attometer per 1 nanosecond is 1 nanometer / second.
+        return Velocity(attos / ns)
+    }
 
     /**
      * Returns the number that is the ratio of this and the [other] length value.
