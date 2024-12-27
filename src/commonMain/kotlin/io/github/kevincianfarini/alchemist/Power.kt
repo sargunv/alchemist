@@ -86,6 +86,10 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
         }
     }
 
+    public fun isFinite(): Boolean = rawMicrowatts.isFinite()
+
+    public fun isInfinite(): Boolean = rawMicrowatts.isInfinite()
+
     /**
      * Returns a power whose value is this power multiplied by the specified [scale].
      */

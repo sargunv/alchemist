@@ -31,8 +31,7 @@ public value class Length internal constructor(internal val rawNanometers: Satur
         val picometers = rawNanometers * 1_000
         val femtometers = picometers * 1_000
         val attometers = femtometers * 1_000
-        val durationPreciseToNanosecond = duration.isPreciseToNanosecond()
-        if (durationPreciseToNanosecond) {
+        if (duration.isPreciseToNanosecond()) {
             val ns = duration.inWholeNanoseconds
             val attoPrecision = attometersPerNs(attometers, ns)
             if (attoPrecision.isFinite()) return attoPrecision
