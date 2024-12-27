@@ -15,3 +15,19 @@ val power: Power = energy / time
 val area: Area = length * length 
 val volume: Volume = length * length * length 
 ```
+
+## Alchemist's Goals 
+
+1. Model physical quantities as Kotlin value classes which wrap a single `Long` value. 
+2. Provide logical arithmetic between different physical quantities, like `power = energy / time`. 
+3. Allow for the implementation of custom units on physical quanities that Alchemist does not provide, such as horsepower as a unit of `Power` or Rankine degrees for `Temperature`. 
+4. (In the future) Allow different order of magnitude precision and wider ranges of valid values. 
+5. Easy extensibility for custom formulas, such as `energyₖ = ½ * mass * velocity²`.
+
+## Alchemist's Non-Goals
+
+1. Using generic or floating point values as the underlying storage mechanism. 
+2. Representing arbitrary formulaic expressions. 
+3. Providing as many formulaic conversions as possible out of the box, such as `energyₖ = ½ * mass * velocity²`.
+4. Infinitely precise values. 
+5. Infinitely large ranges of valid values. 
