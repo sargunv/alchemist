@@ -1,10 +1,14 @@
 package io.github.kevincianfarini.alchemist
 
 import kotlin.jvm.JvmInline
+import kotlin.text.Typography.nbsp
 import kotlin.time.Duration
+import kotlin.time.DurationUnit
 
 @JvmInline
-public value class Velocity internal constructor(private val rawNanometersPerSecond: SaturatingLong) {
+public value class Velocity internal constructor(
+    private val rawNanometersPerSecond: SaturatingLong
+) : Comparable<Velocity> {
 
     /**
      * Returns the [Acceleration] necessary to achieve this velocity when applied over the specified [duration].
@@ -45,7 +49,16 @@ public value class Velocity internal constructor(private val rawNanometersPerSec
     /**
      * Returns the [Length] traveled at this velocity for the specified [duration].
      */
-    public operator fun times(duration: Duration): Length = TODO()
+    public operator fun times(duration: Duration): Length = duration.toComponents { seconds, nanoseconds ->
+        val secondComponent = (rawNanometersPerSecond * seconds).nanometers
+        val preciseNanosecondComponent = ((rawNanometersPerSecond * nanoseconds) / 1_000_000_000).nanometers
+        if (preciseNanosecondComponent.isFinite()) {
+            secondComponent + preciseNanosecondComponent
+        } else {
+            val coarseNanosecondComponent = ((rawNanometersPerSecond / 1_000_000_000) * nanoseconds).nanometers
+            secondComponent + coarseNanosecondComponent
+        }
+    }
 
     /**
      * Returns a velocity whose value is multiplied by the specified [scale].
@@ -60,6 +73,35 @@ public value class Velocity internal constructor(private val rawNanometersPerSec
     public fun isFinite(): Boolean = rawNanometersPerSecond.isFinite()
 
     public fun isInfinite(): Boolean = rawNanometersPerSecond.isInfinite()
+
+    /**
+     * Returns the value of this velocity expressed as a [Double] number of the specific [lengthUnit] per
+     * [durationUnit]. Infinite values are converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY]
+     * depending on its sign.
+     */
+    public fun toDouble(lengthUnit: LengthUnit, durationUnit: DurationUnit = DurationUnit.SECONDS): Double {
+        return (rawNanometersPerSecond.toDouble() / lengthUnit.nanometerScale.toDouble()) * durationUnit.secondScale
+    }
+
+    /**
+     * Returns a fractional string representation of this velocity expressed in the specified [lengthUnit] per
+     * [durationUnit].
+     */
+    public fun toString(lengthUnit: LengthUnit, durationUnit: DurationUnit = DurationUnit.SECONDS): String {
+        return when (isInfinite()) {
+            true -> rawNanometersPerSecond.toString()
+            false -> "${toDouble(lengthUnit, durationUnit)}$nbsp${lengthUnit.symbol}/${durationUnit.shortName}"
+        }
+    }
+
+    override fun toString(): String {
+        val lengthUnit = LengthUnit.International.entries.asReversed().firstOrNull { unit ->
+            rawNanometersPerSecond.absoluteValue / unit.nanometerScale > 0
+        }
+        return toString(lengthUnit ?: LengthUnit.International.Nanometer, DurationUnit.SECONDS)
+    }
+
+    override fun compareTo(other: Velocity): Int = rawNanometersPerSecond.compareTo(other.rawNanometersPerSecond)
 
     public companion object {
         public val POSITIVE_INFINITY: Velocity = Velocity(SaturatingLong.POSITIVE_INFINITY)

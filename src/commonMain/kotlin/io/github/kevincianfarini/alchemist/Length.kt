@@ -301,6 +301,8 @@ public inline val Int.nanometers: Length get() = toLength(LengthUnit.Internation
  */
 public inline val Long.nanometers: Length get() = toLength(LengthUnit.International.Nanometer)
 
+internal inline val SaturatingLong.nanometers: Length get() = Length(this)
+
 /**
  * Returns a [Length] equal to [Int] number of micrometers.
  */
