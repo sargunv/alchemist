@@ -2,6 +2,9 @@ package io.github.kevincianfarini.alchemist
 
 import kotlin.jvm.JvmInline
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Represents a measure of length and is capable of storing ±9.2 million kilometers at nanometer precision.
@@ -28,25 +31,13 @@ public value class Length internal constructor(internal val rawNanometers: Satur
 
     private fun calculateVelocity(duration: Duration): Velocity {
         // Try to find the right level which we can perform this operation at without losing precision.
-        val picometers = rawNanometers * 1_000
-        val femtometers = picometers * 1_000
-        val attometers = femtometers * 1_000
         if (duration.isPreciseToNanosecond()) {
-            val ns = duration.inWholeNanoseconds
-            val attoPrecision = attometersPerNs(attometers, ns)
-            if (attoPrecision.isFinite()) return attoPrecision
-            val femtoPrecision = femtosPerNs(femtometers, ns)
-            if (femtoPrecision.isFinite()) return femtoPrecision
-            val picoNsPrecision = picosPerNs(picometers, ns)
-            if (picoNsPrecision.isFinite()) return picoNsPrecision
-            val nanosNsPrecision = nanosPerNs(rawNanometers, ns)
-            if (nanosNsPrecision.isFinite()) return nanosNsPrecision
+            val velocity = nanosPerNs(rawNanometers, duration.inWholeNanoseconds)
+            if (velocity.isFinite()) return velocity
         }
         val ms = duration.inWholeMilliseconds
-        val picoMsPrecision = picosPerMs(picometers, ms)
-        if (picoMsPrecision.isFinite()) return picoMsPrecision
-        val nanosMsPrecision = nanosPerMs(rawNanometers, ms)
-        if (nanosMsPrecision.isFinite()) return nanosMsPrecision
+        val velcity = nanosPerMs(rawNanometers, ms)
+        if (velcity.isFinite()) return velcity
         return Velocity((rawNanometers / ms) * 1_000)
     }
 

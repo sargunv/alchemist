@@ -34,30 +34,13 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
 
     private fun calculatePower(duration: Duration): Power {
         // Try to find the right level which we can perform this operation at without losing precision.
-        val microjoules = rawMillijoules * 1_000
-        val nanojoules = microjoules * 1_000
-        val picojoules = nanojoules * 1_000
-        val femtojoules = picojoules * 1_000
         if (duration.isPreciseToNanosecond()) {
-            val ns = duration.inWholeNanoseconds
-            val femtoPrecision = femtojoulesPerNs(femtojoules, ns)
-            if (femtoPrecision.isFinite()) return femtoPrecision
-            val picoPrecision = picojoulesPerNs(picojoules, ns)
-            if (picoPrecision.isFinite()) return picoPrecision
-            val nanoPrecision = nanojoulesPerNs(nanojoules, ns)
-            if (nanoPrecision.isFinite()) return nanoPrecision
-            val microPrecision = microjoulesPerNs(microjoules, ns)
-            if (microPrecision.isFinite()) return microPrecision
-            val milliPrecision = millijoulesPerNs(rawMillijoules, ns)
-            if (milliPrecision.isFinite()) return milliPrecision
+            val power = millijoulesPerNs(rawMillijoules, duration.inWholeNanoseconds)
+            if (power.isFinite()) return power
         }
         val ms = duration.inWholeMilliseconds
-        val nanoPrecision = nanojoulesPerMs(nanojoules, ms)
-        if (nanoPrecision.isFinite()) return nanoPrecision
-        val microPrecision = microjoulesPerMs(microjoules, ms)
-        if (microPrecision.isFinite()) return microPrecision
-        val milliPrecision = millijoulesPerMs(rawMillijoules, ms)
-        if (milliPrecision.isFinite()) return milliPrecision
+        val power = millijoulesPerMs(rawMillijoules, ms)
+        if (power.isFinite()) return power
         return (rawMillijoules / ms).watts
     }
 
