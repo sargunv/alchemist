@@ -25,6 +25,17 @@ internal val DurationUnit.shortName: String get() = when (this) {
     else -> error("Unknown unit: $this")
 }
 
+internal val DurationUnit.shortNameSquared: String get() = when (this) {
+    DurationUnit.NANOSECONDS -> "ns²"
+    DurationUnit.MICROSECONDS -> "us²"
+    DurationUnit.MILLISECONDS -> "ms²"
+    DurationUnit.SECONDS -> "s²"
+    DurationUnit.MINUTES -> "m²"
+    DurationUnit.HOURS -> "h²"
+    DurationUnit.DAYS -> "d²"
+    else -> error("Unknown unit: $this")
+}
+
 internal val DurationUnit.secondScale: Double get() = when (this) {
     DurationUnit.NANOSECONDS -> 0.000_000_001
     DurationUnit.MICROSECONDS -> 0.000_001
