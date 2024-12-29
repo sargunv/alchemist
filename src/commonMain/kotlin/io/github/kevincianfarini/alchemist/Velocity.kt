@@ -7,7 +7,7 @@ import kotlin.time.DurationUnit
 
 @JvmInline
 public value class Velocity internal constructor(
-    private val rawNanometersPerSecond: SaturatingLong
+    internal val rawNanometersPerSecond: SaturatingLong
 ) : Comparable<Velocity> {
 
     /**

@@ -241,4 +241,11 @@ class LengthTest {
             actual = ((Long.MAX_VALUE / 2) - 2).nanometers / ((Long.MAX_VALUE / 2) - 1).milliseconds
         )
     }
+
+    @Test
+    fun length_div_velocity_simple() {
+        val length = 10.meters
+        val velocity = 3.meters / 2.seconds
+        assertEquals(6_666_666_666.nanoseconds, length / velocity)
+    }
 }

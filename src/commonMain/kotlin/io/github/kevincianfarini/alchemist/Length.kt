@@ -2,6 +2,7 @@ package io.github.kevincianfarini.alchemist
 
 import kotlin.jvm.JvmInline
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.microseconds
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Duration.Companion.seconds
@@ -77,6 +78,59 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     private fun attometersPerNs(attos: SaturatingLong, ns: Long): Velocity {
         // 1 attometer per 1 nanosecond is 1 nanometer / second.
         return Velocity(attos / ns)
+    }
+
+    /**
+     * Returns the [Duration] required to travel this length at the specified constant [velocity].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this length or the
+     * other [velocity], some precision may be lost.
+     *
+     * @throws IllegalArgumentException if both this length and [velocity] are infinite.
+     */
+    public operator fun div(velocity: Velocity): Duration = when {
+        isInfinite() && velocity.isInfinite() -> {
+            throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
+        }
+        isInfinite() -> Duration.INFINITE / velocity.rawNanometersPerSecond.sign / rawNanometers.sign
+        velocity.isInfinite() -> Duration.ZERO
+        else -> calculateDuration(velocity)
+    }
+
+    private fun calculateDuration(velocity: Velocity): Duration {
+        val duration = seconds(rawNanometers, velocity.rawNanometersPerSecond)
+        return if (duration.isFinite()) {
+            duration
+        } else {
+            // Do coarse operation to avoid returning infinity.
+            (rawNanometers / velocity.rawNanometersPerSecond).rawValue.seconds
+        }
+    }
+
+    private fun seconds(nanometers: SaturatingLong, nanometersPerSecond: SaturatingLong): Duration {
+        // 1 nanometer divided by 1 nm/s is 1 second.
+        val seconds = (nanometers / nanometersPerSecond).rawValue.seconds
+        val picometers = (nanometers % nanometersPerSecond) * 1_000
+        return seconds + milliseconds(picometers, nanometersPerSecond)
+    }
+
+    private fun milliseconds(picometers: SaturatingLong, nanometersPerSecond: SaturatingLong): Duration {
+        // 1 picometer divided by 1 nm/s is 1 millisecond.
+        val milliseconds = (picometers / nanometersPerSecond).rawValue.milliseconds
+        val femtometers = (picometers % nanometersPerSecond) * 1_000
+        return milliseconds + microseconds(femtometers, nanometersPerSecond)
+    }
+
+    private fun microseconds(femtometers: SaturatingLong, nanometersPerSecond: SaturatingLong): Duration {
+        // 1 femtometer divided by 1 nm/s is 1 microsecond.
+        val microseconds = (femtometers / nanometersPerSecond).rawValue.microseconds
+        val attometers = (femtometers % nanometersPerSecond) * 1_000
+        return microseconds + nanoseconds(attometers, nanometersPerSecond)
+    }
+
+    private fun nanoseconds(attometers: SaturatingLong, nanometersPerSecond: SaturatingLong): Duration {
+        // 1 attometer divided by 1 nm/s is 1 nanosecond.
+        return (attometers / nanometersPerSecond).rawValue.nanoseconds
     }
 
     /**
