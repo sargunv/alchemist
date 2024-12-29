@@ -6,6 +6,17 @@ import kotlin.text.Typography.nbsp
 @JvmInline
 public value class Mass internal constructor(private val rawMicrograms: SaturatingLong) : Comparable<Mass> {
 
+    // region SI Arithmetic
+
+    /**
+     * Returns the [Force] required to apply to this mass to achieve the specified [acceleration].
+     */
+    public operator fun times(acceleration: Acceleration): Force = TODO()
+
+    // endregion
+
+    // region Scalar Arithmetic
+
     /**
      * Returns a mass whose value is this mass value divided by the specified [scale].
      */
@@ -32,11 +43,6 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
     public operator fun plus(other: Mass): Mass = Mass(rawMicrograms + other.rawMicrograms)
 
     /**
-     * Returns the [Force] required to apply to this mass to achieve the specified [acceleration].
-     */
-    public operator fun times(acceleration: Acceleration): Force = TODO()
-
-    /**
      * Returns a mass whose value is multiplied by the specified [scale].
      */
     public operator fun times(scale: Int): Mass = times(scale.toLong())
@@ -46,9 +52,9 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
      */
     public operator fun times(scale: Long): Mass = Mass(rawMicrograms * scale)
 
-    public fun isFinite(): Boolean = rawMicrograms.isFinite()
+    // endregion
 
-    public fun isInfinite(): Boolean = rawMicrograms.isInfinite()
+    // region Mass to Scalar Conversions
 
     public fun <T> toInternationalComponents(
         action: (
@@ -100,7 +106,17 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
         return toString(largestUnit ?: MassUnit.International.Microgram)
     }
 
+    // endregion
+
+    // region Comparisons
+
+    public fun isInfinite(): Boolean = rawMicrograms.isInfinite()
+
+    public fun isFinite(): Boolean = rawMicrograms.isFinite()
+
     override fun compareTo(other: Mass): Int = rawMicrograms.compareTo(other.rawMicrograms)
+
+    // endregion
 
     public companion object {
         public val POSITIVE_INFINITY: Mass = Mass(SaturatingLong.POSITIVE_INFINITY)
@@ -108,22 +124,7 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
     }
 }
 
-public interface MassUnit {
-
-    public val microgramScale: Long
-
-    public val symbol: String
-
-    public enum class International(override val microgramScale: Long, override val symbol: String): MassUnit {
-        Microgram(1, "μg"),
-        Milligram(1_000, "mg"),
-        Gram(1_000_000, "g"),
-        Kilogram(1_000_000_000, "kg"),
-        Megagram(1_000_000_000_000, "Mg"),
-        Gigagram(1_000_000_000_000_000, "Gg"),
-        Teragram(1_000_000_000_000_000_000, "Tg"),
-    }
-}
+// region Scalar to Mass Conversions
 
 public fun Int.toMass(unit: MassUnit): Mass {
     return toLong().toMass(unit)
@@ -156,3 +157,22 @@ public inline val Long.gigagrams: Mass get() = toMass(MassUnit.International.Gig
 
 public inline val Int.teragrams: Mass get() = toMass(MassUnit.International.Teragram)
 public inline val Long.teragrams: Mass get() = toMass(MassUnit.International.Teragram)
+
+// endregion
+
+public interface MassUnit {
+
+    public val microgramScale: Long
+
+    public val symbol: String
+
+    public enum class International(override val microgramScale: Long, override val symbol: String): MassUnit {
+        Microgram(1, "μg"),
+        Milligram(1_000, "mg"),
+        Gram(1_000_000, "g"),
+        Kilogram(1_000_000_000, "kg"),
+        Megagram(1_000_000_000_000, "Mg"),
+        Gigagram(1_000_000_000_000_000, "Gg"),
+        Teragram(1_000_000_000_000_000_000, "Tg"),
+    }
+}

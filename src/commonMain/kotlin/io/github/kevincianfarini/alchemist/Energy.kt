@@ -10,6 +10,8 @@ import kotlin.time.Duration
 @JvmInline
 public value class Energy internal constructor(private val rawMillijoules: SaturatingLong) : Comparable<Energy> {
 
+    // region SI Arithmetic
+
     /**
      * Returns the constant [Force] applied over the specified [length] required to expend this amount of energy.
      */
@@ -90,6 +92,10 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
         return (femtojoules / ns).microwatts
     }
 
+    // endregion
+
+    // region Scalar Arithmetic
+
     /**
      * Returns the number that is the ratio of this and the [other] energy value.
      */
@@ -138,6 +144,10 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
     public operator fun times(scale: Long): Energy {
         return Energy(rawMillijoules * scale)
     }
+
+    // endregion
+
+    // region Energy to Scalar Conversions
 
     public fun toDouble(unit: EnergyUnit): Double {
         return this / unit.millijouleScale.millijoules
@@ -224,15 +234,65 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
         return toString(largestUnit ?: EnergyUnit.International.Millijoule)
     }
 
+    // endregion
+
+    // region Comparisons
+
+    public fun isInfinite(): Boolean = rawMillijoules.isInfinite()
+
+    public fun isFinite(): Boolean = rawMillijoules.isFinite()
+
     public override fun compareTo(other: Energy): Int {
         return rawMillijoules.compareTo(other.rawMillijoules)
     }
+
+    // endregion
 
     public companion object {
         public val POSITIVE_INFINITY: Energy = Energy(SaturatingLong.POSITIVE_INFINITY)
         public val NEGATIVE_INFINITY: Energy = Energy(SaturatingLong.NEGATIVE_INFINITY)
     }
 }
+
+// region Scalar to Energy Conversions
+
+public fun Int.toEnergy(unit: EnergyUnit): Energy {
+   return toLong().toEnergy(unit)
+}
+
+public fun Long.toEnergy(unit: EnergyUnit): Energy {
+    return Energy(this.saturated * unit.millijouleScale)
+}
+
+public inline val Int.millijoules: Energy get() = toEnergy(EnergyUnit.International.Millijoule)
+public inline val Long.millijoules: Energy get() = toEnergy(EnergyUnit.International.Millijoule)
+public inline val Int.joules: Energy get() = toEnergy(EnergyUnit.International.Joule)
+public inline val Long.joules: Energy get() = toEnergy(EnergyUnit.International.Joule)
+public inline val Int.kilojoules: Energy get() = toEnergy(EnergyUnit.International.Kilojoule)
+public inline val Long.kilojoules: Energy get() = toEnergy(EnergyUnit.International.Kilojoule)
+public inline val Int.megajoules: Energy get() = toEnergy(EnergyUnit.International.Megajoule)
+public inline val Long.megajoules: Energy get() = toEnergy(EnergyUnit.International.Megajoule)
+public inline val Int.gigajoules: Energy get() = toEnergy(EnergyUnit.International.Gigajoule)
+public inline val Long.gigajoules: Energy get() = toEnergy(EnergyUnit.International.Gigajoule)
+public inline val Int.tetrajoules: Energy get() = toEnergy(EnergyUnit.International.Tetrajoule)
+public inline val Long.tetrajoules: Energy get() = toEnergy(EnergyUnit.International.Tetrajoule)
+public inline val Int.petajoules: Energy get() = toEnergy(EnergyUnit.International.Petajoule)
+public inline val Long.petajoules: Energy get() = toEnergy(EnergyUnit.International.Petajoule)
+
+public inline val Int.milliwattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MilliwattHour)
+public inline val Long.milliwattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MilliwattHour)
+public inline val Int.wattHours: Energy get() = toEnergy(EnergyUnit.Electricity.WattHour)
+public inline val Long.wattHours: Energy get() = toEnergy(EnergyUnit.Electricity.WattHour)
+public inline val Int.kilowattHours: Energy get() = toEnergy(EnergyUnit.Electricity.KilowattHour)
+public inline val Long.kilowattHours: Energy get() = toEnergy(EnergyUnit.Electricity.KilowattHour)
+public inline val Int.megawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MegawattHour)
+public inline val Long.megawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MegawattHour)
+public inline val Int.gigawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.GigawattHour)
+public inline val Long.gigawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.GigawattHour)
+public inline val Int.terawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.TerawattHour)
+public inline val Long.terawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.TerawattHour)
+
+// endregion
 
 /**
  * A unit of energy precise to the millijoule.
@@ -275,39 +335,3 @@ public interface EnergyUnit {
         TerawattHour(3_600_000_000_000_000_000, "TWh"),
     }
 }
-
-public fun Int.toEnergy(unit: EnergyUnit): Energy {
-   return toLong().toEnergy(unit)
-}
-
-public fun Long.toEnergy(unit: EnergyUnit): Energy {
-    return Energy(this.saturated * unit.millijouleScale)
-}
-
-public inline val Int.millijoules: Energy get() = toEnergy(EnergyUnit.International.Millijoule)
-public inline val Long.millijoules: Energy get() = toEnergy(EnergyUnit.International.Millijoule)
-public inline val Int.joules: Energy get() = toEnergy(EnergyUnit.International.Joule)
-public inline val Long.joules: Energy get() = toEnergy(EnergyUnit.International.Joule)
-public inline val Int.kilojoules: Energy get() = toEnergy(EnergyUnit.International.Kilojoule)
-public inline val Long.kilojoules: Energy get() = toEnergy(EnergyUnit.International.Kilojoule)
-public inline val Int.megajoules: Energy get() = toEnergy(EnergyUnit.International.Megajoule)
-public inline val Long.megajoules: Energy get() = toEnergy(EnergyUnit.International.Megajoule)
-public inline val Int.gigajoules: Energy get() = toEnergy(EnergyUnit.International.Gigajoule)
-public inline val Long.gigajoules: Energy get() = toEnergy(EnergyUnit.International.Gigajoule)
-public inline val Int.tetrajoules: Energy get() = toEnergy(EnergyUnit.International.Tetrajoule)
-public inline val Long.tetrajoules: Energy get() = toEnergy(EnergyUnit.International.Tetrajoule)
-public inline val Int.petajoules: Energy get() = toEnergy(EnergyUnit.International.Petajoule)
-public inline val Long.petajoules: Energy get() = toEnergy(EnergyUnit.International.Petajoule)
-
-public inline val Int.milliwattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MilliwattHour)
-public inline val Long.milliwattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MilliwattHour)
-public inline val Int.wattHours: Energy get() = toEnergy(EnergyUnit.Electricity.WattHour)
-public inline val Long.wattHours: Energy get() = toEnergy(EnergyUnit.Electricity.WattHour)
-public inline val Int.kilowattHours: Energy get() = toEnergy(EnergyUnit.Electricity.KilowattHour)
-public inline val Long.kilowattHours: Energy get() = toEnergy(EnergyUnit.Electricity.KilowattHour)
-public inline val Int.megawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MegawattHour)
-public inline val Long.megawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.MegawattHour)
-public inline val Int.gigawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.GigawattHour)
-public inline val Long.gigawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.GigawattHour)
-public inline val Int.terawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.TerawattHour)
-public inline val Long.terawattHours: Energy get() = toEnergy(EnergyUnit.Electricity.TerawattHour)

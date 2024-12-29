@@ -10,6 +10,22 @@ public value class Acceleration internal constructor(
     private val rawNanometersPerSecondSquared: SaturatingLong
 ) : Comparable<Acceleration> {
 
+    // region SI Arithmetic
+
+    /**
+     * Returns the resulting [Velocity] after applying this acceleration for [duration].
+     */
+    public operator fun times(duration: Duration): Velocity = TODO()
+
+    /**
+     * Returns the resulting [Force] after applying this acceleration to [mass].
+     */
+    public operator fun times(mass: Mass): Force = TODO()
+
+    // endregion
+
+    // region Scalar Arithmetic
+
     /**
      * Returns the number that is the ratio of this and the [other] acceleration value.
      */
@@ -42,16 +58,6 @@ public value class Acceleration internal constructor(
     }
 
     /**
-     * Returns the resulting [Velocity] after applying this acceleration for [duration].
-     */
-    public operator fun times(duration: Duration): Velocity = TODO()
-
-    /**
-     * Returns the resulting [Force] after applying this acceleration to [mass].
-     */
-    public operator fun times(mass: Mass): Force = TODO()
-
-    /**
      * Returns an acceleration whose value is multiplied by the specified [scale].
      */
     public operator fun times(scale: Int): Acceleration = times(scale.toLong())
@@ -61,15 +67,9 @@ public value class Acceleration internal constructor(
      */
     public operator fun times(scale: Long): Acceleration = Acceleration(rawNanometersPerSecondSquared * scale)
 
-    /**
-     * Returns true if this acceleration value is finite.
-     */
-    public fun isFinite(): Boolean = rawNanometersPerSecondSquared.isFinite()
+    // endregion
 
-    /**
-     * Returns true if this acceleration value is infinite.
-     */
-    public fun isInfinite(): Boolean = rawNanometersPerSecondSquared.isInfinite()
+    // region Acceleration to Scalar Conversions
 
     /**
      * Returns the value of this acceleration expressed as a [Double] number of the specific [lengthUnit] per
@@ -99,9 +99,25 @@ public value class Acceleration internal constructor(
         return toString(lengthUnit ?: LengthUnit.International.Nanometer, DurationUnit.SECONDS)
     }
 
+    // endregion
+
+    // region Comparisons
+
+    /**
+     * Returns true if this acceleration value is finite.
+     */
+    public fun isFinite(): Boolean = rawNanometersPerSecondSquared.isFinite()
+
+    /**
+     * Returns true if this acceleration value is infinite.
+     */
+    public fun isInfinite(): Boolean = rawNanometersPerSecondSquared.isInfinite()
+
     override fun compareTo(other: Acceleration): Int {
         return rawNanometersPerSecondSquared.compareTo(other.rawNanometersPerSecondSquared)
     }
+
+    // endregion
 
     public companion object {
         public val POSITIVE_INFINITY: Acceleration = Acceleration(SaturatingLong.POSITIVE_INFINITY)

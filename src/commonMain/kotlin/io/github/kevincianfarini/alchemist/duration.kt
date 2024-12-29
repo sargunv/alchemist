@@ -1,7 +1,10 @@
 package io.github.kevincianfarini.alchemist
 
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.microseconds
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
 internal fun Duration.isPreciseToNanosecond(): Boolean {
@@ -45,4 +48,22 @@ internal val DurationUnit.secondScale: Double get() = when (this) {
     DurationUnit.HOURS -> 3_600.0
     DurationUnit.DAYS -> 86_400.0
     else -> error("Unknown unit: $this")
+}
+
+internal fun Duration.toDecimalComponents(
+    action: (
+        kiloseconds: Long,
+        seconds: Long,
+        millis: Long,
+        micros: Long,
+        nanos: Long
+    ) -> Energy,
+): Energy {
+    val seconds = inWholeSeconds
+    val secondsRemainder = this - seconds.seconds
+    val millis = secondsRemainder.inWholeMilliseconds
+    val millisRemainder = secondsRemainder - millis.milliseconds
+    val micros = millisRemainder.inWholeMicroseconds
+    val nanos = (millisRemainder - micros.microseconds).inWholeNanoseconds
+    return action(seconds / 1_000, seconds % 1_000, millis, micros, nanos)
 }

@@ -13,6 +13,8 @@ import kotlin.time.Duration.Companion.seconds
 @JvmInline
 public value class Length internal constructor(internal val rawNanometers: SaturatingLong) : Comparable<Length> {
 
+    // region SI Arithmetic
+
     /**
      * Returns the constant [Velocity] required to travel this length in the specified [duration].
      *
@@ -134,41 +136,6 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     }
 
     /**
-     * Returns the number that is the ratio of this and the [other] length value.
-     */
-    public operator fun div(other: Length): Double {
-        return rawNanometers.toDouble() / other.rawNanometers.toDouble()
-    }
-
-    /**
-     * Returns a length whose value is this length value divided by the specified [scale].
-     */
-    public operator fun div(scale: Int): Length {
-        return div(scale.toLong())
-    }
-
-    /**
-     * Returns a length whose value is this length value divided by the specified [scale].
-     */
-    public operator fun div(scale: Long): Length {
-        return Length(rawNanometers / scale)
-    }
-
-    /**
-     * Returns a length whose value is the difference between this and the [other] length value.
-     */
-    public operator fun minus(other: Length): Length {
-        return Length(rawNanometers - other.rawNanometers)
-    }
-
-    /**
-     * Returns a length whose value is the sum between this and the [other] length value.
-     */
-    public operator fun plus(other: Length): Length {
-        return Length(rawNanometers + other.rawNanometers)
-    }
-
-    /**
      * Returns the resulting [Area] after multiplying this length by the [other] length value.
      */
     public operator fun times(other: Length): Area {
@@ -208,6 +175,45 @@ public value class Length internal constructor(internal val rawNanometers: Satur
      */
     public fun cubed(): Volume = this * this * this
 
+    // endregion
+
+    // region Scalar Arithmetic
+
+    /**
+     * Returns the number that is the ratio of this and the [other] length value.
+     */
+    public operator fun div(other: Length): Double {
+        return rawNanometers.toDouble() / other.rawNanometers.toDouble()
+    }
+
+    /**
+     * Returns a length whose value is this length value divided by the specified [scale].
+     */
+    public operator fun div(scale: Int): Length {
+        return div(scale.toLong())
+    }
+
+    /**
+     * Returns a length whose value is this length value divided by the specified [scale].
+     */
+    public operator fun div(scale: Long): Length {
+        return Length(rawNanometers / scale)
+    }
+
+    /**
+     * Returns a length whose value is the difference between this and the [other] length value.
+     */
+    public operator fun minus(other: Length): Length {
+        return Length(rawNanometers - other.rawNanometers)
+    }
+
+    /**
+     * Returns a length whose value is the sum between this and the [other] length value.
+     */
+    public operator fun plus(other: Length): Length {
+        return Length(rawNanometers + other.rawNanometers)
+    }
+
     /**
      * Returns a length whose value is multiplied by the specified [scale].
      */
@@ -221,6 +227,10 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     public operator fun times(scale: Long): Length {
         return Length(rawNanometers * scale)
     }
+
+    // endregion
+
+    // region Length to Scalar Conversions
 
     /**
      * Returns the value of this length expressed as a [Double] number of the specified [unit]. Infinite values are
@@ -314,6 +324,10 @@ public value class Length internal constructor(internal val rawNanometers: Satur
         return toString(largestUnit ?: LengthUnit.International.Nanometer)
     }
 
+    // endregion
+
+    // region Comparisons
+
     public override fun compareTo(other: Length): Int {
         return rawNanometers.compareTo(other.rawNanometers)
     }
@@ -321,6 +335,8 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     public fun isInfinite(): Boolean = this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
 
     public fun isFinite(): Boolean = !isInfinite()
+
+    // endregion
 
     public companion object {
 
@@ -335,6 +351,8 @@ public value class Length internal constructor(internal val rawNanometers: Satur
         public val NEGATIVE_INFINITY: Length = Length(SaturatingLong.NEGATIVE_INFINITY)
     }
 }
+
+// region Scalar to Length Conversions
 
 /**
  * Returns a [Length] equal to [Int] number of nanometers.
@@ -465,6 +483,8 @@ public fun Int.toLength(unit: LengthUnit): Length {
 public fun Long.toLength(unit: LengthUnit): Length {
     return Length(this.saturated * unit.nanometerScale)
 }
+
+// endregions
 
 /**
  * A unit of length precise to the nanometer.

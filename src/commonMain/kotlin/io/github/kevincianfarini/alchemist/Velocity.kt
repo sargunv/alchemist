@@ -10,10 +10,30 @@ public value class Velocity internal constructor(
     internal val rawNanometersPerSecond: SaturatingLong
 ) : Comparable<Velocity> {
 
+    // region SI Arithmetic
+
     /**
      * Returns the [Acceleration] necessary to achieve this velocity when applied over the specified [duration].
      */
     public operator fun div(duration: Duration): Acceleration = TODO()
+
+    /**
+     * Returns the [Length] traveled at this velocity for the specified [duration].
+     */
+    public operator fun times(duration: Duration): Length = duration.toComponents { seconds, nanoseconds ->
+        val secondComponent = (rawNanometersPerSecond * seconds).nanometers
+        val preciseNanosecondComponent = ((rawNanometersPerSecond * nanoseconds) / 1_000_000_000).nanometers
+        if (preciseNanosecondComponent.isFinite()) {
+            secondComponent + preciseNanosecondComponent
+        } else {
+            val coarseNanosecondComponent = ((rawNanometersPerSecond / 1_000_000_000) * nanoseconds).nanometers
+            secondComponent + coarseNanosecondComponent
+        }
+    }
+
+    // endregion
+
+    // region Scalar Arithmetic
 
     /**
      * Returns the number that is the ratio of this and the [other] velocity value.
@@ -47,20 +67,6 @@ public value class Velocity internal constructor(
     }
 
     /**
-     * Returns the [Length] traveled at this velocity for the specified [duration].
-     */
-    public operator fun times(duration: Duration): Length = duration.toComponents { seconds, nanoseconds ->
-        val secondComponent = (rawNanometersPerSecond * seconds).nanometers
-        val preciseNanosecondComponent = ((rawNanometersPerSecond * nanoseconds) / 1_000_000_000).nanometers
-        if (preciseNanosecondComponent.isFinite()) {
-            secondComponent + preciseNanosecondComponent
-        } else {
-            val coarseNanosecondComponent = ((rawNanometersPerSecond / 1_000_000_000) * nanoseconds).nanometers
-            secondComponent + coarseNanosecondComponent
-        }
-    }
-
-    /**
      * Returns a velocity whose value is multiplied by the specified [scale].
      */
     public operator fun times(scale: Int): Velocity = times(scale.toLong())
@@ -70,9 +76,9 @@ public value class Velocity internal constructor(
      */
     public operator fun times(scale: Long): Velocity = Velocity(rawNanometersPerSecond * scale)
 
-    public fun isFinite(): Boolean = rawNanometersPerSecond.isFinite()
+    // endregion
 
-    public fun isInfinite(): Boolean = rawNanometersPerSecond.isInfinite()
+    // region Velocity to Scalar Conversions
 
     /**
      * Returns the value of this velocity expressed as a [Double] number of the specific [lengthUnit] per
@@ -101,7 +107,17 @@ public value class Velocity internal constructor(
         return toString(lengthUnit ?: LengthUnit.International.Nanometer, DurationUnit.SECONDS)
     }
 
+    // endregion
+
+    // region Comparisons
+
+    public fun isFinite(): Boolean = rawNanometersPerSecond.isFinite()
+
+    public fun isInfinite(): Boolean = rawNanometersPerSecond.isInfinite()
+
     override fun compareTo(other: Velocity): Int = rawNanometersPerSecond.compareTo(other.rawNanometersPerSecond)
+
+    // endregion
 
     public companion object {
         public val POSITIVE_INFINITY: Velocity = Velocity(SaturatingLong.POSITIVE_INFINITY)

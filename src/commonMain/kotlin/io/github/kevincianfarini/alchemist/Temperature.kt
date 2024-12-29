@@ -10,6 +10,8 @@ import kotlin.text.Typography.nbsp
 @JvmInline
 public value class Temperature internal constructor(private val rawNanokelvin: SaturatingLong) : Comparable<Temperature> {
 
+    // region Scalar Arithmetic
+
     /**
      * Returns the number that is the ratio of this and the [other] temperature value.
      */
@@ -47,16 +49,16 @@ public value class Temperature internal constructor(private val rawNanokelvin: S
      */
     public operator fun times(scale: Long): Temperature = Temperature(rawNanokelvin * scale)
 
+    // endregion
+
+    // region Temperature to Scalar Conversions
+
     public fun toString(unit: TemperatureUnit): String {
         return "${unit.convertNanokelvinsToThis(rawNanokelvin)}${unit.symbol}"
     }
 
     public override fun toString(): String {
         return toString(toStringUnit())
-    }
-
-    public override fun compareTo(other: Temperature): Int {
-        return rawNanokelvin.compareTo(other.rawNanokelvin)
     }
 
     private fun toStringUnit(): TemperatureUnit {
@@ -81,9 +83,27 @@ public value class Temperature internal constructor(private val rawNanokelvin: S
         return TemperatureUnit.International.Nanokelvin
     }
 
+    // endregion
+
+    // region Comparisons
+
+    public fun isInfinite(): Boolean = rawNanokelvin.isInfinite()
+
+    public fun isFinite(): Boolean = rawNanokelvin.isFinite()
+
+    public override fun compareTo(other: Temperature): Int {
+        return rawNanokelvin.compareTo(other.rawNanokelvin)
+    }
+
+    // endregion
+
     public companion object {
+        public val POSITIVE_INFINITY: Temperature = Temperature(SaturatingLong.POSITIVE_INFINITY)
+        public val NEGATIVE_INFINITY: Temperature = Temperature(SaturatingLong.NEGATIVE_INFINITY)
     }
 }
+
+// region Scalar to Temperature Conversions
 
 public val Int.nanokelvins: Temperature get() = toLong().nanokelvins
 public val Long.nanokelvins: Temperature get() = saturated.nanokelvins
@@ -138,6 +158,8 @@ public val Long.fahrenheit: Temperature get() = saturated.fahrenheit
 private inline val SaturatingLong.fahrenheit get() = Temperature(
     TemperatureUnit.Fahrenheit.convertToNanokelvin(this)
 )
+
+// endregion
 
 @RequiresOptIn(
     message = """

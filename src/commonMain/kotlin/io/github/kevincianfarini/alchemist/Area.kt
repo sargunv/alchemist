@@ -8,6 +8,8 @@ import kotlin.jvm.JvmInline
 @JvmInline
 public value class Area internal constructor(private val rawMillimetersSquared: SaturatingLong) : Comparable<Area> {
 
+    // region SI Arithmetic
+
     /**
      * Returns the resulting length after dividing this area by the specified [length].
      *
@@ -29,6 +31,15 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
         if (micro2.isFinite()) return Length((micro2 / length.rawNanometers) * 1_000_000)
         return Length((rawMillimetersSquared / length.rawNanometers) * 1_000_000_000_000)
     }
+
+    /**
+     * Returns the resulting [Volume] after applying this area over the specified [length].
+     */
+    public operator fun times(length: Length): Volume = TODO()
+
+    // endregion
+
+    // region Scalar Arithmetic
 
     /**
      * Returns an area whose value is this area value divided by the specified [scale].
@@ -58,11 +69,6 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     public operator fun plus(other: Area): Area = Area(rawMillimetersSquared + other.rawMillimetersSquared)
 
     /**
-     * Returns the resulting [Volume] after applying this area over the specified [length].
-     */
-    public operator fun times(length: Length): Volume = TODO()
-
-    /**
      * Returns an area whose value is multiplied by the specified [scale].
      */
     public operator fun times(scale: Int): Area = times(scale.toLong())
@@ -71,6 +77,10 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
      * Returns an area whose value is multiplied by the specified [scale].
      */
     public operator fun times(scale: Long): Area = Area(rawMillimetersSquared * scale)
+
+    // endregion
+
+    // region Area to Scalar Conversions
 
     /**
      * Returns the value of this area expressed as a [Double] number of the specified [unit]. Infinite values are
@@ -112,13 +122,19 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
         return toString(largestUnit ?: AreaUnit.International.MillimeterSquared)
     }
 
-    public override fun compareTo(other: Area): Int {
-        return rawMillimetersSquared.compareTo(other.rawMillimetersSquared)
-    }
+    // endregion
+
+    // region Comparisons
 
     public fun isInfinite(): Boolean = this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
 
     public fun isFinite(): Boolean = !isInfinite()
+
+    public override fun compareTo(other: Area): Int {
+        return rawMillimetersSquared.compareTo(other.rawMillimetersSquared)
+    }
+
+    // endregion
 
     public companion object {
         public val POSITIVE_INFINITY: Area = Area(SaturatingLong.POSITIVE_INFINITY)
