@@ -1,4 +1,4 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.internal
 
 import java.math.RoundingMode
 import java.text.DecimalFormat

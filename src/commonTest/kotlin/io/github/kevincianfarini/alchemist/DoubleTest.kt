@@ -1,5 +1,6 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.test.assertEquals
 import kotlin.test.Test
 

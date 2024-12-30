@@ -1,4 +1,4 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.internal
 
 import kotlin.math.abs
 import kotlin.math.pow
@@ -9,7 +9,7 @@ import kotlin.math.log10
 
 internal actual fun Double.toDecimalString(decimals: Int): String {
     val rounded = if (decimals == 0) {
-       this
+        this
     } else {
         val pow = (10.0).pow(decimals)
         round(abs(this) * pow) / pow * sign(this)

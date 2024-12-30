@@ -1,4 +1,4 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.internal
 
 /**
  * Returns a decimal string that has been rounded to the specified number of [decimals].

@@ -1,5 +1,8 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.secondScale
+import io.github.kevincianfarini.alchemist.internal.shortNameSquared
+import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
 import kotlin.text.Typography.nbsp
 import kotlin.time.Duration

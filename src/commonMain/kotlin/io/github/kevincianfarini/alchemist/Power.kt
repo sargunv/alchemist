@@ -1,10 +1,10 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.sign
+import io.github.kevincianfarini.alchemist.internal.toDecimalComponents
+import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.microseconds
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * Represents an amount of power and is capable of storing ±9.22 terawatts at microwatt precision.

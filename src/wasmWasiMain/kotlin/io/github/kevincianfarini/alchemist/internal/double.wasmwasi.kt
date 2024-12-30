@@ -6,7 +6,7 @@
     "LiftReturnOrAssignment"
 )
 
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.internal
 
 import kotlin.math.pow
 

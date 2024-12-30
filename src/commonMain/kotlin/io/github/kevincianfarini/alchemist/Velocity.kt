@@ -1,5 +1,10 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.*
+import io.github.kevincianfarini.alchemist.internal.isPreciseToNanosecond
+import io.github.kevincianfarini.alchemist.internal.secondScale
+import io.github.kevincianfarini.alchemist.internal.sign
+import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
 import kotlin.text.Typography.nbsp
 import kotlin.time.Duration

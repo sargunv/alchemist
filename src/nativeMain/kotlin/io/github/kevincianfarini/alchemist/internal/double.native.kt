@@ -1,4 +1,4 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.internal
 
 import kotlinx.cinterop.*
 import platform.posix.sprintf
