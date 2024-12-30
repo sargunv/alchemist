@@ -13,9 +13,65 @@ public value class Velocity internal constructor(
     // region SI Arithmetic
 
     /**
-     * Returns the [Acceleration] necessary to achieve this velocity when applied over the specified [duration].
+     * Returns the constant [Acceleration] required achieve this velocity in the specified [duration].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this velocity or the
+     * other [duration], some precision may be lost.
+     *
+     * @throws IllegalArgumentException if both this velocity and [duration] are infinite.
      */
-    public operator fun div(duration: Duration): Acceleration = TODO()
+    public operator fun div(duration: Duration): Acceleration = when {
+        isInfinite() && duration.isInfinite() -> {
+            throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
+        }
+        isInfinite() -> Acceleration(rawNanometersPerSecond * duration.sign)
+        duration.isInfinite() -> Acceleration(0L.saturated)
+        else -> calculateAcceleration(duration)
+    }
+
+    private fun calculateAcceleration(duration: Duration): Acceleration {
+        // Try to find the right level which we can perform this operation at without losing precision.
+        if (duration.isPreciseToNanosecond()) {
+            val acceleration = nanosPerNs2(rawNanometersPerSecond, duration.inWholeNanoseconds)
+            if (acceleration.isFinite()) return acceleration
+        }
+        val ms = duration.inWholeMilliseconds
+        val acceleration = nanosPerMs2(rawNanometersPerSecond, ms)
+        if (acceleration.isFinite()) return acceleration
+        return Acceleration((rawNanometersPerSecond / ms) * 1_000)
+    }
+
+    private fun nanosPerNs2(nanosPerSecond: SaturatingLong, ns: Long): Acceleration {
+        val nanos = nanosPerSecond / ns
+        val picoRemainder = (nanosPerSecond % ns) * 1_000
+        return (nanos * 1_000_000_000).nmPerSecond2 + picosPerNs2(picoRemainder, ns)
+    }
+
+    private fun picosPerNs2(picosPerSecond: SaturatingLong, ns: Long): Acceleration {
+        val picos = picosPerSecond / ns
+        val femtoRemainder = (picosPerSecond % ns) * 1_000
+        return (picos * 1_000_000).nmPerSecond2 + femtosPerNs2(femtoRemainder, ns)
+    }
+
+    private fun femtosPerNs2(femtosPerSecond: SaturatingLong, ns: Long): Acceleration {
+        val femtos = femtosPerSecond / ns
+        val attoRemainder = (femtosPerSecond % ns) * 1_000
+        return (femtos * 1_000).nmPerSecond2 + attosPerNs2(attoRemainder, ns)
+    }
+
+    private fun attosPerNs2(attosPerSecond: SaturatingLong, ns: Long): Acceleration {
+        return Acceleration(attosPerSecond / ns)
+    }
+
+    private fun nanosPerMs2(nanosPerSecond: SaturatingLong, ms: Long): Acceleration {
+        val nanos = nanosPerSecond / ms
+        val picoRemainder = (nanosPerSecond % ms) * 1_000
+        return (nanos * 1_000).nmPerSecond2 + picosPerMs2(picoRemainder, ms)
+    }
+
+    private fun picosPerMs2(picosPerSecond: SaturatingLong, ms: Long): Acceleration {
+        return Acceleration(picosPerSecond / ms)
+    }
 
     /**
      * Returns the [Length] traveled at this velocity for the specified [duration].

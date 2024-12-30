@@ -4,6 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.text.Typography.nbsp
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
@@ -50,6 +51,14 @@ class VelocityTest {
         assertEquals(
             expected = 444_441_600.meters,
             actual = (123_456.meters / 1.seconds) * 1.hours,
+        )
+    }
+
+    @Test
+    fun velocity_div_time_simple() {
+        assertEquals(
+            expected = 10_032_520_325.nmPerSecond2,
+            actual = 1_234.nanometers / 1.seconds / 123.nanoseconds,
         )
     }
 }

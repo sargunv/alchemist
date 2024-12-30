@@ -133,3 +133,4 @@ public value class Acceleration internal constructor(
 
 internal val Int.nmPerSecond2: Acceleration get() = toLong().nmPerSecond2
 internal val Long.nmPerSecond2: Acceleration get() = Acceleration(saturated)
+internal val SaturatingLong.nmPerSecond2: Acceleration get() = Acceleration(this)
