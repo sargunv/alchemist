@@ -6,6 +6,7 @@ import io.github.kevincianfarini.alchemist.internal.sign
 import io.github.kevincianfarini.alchemist.internal.toDecimalComponents
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
+import kotlin.math.roundToLong
 import kotlin.time.Duration
 
 /**
@@ -151,21 +152,27 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
 
 public inline val Int.terawatts: Power get() = toPower(PowerUnit.International.Terawatt)
 public inline val Long.terawatts: Power get() = toPower(PowerUnit.International.Terawatt)
+public inline val Double.terawatts: Power get() = toPower(PowerUnit.International.Terawatt)
 
 public inline val Int.gigawatts: Power get() = toPower(PowerUnit.International.Gigawatt)
 public inline val Long.gigawatts: Power get() = toPower(PowerUnit.International.Gigawatt)
+public inline val Double.gigawatts: Power get() = toPower(PowerUnit.International.Gigawatt)
 
 public inline val Int.megawatts: Power get() = toPower(PowerUnit.International.Megawatt)
 public inline val Long.megawatts: Power get() = toPower(PowerUnit.International.Megawatt)
+public inline val Double.megawatts: Power get() = toPower(PowerUnit.International.Megawatt)
 
 public inline val Int.kilowatts: Power get() = toPower(PowerUnit.International.Kilowatt)
 public inline val Long.kilowatts: Power get() = toPower(PowerUnit.International.Kilowatt)
+public inline val Double.kilowatts: Power get() = toPower(PowerUnit.International.Kilowatt)
 
 public inline val Int.watts: Power get() = toPower(PowerUnit.International.Watt)
 public inline val Long.watts: Power get() = toPower(PowerUnit.International.Watt)
+public inline val Double.watts: Power get() = toPower(PowerUnit.International.Watt)
 
 public inline val Int.milliwatts: Power get() = toPower(PowerUnit.International.Milliwatt)
 public inline val Long.milliwatts: Power get() = toPower(PowerUnit.International.Milliwatt)
+public inline val Double.milliwatts: Power get() = toPower(PowerUnit.International.Milliwatt)
 
 public inline val Int.microwatts: Power get() = toPower(PowerUnit.International.Microwatt)
 public inline val Long.microwatts: Power get() = toPower(PowerUnit.International.Microwatt)
@@ -182,6 +189,12 @@ public fun Int.toPower(unit: PowerUnit): Power {
 
 public fun Long.toPower(unit: PowerUnit): Power {
     return Power(saturated * unit.microwattScale)
+}
+
+public fun Double.toPower(unit: PowerUnit): Power {
+    val valueInMicrowatts = this * unit.microwattScale
+    require(!valueInMicrowatts.isNaN()) { "Mass value cannot be NaN." }
+    return Power(valueInMicrowatts.roundToLong().saturated)
 }
 
 // endregion

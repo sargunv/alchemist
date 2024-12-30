@@ -6,6 +6,7 @@ import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.sign
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
+import kotlin.math.roundToLong
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 import kotlin.time.Duration.Companion.milliseconds
@@ -385,6 +386,11 @@ public inline val Int.micrometers: Length get() = toLength(LengthUnit.Internatio
 public inline val Long.micrometers: Length get() = toLength(LengthUnit.International.Micrometer)
 
 /**
+ * Returns a [Length] equal to [Double] number of micrometers. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.micrometers: Length get() = toLength(LengthUnit.International.Micrometer)
+
+/**
  * Returns a [Length] equal to [Int] number of millimeters.
  */
 public inline val Int.millimeters: Length get() = toLength(LengthUnit.International.Millimeter)
@@ -393,6 +399,11 @@ public inline val Int.millimeters: Length get() = toLength(LengthUnit.Internatio
  * Returns a [Length] equal to [Long] number of millimeters.
  */
 public inline val Long.millimeters: Length get() = toLength(LengthUnit.International.Millimeter)
+
+/**
+ * Returns a [Length] equal to [Double] number of millimeters. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.millimeters: Length get() = toLength(LengthUnit.International.Millimeter)
 
 /**
  * Returns a [Length] equal to [Int] number of centimeters.
@@ -405,6 +416,11 @@ public inline val Int.centimeters: Length get() = toLength(LengthUnit.Internatio
 public inline val Long.centimeters: Length get() = toLength(LengthUnit.International.Centimeter)
 
 /**
+ * Returns a [Length] equal to [Double] number of centimeters. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.centimeters: Length get() = toLength(LengthUnit.International.Centimeter)
+
+/**
  * Returns a [Length] equal to [Int] number of meters.
  */
 public inline val Int.meters: Length get() = toLength(LengthUnit.International.Meter)
@@ -413,6 +429,11 @@ public inline val Int.meters: Length get() = toLength(LengthUnit.International.M
  * Returns a [Length] equal to [Long] number of meters.
  */
 public inline val Long.meters: Length get() = toLength(LengthUnit.International.Meter)
+
+/**
+ * Returns a [Length] equal to [Double] number of meters. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.meters: Length get() = toLength(LengthUnit.International.Meter)
 
 /**
  * Returns a [Length] equal to [Int] number of kilometers.
@@ -425,6 +446,11 @@ public inline val Int.kilometers: Length get() = toLength(LengthUnit.Internation
 public inline val Long.kilometers: Length get() = toLength(LengthUnit.International.Kilometer)
 
 /**
+ * Returns a [Length] equal to [Double] number of kilometers. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.kilometers: Length get() = toLength(LengthUnit.International.Kilometer)
+
+/**
  * Returns a [Length] equal to [Int] number of megameters.
  */
 public inline val Int.megameters: Length get() = toLength(LengthUnit.International.Megameter)
@@ -433,6 +459,11 @@ public inline val Int.megameters: Length get() = toLength(LengthUnit.Internation
  * Returns a [Length] equal to [Long] number of megameters.
  */
 public inline val Long.megameters: Length get() = toLength(LengthUnit.International.Megameter)
+
+/**
+ * Returns a [Length] equal to [Double] number of megameters. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.megameters: Length get() = toLength(LengthUnit.International.Megameter)
 
 /**
  * Returns a [Length] equal to [Int] number of gigameters.
@@ -445,6 +476,11 @@ public inline val Int.gigameters: Length get() = toLength(LengthUnit.Internation
 public inline val Long.gigameters: Length get() = toLength(LengthUnit.International.Gigameter)
 
 /**
+ * Returns a [Length] equal to [Double] number of gigameters. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.gigameters: Length get() = toLength(LengthUnit.International.Gigameter)
+
+/**
  * Returns a [Length] equal to [Int] number of inches.
  */
 public inline val Int.inches: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Inch)
@@ -453,6 +489,11 @@ public inline val Int.inches: Length get() = toLength(LengthUnit.UnitedStatesCus
  * Returns a [Length] equal to [Long] number of inches.
  */
 public inline val Long.inches: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Inch)
+
+/**
+ * Returns a [Length] equal to [Double] number of inches. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.inches: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Inch)
 
 /**
  * Returns a [Length] equal to [Int] number of feet.
@@ -465,6 +506,11 @@ public inline val Int.feet: Length get() = toLength(LengthUnit.UnitedStatesCusto
 public inline val Long.feet: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Foot)
 
 /**
+ * Returns a [Length] equal to [Double] number of feet. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.feet: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Foot)
+
+/**
  * Returns a [Length] equal to [Int] number of yards.
  */
 public inline val Int.yards: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Yard)
@@ -473,6 +519,11 @@ public inline val Int.yards: Length get() = toLength(LengthUnit.UnitedStatesCust
  * Returns a [Length] equal to [Long] number of yards.
  */
 public inline val Long.yards: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Yard)
+
+/**
+ * Returns a [Length] equal to [Double] number of yards. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.yards: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Yard)
 
 /**
  * Returns a [Length] equal to [Int] number of miles.
@@ -484,12 +535,23 @@ public inline val Int.miles: Length get() = toLength(LengthUnit.UnitedStatesCust
  */
 public inline val Long.miles: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Mile)
 
+/**
+ * Returns a [Length] equal to [Double] number of miles. Depending on its magnitude, some precision may be lost.
+ */
+public inline val Double.miles: Length get() = toLength(LengthUnit.UnitedStatesCustomary.Mile)
+
 public fun Int.toLength(unit: LengthUnit): Length {
     return toLong().toLength(unit)
 }
 
 public fun Long.toLength(unit: LengthUnit): Length {
     return Length(this.saturated * unit.nanometerScale)
+}
+
+public fun Double.toLength(unit: LengthUnit): Length {
+    val valueInNanometers = this * unit.nanometerScale
+    require(!valueInNanometers.isNaN()) { "Length value cannot be NaN." }
+    return Length(valueInNanometers.roundToLong().saturated)
 }
 
 // endregions
