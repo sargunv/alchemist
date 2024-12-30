@@ -1,7 +1,7 @@
 package io.github.kevincianfarini.alchemist
 
-import io.github.kevincianfarini.alchemist.internal.*
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
+import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.sign
 import io.github.kevincianfarini.alchemist.internal.toDecimalComponents
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
@@ -181,7 +181,7 @@ public fun Int.toPower(unit: PowerUnit): Power {
 }
 
 public fun Long.toPower(unit: PowerUnit): Power {
-    return Power(this.saturated * unit.microwattScale)
+    return Power(saturated * unit.microwattScale)
 }
 
 // endregion

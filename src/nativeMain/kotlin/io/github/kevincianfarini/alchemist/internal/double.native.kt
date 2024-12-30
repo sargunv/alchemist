@@ -1,6 +1,10 @@
 package io.github.kevincianfarini.alchemist.internal
 
-import kotlinx.cinterop.*
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.allocArray
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.toKString
 import platform.posix.sprintf
 
 @OptIn(ExperimentalForeignApi::class)
