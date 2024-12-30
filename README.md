@@ -34,29 +34,29 @@ val volume: Volume = length * length * length
 
 ## Platform Support 
 
-| Platform             | Compiled | Tested in CI                                                                |
-|----------------------|----------|-----------------------------------------------------------------------------|
-| androidNativeArm32   |    ✅     | ❌                                                                           |
-| androidNativeArm64   |    ✅     | ❌                                                                           |
-| androidNativeX64     |    ✅     | ❌                                                                           |
-| androidNativeX86     |    ✅     | ❌                                                                           |
-| iosArm64             |    ✅     | ❌                                                                           |
-| iosSimulatorArm64    |    ✅     | ✅                                                                           |
-| iosX64               |    ✅     | ✅                                                                           |
-| js                   |    ✅     | ✅                                                                           |
-| jvm                  |    ✅     | ✅                                                                           |
-| linuxArm64           |    ✅     | ❌                                                                           |
-| linuxX64             |    ✅     | ✅                                                                           |
-| macosArm64           |    ✅     | ✅                                                                           |
-| macosX64             |    ✅     | ✅                                                                           |
-| mingwX64             |    ✅     | ✅                                                                           |
-| tvosArm64            |    ✅     | ❌                                                                           |
-| tvosSimulatorArm64   |    ✅     | ✅                                                                           |
-| tvosX64              |    ✅     | ✅                                                                           |
-| wasmJs               |    ✅     | ✅                                                                           |
-| wasmWasi             |    ✅     | ❌ (Prohibited by [KT-60964](https://youtrack.jetbrains.com/issue/KT-60964)) |
-| watchosArm32         |    ✅     | ❌                                                                           |
-| watchosArm64         |    ✅     | ❌                                                                           |
-| watchosDeviceArm64   |    ✅     | ❌                                                                           |
-| watchosSimuatorArm64 |    ✅     | ✅                                                                           |
-| watchosX64           |    ✅     | ✅                                                                           |
+| Platform             | Compiled | Tested in CI                                                                                       |
+|----------------------|----------|----------------------------------------------------------------------------------------------------|
+| androidNativeArm32   | ✅        | ❌                                                                                                  |
+| androidNativeArm64   | ✅        | ❌                                                                                                  |
+| androidNativeX64     | ✅        | ❌                                                                                                  |
+| androidNativeX86     | ✅        | ❌                                                                                                  |
+| iosArm64             | ✅        | ❌                                                                                                  |
+| iosSimulatorArm64    | ✅        | ✅                                                                                                  |
+| iosX64               | ✅        | ✅                                                                                                  |
+| js                   | ✅        | ✅                                                                                                  |
+| jvm                  | ✅        | ✅                                                                                                  |
+| linuxArm64           | ✅        | ❌ (Prohibited by [Tier 2](https://kotlinlang.org/docs/native-target-support.html#tier-2) support.) |
+| linuxX64             | ✅        | ✅                                                                                                  |
+| macosArm64           | ✅        | ✅                                                                                                  |
+| macosX64             | ✅        | ✅                                                                                                  |
+| mingwX64             | ✅        | ✅                                                                                                  |
+| tvosArm64            | ✅        | ❌                                                                                                  |
+| tvosSimulatorArm64   | ✅        | ✅                                                                                                  |
+| tvosX64              | ✅        | ✅                                                                                                  |
+| wasmJs               | ✅        | ✅                                                                                                  |
+| wasmWasi             | ✅        | ❌ (Prohibited by [KT-60964](https://youtrack.jetbrains.com/issue/KT-60964).)                       |
+| watchosArm32         | ✅        | ❌                                                                                                  |
+| watchosArm64         | ✅        | ❌                                                                                                  |
+| watchosDeviceArm64   | ✅        | ❌                                                                                                  |
+| watchosSimuatorArm64 | ✅        | ✅                                                                                                  |
+| watchosX64           | ✅        | ✅                                                                                                  |
