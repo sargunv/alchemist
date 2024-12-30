@@ -158,7 +158,7 @@ private inline val SaturatingLong.megakelvins get() = Temperature(
     TemperatureUnit.International.Megakelvin.convertToNanokelvin(this)
 )
 
-public val Int.gigskelvins: Temperature get() = toLong().gigakelvins
+public val Int.gigakelvins: Temperature get() = toLong().gigakelvins
 public val Long.gigakelvins: Temperature get() = saturated.gigakelvins
 public val Double.gigakelvins: Temperature get() = Temperature(
     TemperatureUnit.International.Gigakelvin.convertToNanokelvin(this).saturated
