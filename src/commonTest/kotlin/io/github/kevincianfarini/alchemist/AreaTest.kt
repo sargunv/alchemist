@@ -1,5 +1,7 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
+import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -10,33 +12,33 @@ class AreaTest {
 
     @Test
     fun infinite_area_div_finite_length_is_infinite() {
-        assertEquals(Length.POSITIVE_INFINITY, Area.POSITIVE_INFINITY / 1.nanometers)
-        assertEquals(Length.NEGATIVE_INFINITY, Area.POSITIVE_INFINITY / (-1).nanometers)
-        assertEquals(Length.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY / 1.nanometers)
-        assertEquals(Length.POSITIVE_INFINITY, Area.NEGATIVE_INFINITY / (-1).nanometers)
+        assertEquals(POSITIVE_INFINITY.nanometers, POSITIVE_INFINITY.mm2 / 1.nanometers)
+        assertEquals(NEGATIVE_INFINITY.nanometers, POSITIVE_INFINITY.mm2 / (-1).nanometers)
+        assertEquals(NEGATIVE_INFINITY.nanometers, NEGATIVE_INFINITY.mm2 / 1.nanometers)
+        assertEquals(POSITIVE_INFINITY.nanometers, NEGATIVE_INFINITY.mm2 / (-1).nanometers)
     }
 
     @Test
     fun finite_area_div_infinite_length_is_zero() {
-        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / Length.POSITIVE_INFINITY)
-        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / Length.NEGATIVE_INFINITY)
-        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / Length.POSITIVE_INFINITY)
-        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / Length.NEGATIVE_INFINITY)
+        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / POSITIVE_INFINITY.nanometers)
+        assertEquals(0.nanometers, (Long.MAX_VALUE - 1).mm2 / NEGATIVE_INFINITY.nanometers)
+        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / POSITIVE_INFINITY.nanometers)
+        assertEquals(0.nanometers, (Long.MIN_VALUE + 1).mm2 / NEGATIVE_INFINITY.nanometers)
     }
 
     @Test
     fun infinite_area_div_infinite_length_throws() {
         assertFailsWith<IllegalArgumentException> {
-            Area.POSITIVE_INFINITY / Length.POSITIVE_INFINITY
+            POSITIVE_INFINITY.mm2 / POSITIVE_INFINITY.nanometers
         }
         assertFailsWith<IllegalArgumentException> {
-            Area.NEGATIVE_INFINITY / Length.POSITIVE_INFINITY
+            NEGATIVE_INFINITY.mm2 / POSITIVE_INFINITY.nanometers
         }
         assertFailsWith<IllegalArgumentException> {
-            Area.NEGATIVE_INFINITY / Length.NEGATIVE_INFINITY
+            NEGATIVE_INFINITY.mm2 / NEGATIVE_INFINITY.nanometers
         }
         assertFailsWith<IllegalArgumentException> {
-            Area.POSITIVE_INFINITY / Length.NEGATIVE_INFINITY
+            POSITIVE_INFINITY.mm2 / NEGATIVE_INFINITY.nanometers
         }
     }
 
@@ -59,20 +61,20 @@ class AreaTest {
     fun area_div_scale_is_correct() {
         assertEquals(1.mm2, 2.mm2 / 2)
         assertEquals(0.mm2, 1.mm2 / 2)
-        assertEquals(Area.POSITIVE_INFINITY, Area.POSITIVE_INFINITY / 2)
-        assertEquals(Area.NEGATIVE_INFINITY, Area.POSITIVE_INFINITY / -2)
-        assertEquals(Area.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY / 2)
-        assertEquals(Area.POSITIVE_INFINITY, Area.NEGATIVE_INFINITY / -2)
+        assertEquals(POSITIVE_INFINITY.mm2, POSITIVE_INFINITY.mm2 / 2)
+        assertEquals(NEGATIVE_INFINITY.mm2, POSITIVE_INFINITY.mm2 / -2)
+        assertEquals(NEGATIVE_INFINITY.mm2, NEGATIVE_INFINITY.mm2 / 2)
+        assertEquals(POSITIVE_INFINITY.mm2, NEGATIVE_INFINITY.mm2 / -2)
     }
 
     @Test
     fun area_div_area_is_correct() {
         assertEquals(1.0, 1.mm2 / 1.mm2)
         assertEquals(2.5, 5.mm2 / 2.mm2)
-        assertEquals(Double.POSITIVE_INFINITY, Area.POSITIVE_INFINITY / 2.mm2)
-        assertEquals(Double.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY / 2.mm2)
-        assertEquals(Double.NEGATIVE_INFINITY, Area.POSITIVE_INFINITY / (-2).mm2)
-        assertEquals(Double.POSITIVE_INFINITY, Area.NEGATIVE_INFINITY / (-2).mm2)
+        assertEquals(Double.POSITIVE_INFINITY, POSITIVE_INFINITY.mm2 / 2.mm2)
+        assertEquals(Double.NEGATIVE_INFINITY, NEGATIVE_INFINITY.mm2 / 2.mm2)
+        assertEquals(Double.NEGATIVE_INFINITY, POSITIVE_INFINITY.mm2 / (-2).mm2)
+        assertEquals(Double.POSITIVE_INFINITY, NEGATIVE_INFINITY.mm2 / (-2).mm2)
     }
 
     @Test
@@ -80,10 +82,10 @@ class AreaTest {
         assertEquals((-1).mm2, 0.mm2 - 1.mm2)
         assertEquals(5.mm2, 10.mm2 - 5.mm2)
         assertEquals(12.mm2, 10.mm2 - (-2).mm2)
-        assertEquals(Area.NEGATIVE_INFINITY, (Long.MIN_VALUE + 1).mm2 - 1.mm2)
-        assertEquals(Area.POSITIVE_INFINITY, (Long.MAX_VALUE - 1).mm2 - (-1).mm2)
-        assertEquals(Area.POSITIVE_INFINITY, Area.POSITIVE_INFINITY - 100_000_000.mm2)
-        assertEquals(Area.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY - 100_000_000.mm2)
+        assertEquals(NEGATIVE_INFINITY.mm2, (Long.MIN_VALUE + 1).mm2 - 1.mm2)
+        assertEquals(POSITIVE_INFINITY.mm2, (Long.MAX_VALUE - 1).mm2 - (-1).mm2)
+        assertEquals(POSITIVE_INFINITY.mm2, POSITIVE_INFINITY.mm2 - 100_000_000.mm2)
+        assertEquals(NEGATIVE_INFINITY.mm2, NEGATIVE_INFINITY.mm2 - 100_000_000.mm2)
     }
 
     @Test
@@ -91,20 +93,20 @@ class AreaTest {
         assertEquals(1.mm2, 0.mm2 + 1.mm2)
         assertEquals(15.mm2, 10.mm2 + 5.mm2)
         assertEquals(8.mm2, 10.mm2 + (-2).mm2)
-        assertEquals(Area.NEGATIVE_INFINITY, (Long.MIN_VALUE + 1).mm2 + (-1).mm2)
-        assertEquals(Area.POSITIVE_INFINITY, (Long.MAX_VALUE - 1).mm2 + 1.mm2)
-        assertEquals(Area.POSITIVE_INFINITY, Area.POSITIVE_INFINITY + 100_000_000.mm2)
-        assertEquals(Area.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY + 100_000_000.mm2)
+        assertEquals(NEGATIVE_INFINITY.mm2, (Long.MIN_VALUE + 1).mm2 + (-1).mm2)
+        assertEquals(POSITIVE_INFINITY.mm2, (Long.MAX_VALUE - 1).mm2 + 1.mm2)
+        assertEquals(POSITIVE_INFINITY.mm2, POSITIVE_INFINITY.mm2 + 100_000_000.mm2)
+        assertEquals(NEGATIVE_INFINITY.mm2, NEGATIVE_INFINITY.mm2 + 100_000_000.mm2)
     }
 
     @Test
     fun area_mul_scale_is_correct() {
         assertEquals(4.mm2, 2.mm2 * 2)
         assertEquals(0.mm2, 0.mm2 * 2)
-        assertEquals(Area.POSITIVE_INFINITY, Area.POSITIVE_INFINITY * 2)
-        assertEquals(Area.NEGATIVE_INFINITY, Area.POSITIVE_INFINITY * -2)
-        assertEquals(Area.NEGATIVE_INFINITY, Area.NEGATIVE_INFINITY * 2)
-        assertEquals(Area.POSITIVE_INFINITY, Area.NEGATIVE_INFINITY * -2)
+        assertEquals(POSITIVE_INFINITY.mm2, POSITIVE_INFINITY.mm2 * 2)
+        assertEquals(NEGATIVE_INFINITY.mm2, POSITIVE_INFINITY.mm2 * -2)
+        assertEquals(NEGATIVE_INFINITY.mm2, NEGATIVE_INFINITY.mm2 * 2)
+        assertEquals(POSITIVE_INFINITY.mm2, NEGATIVE_INFINITY.mm2 * -2)
     }
 
     @Test
@@ -136,14 +138,14 @@ class AreaTest {
 
     @Test
     fun infinity_to_international_components_works() {
-        Area.POSITIVE_INFINITY.toInternationalComponents { megametersSquared, kilometersSquared, metersSquared, centimetersSquared, millimetersSquared ->
+        POSITIVE_INFINITY.mm2.toInternationalComponents { megametersSquared, kilometersSquared, metersSquared, centimetersSquared, millimetersSquared ->
             assertEquals(megametersSquared, Long.MAX_VALUE)
             assertEquals(kilometersSquared, Long.MAX_VALUE)
             assertEquals(metersSquared, Long.MAX_VALUE)
             assertEquals(centimetersSquared, Long.MAX_VALUE)
             assertEquals(millimetersSquared, Long.MAX_VALUE)
         }
-        Area.NEGATIVE_INFINITY.toInternationalComponents { megametersSquared, kilometersSquared, metersSquared, centimetersSquared, millimetersSquared ->
+        NEGATIVE_INFINITY.mm2.toInternationalComponents { megametersSquared, kilometersSquared, metersSquared, centimetersSquared, millimetersSquared ->
             assertEquals(megametersSquared, Long.MIN_VALUE)
             assertEquals(kilometersSquared, Long.MIN_VALUE)
             assertEquals(metersSquared, Long.MIN_VALUE)
@@ -164,8 +166,8 @@ class AreaTest {
         assertEquals("1.01km²", 1_010_000_000_000.mm2.toString())
         assertEquals("1.00Mm²", 1_000_000_000_000_000_000.mm2.toString())
         assertEquals("1.01Mm²", 1_010_000_000_000_000_000.mm2.toString())
-        assertEquals("Infinity", Area.POSITIVE_INFINITY.toString())
-        assertEquals("-Infinity", Area.NEGATIVE_INFINITY.toString())
+        assertEquals("Infinity", POSITIVE_INFINITY.mm2.toString())
+        assertEquals("-Infinity", NEGATIVE_INFINITY.mm2.toString())
     }
 
     @Test
@@ -174,18 +176,18 @@ class AreaTest {
         assertTrue(2.mm2 <= 2.mm2)
         assertFalse(1.mm2 > 2.mm2)
         assertFalse(1.mm2 >= 2.mm2)
-        assertFalse(Area.POSITIVE_INFINITY > Area.POSITIVE_INFINITY)
-        assertFalse(Area.POSITIVE_INFINITY < Area.POSITIVE_INFINITY)
-        assertTrue(Area.POSITIVE_INFINITY >= Area.POSITIVE_INFINITY)
-        assertTrue(Area.POSITIVE_INFINITY <= Area.POSITIVE_INFINITY)
-        assertTrue(Area.POSITIVE_INFINITY > Area.NEGATIVE_INFINITY)
-        assertTrue(Area.POSITIVE_INFINITY >= Area.NEGATIVE_INFINITY)
-        assertFalse(Area.NEGATIVE_INFINITY > Area.NEGATIVE_INFINITY)
-        assertFalse(Area.NEGATIVE_INFINITY < Area.NEGATIVE_INFINITY)
-        assertTrue(Area.NEGATIVE_INFINITY >= Area.NEGATIVE_INFINITY)
-        assertTrue(Area.NEGATIVE_INFINITY <= Area.NEGATIVE_INFINITY)
-        assertTrue(Area.NEGATIVE_INFINITY < Area.POSITIVE_INFINITY)
-        assertTrue(Area.NEGATIVE_INFINITY <= Area.POSITIVE_INFINITY)
+        assertFalse(POSITIVE_INFINITY.mm2 > POSITIVE_INFINITY.mm2)
+        assertFalse(POSITIVE_INFINITY.mm2 < POSITIVE_INFINITY.mm2)
+        assertTrue(POSITIVE_INFINITY.mm2 >= POSITIVE_INFINITY.mm2)
+        assertTrue(POSITIVE_INFINITY.mm2 <= POSITIVE_INFINITY.mm2)
+        assertTrue(POSITIVE_INFINITY.mm2 > NEGATIVE_INFINITY.mm2)
+        assertTrue(POSITIVE_INFINITY.mm2 >= NEGATIVE_INFINITY.mm2)
+        assertFalse(NEGATIVE_INFINITY.mm2 > NEGATIVE_INFINITY.mm2)
+        assertFalse(NEGATIVE_INFINITY.mm2 < NEGATIVE_INFINITY.mm2)
+        assertTrue(NEGATIVE_INFINITY.mm2 >= NEGATIVE_INFINITY.mm2)
+        assertTrue(NEGATIVE_INFINITY.mm2 <= NEGATIVE_INFINITY.mm2)
+        assertTrue(NEGATIVE_INFINITY.mm2 < POSITIVE_INFINITY.mm2)
+        assertTrue(NEGATIVE_INFINITY.mm2 <= POSITIVE_INFINITY.mm2)
     }
 
     @Test
@@ -195,7 +197,7 @@ class AreaTest {
         assertTrue((Long.MIN_VALUE + 1).mm2.isFinite())
         assertFalse(Long.MAX_VALUE.mm2.isFinite())
         assertFalse(Long.MIN_VALUE.mm2.isFinite())
-        assertFalse(Area.POSITIVE_INFINITY.isFinite())
-        assertFalse(Area.NEGATIVE_INFINITY.isFinite())
+        assertFalse(POSITIVE_INFINITY.mm2.isFinite())
+        assertFalse(NEGATIVE_INFINITY.mm2.isFinite())
     }
 }

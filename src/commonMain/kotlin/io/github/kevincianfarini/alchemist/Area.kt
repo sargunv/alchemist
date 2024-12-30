@@ -132,20 +132,15 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
 
     // region Comparisons
 
-    public fun isInfinite(): Boolean = this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
+    public fun isInfinite(): Boolean = rawMillimetersSquared.isInfinite()
 
-    public fun isFinite(): Boolean = !isInfinite()
+    public fun isFinite(): Boolean = rawMillimetersSquared.isFinite()
 
     public override fun compareTo(other: Area): Int {
         return rawMillimetersSquared.compareTo(other.rawMillimetersSquared)
     }
 
     // endregion
-
-    public companion object {
-        public val POSITIVE_INFINITY: Area = Area(SaturatingLong.POSITIVE_INFINITY)
-        public val NEGATIVE_INFINITY: Area = Area(SaturatingLong.NEGATIVE_INFINITY)
-    }
 }
 
 public interface AreaUnit {
@@ -174,5 +169,6 @@ public interface AreaUnit {
 }
 
 
-internal val Long.mm2: Area get() = Area(saturated)
-internal val Int.mm2: Area get() = Area(toLong().saturated)
+internal inline val Long.mm2: Area get() = Area(saturated)
+internal inline val Int.mm2: Area get() = Area(toLong().saturated)
+internal inline val SaturatingLong.mm2: Area get() = Area(this)

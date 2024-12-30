@@ -125,11 +125,6 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
     override fun compareTo(other: Mass): Int = rawMicrograms.compareTo(other.rawMicrograms)
 
     // endregion
-
-    public companion object {
-        public val POSITIVE_INFINITY: Mass = Mass(SaturatingLong.POSITIVE_INFINITY)
-        public val NEGATIVE_INFINITY: Mass = Mass(SaturatingLong.NEGATIVE_INFINITY)
-    }
 }
 
 // region Scalar to Mass Conversions

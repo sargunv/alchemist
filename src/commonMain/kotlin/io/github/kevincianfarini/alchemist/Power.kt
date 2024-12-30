@@ -1,5 +1,6 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.sign
@@ -29,7 +30,7 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
     public operator fun times(duration: Duration): Energy {
         return when {
             duration.isInfinite() || rawMicrowatts.isInfinite() -> {
-                Energy(SaturatingLong.POSITIVE_INFINITY * duration.sign * rawMicrowatts)
+                Energy(POSITIVE_INFINITY * duration.sign * rawMicrowatts)
             }
             else -> duration.toDecimalComponents { thousandSeconds, secondsRemainder, millis, micros, nanos ->
                 // Try to find the right level which we can perform this operation at without losing precision.
@@ -141,11 +142,6 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
     }
 
     // endregion
-
-    public companion object {
-        public val POSITIVE_INFINITY: Power = Power(SaturatingLong.POSITIVE_INFINITY)
-        public val NEGATIVE_INFINITY: Power = Power(SaturatingLong.NEGATIVE_INFINITY)
-    }
 }
 
 // region Scalar to Power Conversions

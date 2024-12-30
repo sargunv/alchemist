@@ -1,5 +1,7 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
+import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -28,7 +30,7 @@ class EnergyTest {
 
     @Test
     fun infinite_to_international_components() {
-        Energy.POSITIVE_INFINITY.toInternationalComponents { petajoules, tetrajoules, gigajoules, megajoules, kilojoules, joules, millijoules ->
+        POSITIVE_INFINITY.millijoules.toInternationalComponents { petajoules, tetrajoules, gigajoules, megajoules, kilojoules, joules, millijoules ->
             assertEquals(Long.MAX_VALUE, petajoules)
             assertEquals(Long.MAX_VALUE, tetrajoules)
             assertEquals(Long.MAX_VALUE, gigajoules)
@@ -55,7 +57,7 @@ class EnergyTest {
 
     @Test
     fun infinite_to_electricity_components() {
-        Energy.POSITIVE_INFINITY.toElectricityComponents { terawattHours, gigawattHours, megawattHours, kilowattHours, wattHours, milliwattHours, microwattHours ->
+        POSITIVE_INFINITY.millijoules.toElectricityComponents { terawattHours, gigawattHours, megawattHours, kilowattHours, wattHours, milliwattHours, microwattHours ->
             assertEquals(Long.MAX_VALUE, terawattHours)
             assertEquals(Long.MAX_VALUE, gigawattHours)
             assertEquals(Long.MAX_VALUE, megawattHours)
@@ -87,17 +89,17 @@ class EnergyTest {
     @Test
     fun infinite_energy_div_infinite_duration_throws() {
         assertFailsWith<IllegalArgumentException> {
-            Energy.POSITIVE_INFINITY / Duration.INFINITE
+            POSITIVE_INFINITY.millijoules / Duration.INFINITE
         }
         assertFailsWith<IllegalArgumentException> {
-            Energy.NEGATIVE_INFINITY / Duration.INFINITE
+            NEGATIVE_INFINITY.millijoules / Duration.INFINITE
         }
     }
 
     @Test
     fun infinite_energy_div_finite_duration_produces_infinite_power() {
-        assertEquals(Power.POSITIVE_INFINITY, Energy.POSITIVE_INFINITY / 10.hours)
-        assertEquals(Power.NEGATIVE_INFINITY, Energy.NEGATIVE_INFINITY / 10.hours)
+        assertEquals(POSITIVE_INFINITY.microwatts, POSITIVE_INFINITY.millijoules / 10.hours)
+        assertEquals(NEGATIVE_INFINITY.microwatts, NEGATIVE_INFINITY.millijoules / 10.hours)
     }
 
     @Test

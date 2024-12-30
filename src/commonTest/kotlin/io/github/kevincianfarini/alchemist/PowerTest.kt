@@ -1,5 +1,7 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
+import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration
@@ -13,19 +15,19 @@ class PowerTest {
     @Test
     fun power_multiply_infinite_time() {
         assertEquals(
-            expected = Energy.POSITIVE_INFINITY,
+            expected = POSITIVE_INFINITY.millijoules,
             actual = 1.microwatts * Duration.INFINITE,
         )
         assertEquals(
-            expected = Energy.NEGATIVE_INFINITY,
+            expected = NEGATIVE_INFINITY.millijoules,
             actual = (-1).microwatts * Duration.INFINITE,
         )
         assertEquals(
-            expected = Energy.POSITIVE_INFINITY,
+            expected = POSITIVE_INFINITY.millijoules,
             actual = (-1).microwatts * -Duration.INFINITE,
         )
         assertEquals(
-            expected = Energy.NEGATIVE_INFINITY,
+            expected = NEGATIVE_INFINITY.millijoules,
             actual = 1.microwatts * -Duration.INFINITE,
         )
     }
@@ -33,40 +35,40 @@ class PowerTest {
     @Test
     fun infinite_power_multiply_time() {
         assertEquals(
-            expected = Energy.POSITIVE_INFINITY,
-            actual = Power.POSITIVE_INFINITY * 1.nanoseconds,
+            expected = POSITIVE_INFINITY.millijoules,
+            actual = POSITIVE_INFINITY.microwatts * 1.nanoseconds,
         )
         assertEquals(
-            expected = Energy.POSITIVE_INFINITY,
-            actual = Power.NEGATIVE_INFINITY * (-1).nanoseconds,
+            expected = POSITIVE_INFINITY.millijoules,
+            actual = NEGATIVE_INFINITY.microwatts * (-1).nanoseconds,
         )
         assertEquals(
-            expected = Energy.NEGATIVE_INFINITY,
-            actual = Power.NEGATIVE_INFINITY * 1.nanoseconds,
+            expected = NEGATIVE_INFINITY.millijoules,
+            actual = NEGATIVE_INFINITY.microwatts * 1.nanoseconds,
         )
         assertEquals(
-            expected = Energy.NEGATIVE_INFINITY,
-            actual = Power.POSITIVE_INFINITY * (-1).nanoseconds,
+            expected = NEGATIVE_INFINITY.millijoules,
+            actual = POSITIVE_INFINITY.microwatts * (-1).nanoseconds,
         )
     }
 
     @Test
     fun infinite_power_multiply_infinite_time() {
         assertEquals(
-            expected = Energy.POSITIVE_INFINITY,
-            actual = Power.POSITIVE_INFINITY * Duration.INFINITE,
+            expected = POSITIVE_INFINITY.millijoules,
+            actual = POSITIVE_INFINITY.microwatts * Duration.INFINITE,
         )
         assertEquals(
-            expected = Energy.POSITIVE_INFINITY,
-            actual = Power.NEGATIVE_INFINITY * -Duration.INFINITE,
+            expected = POSITIVE_INFINITY.millijoules,
+            actual = NEGATIVE_INFINITY.microwatts * -Duration.INFINITE,
         )
         assertEquals(
-            expected = Energy.NEGATIVE_INFINITY,
-            actual = Power.NEGATIVE_INFINITY * Duration.INFINITE,
+            expected = NEGATIVE_INFINITY.millijoules,
+            actual = NEGATIVE_INFINITY.microwatts * Duration.INFINITE,
         )
         assertEquals(
-            expected = Energy.NEGATIVE_INFINITY,
-            actual = Power.POSITIVE_INFINITY * -Duration.INFINITE,
+            expected = NEGATIVE_INFINITY.millijoules,
+            actual = POSITIVE_INFINITY.microwatts * -Duration.INFINITE,
         )
     }
 

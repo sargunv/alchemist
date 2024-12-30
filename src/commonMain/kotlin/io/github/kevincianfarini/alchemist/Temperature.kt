@@ -103,11 +103,6 @@ public value class Temperature internal constructor(private val rawNanokelvin: S
     }
 
     // endregion
-
-    public companion object {
-        public val POSITIVE_INFINITY: Temperature = Temperature(SaturatingLong.POSITIVE_INFINITY)
-        public val NEGATIVE_INFINITY: Temperature = Temperature(SaturatingLong.NEGATIVE_INFINITY)
-    }
 }
 
 // region Scalar to Temperature Conversions
@@ -307,26 +302,24 @@ public interface TemperatureUnit {
         },
     }
 
-    public companion object {
-        public val Fahrenheit: TemperatureUnit = object : TemperatureUnit {
-            override val symbol: String get() = "°F"
-            override fun convertToNanokelvin(degrees: Long): Long {
-                val accurate = (((degrees.saturated * 1_000_000_000) + 459_670_000_000) * 5) / 9
-                return if (accurate.isFinite()) {
-                    accurate.rawValue
-                } else {
-                    ((degrees.saturated * 555_555_556) + 255_372_222_222).rawValue
-                }
+    public object Fahrenheit : TemperatureUnit  {
+        override val symbol: String get() = "°F"
+        override fun convertToNanokelvin(degrees: Long): Long {
+            val accurate = (((degrees.saturated * 1_000_000_000) + 459_670_000_000) * 5) / 9
+            return if (accurate.isFinite()) {
+                accurate.rawValue
+            } else {
+                ((degrees.saturated * 555_555_556) + 255_372_222_222).rawValue
             }
+        }
 
-            override fun convertToNanokelvin(degrees: Double): Long {
-                val ret = (((degrees * 1_000_000_000) + 459_670_000_000) * 5) / 9
-                require(!ret.isNaN()) { "Temperature value cannot be NaN." }
-                return ret.roundToLong()
-            }
-            override fun convertNanokelvinsToThis(nanokelvins: Long): Double {
-                return (nanokelvins.saturated - 255_372_222_222).toDouble() / 555_555_556.toDouble()
-            }
+        override fun convertToNanokelvin(degrees: Double): Long {
+            val ret = (((degrees * 1_000_000_000) + 459_670_000_000) * 5) / 9
+            require(!ret.isNaN()) { "Temperature value cannot be NaN." }
+            return ret.roundToLong()
+        }
+        override fun convertNanokelvinsToThis(nanokelvins: Long): Double {
+            return (nanokelvins.saturated - 255_372_222_222).toDouble() / 555_555_556.toDouble()
         }
     }
 }

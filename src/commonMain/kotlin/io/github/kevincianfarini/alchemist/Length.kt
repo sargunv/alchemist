@@ -1,5 +1,6 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.isPreciseToNanosecond
 import io.github.kevincianfarini.alchemist.internal.saturated
@@ -159,7 +160,7 @@ public value class Length internal constructor(internal val rawNanometers: Satur
                 val millisSquared = milli * otherMilli
                 if (gigaSquared != 0L.saturated) {
                     // We can't represent gigameter² at millimeter² precision.
-                    Area(SaturatingLong.POSITIVE_INFINITY * gigaSquared.sign)
+                    Area(POSITIVE_INFINITY * gigaSquared.sign)
                 } else {
                     val megaMillis = megaSquared * 1_000_000_000_000_000_000
                     val kiloMillis = kiloSquared * 1_000_000_000_000
@@ -341,24 +342,11 @@ public value class Length internal constructor(internal val rawNanometers: Satur
         return rawNanometers.compareTo(other.rawNanometers)
     }
 
-    public fun isInfinite(): Boolean = this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
+    public fun isInfinite(): Boolean = rawNanometers.isInfinite()
 
-    public fun isFinite(): Boolean = !isInfinite()
+    public fun isFinite(): Boolean = rawNanometers.isFinite()
 
     // endregion
-
-    public companion object {
-
-        /**
-         * A positive infinite length.
-         */
-        public val POSITIVE_INFINITY: Length = Length(SaturatingLong.POSITIVE_INFINITY)
-
-        /**
-         * A negative infinite length.
-         */
-        public val NEGATIVE_INFINITY: Length = Length(SaturatingLong.NEGATIVE_INFINITY)
-    }
 }
 
 // region Scalar to Length Conversions

@@ -148,11 +148,8 @@ internal value class SaturatingLong(val rawValue: Long) : Comparable<SaturatingL
         NEGATIVE_INFINITY -> Double.NEGATIVE_INFINITY
         else -> rawValue.toDouble()
     }
-
-    companion object {
-        val POSITIVE_INFINITY = SaturatingLong(Long.MAX_VALUE)
-        val NEGATIVE_INFINITY = SaturatingLong(Long.MIN_VALUE)
-    }
 }
 
-internal val Long.saturated get() = SaturatingLong(this)
+internal inline val Long.saturated get() = SaturatingLong(this)
+internal inline val POSITIVE_INFINITY get() = SaturatingLong(Long.MAX_VALUE)
+internal inline val NEGATIVE_INFINITY get() = SaturatingLong(Long.MIN_VALUE)

@@ -79,8 +79,4 @@ public value class Force internal constructor(private val foo: Long) : Comparabl
     }
 
     // endregion
-
-    public companion object {
-
-    }
 }

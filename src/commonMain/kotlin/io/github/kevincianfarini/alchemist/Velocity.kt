@@ -191,11 +191,6 @@ public value class Velocity internal constructor(
     override fun compareTo(other: Velocity): Int = rawNanometersPerSecond.compareTo(other.rawNanometersPerSecond)
 
     // endregion
-
-    public companion object {
-        public val POSITIVE_INFINITY: Velocity = Velocity(SaturatingLong.POSITIVE_INFINITY)
-        public val NEGATIVE_INFINITY: Velocity = Velocity(SaturatingLong.NEGATIVE_INFINITY)
-    }
 }
 
 internal val Int.nmPerSecond: Velocity get() = Velocity(toLong().saturated)

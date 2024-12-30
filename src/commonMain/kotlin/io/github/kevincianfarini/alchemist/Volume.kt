@@ -79,8 +79,4 @@ public value class Volume internal constructor(private val foo: Long) : Comparab
     }
 
     // endregion
-
-    public companion object {
-
-    }
 }

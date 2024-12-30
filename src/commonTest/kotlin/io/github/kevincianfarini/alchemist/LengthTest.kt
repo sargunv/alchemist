@@ -1,5 +1,7 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
+import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -27,7 +29,7 @@ class LengthTest {
 
     @Test
     fun to_metric_components_positive_infinity_max_value_every_component() {
-        Length.POSITIVE_INFINITY.toInternationalComponents { gm, mega, km, m, cm, milli, um, nm ->
+        POSITIVE_INFINITY.nanometers.toInternationalComponents { gm, mega, km, m, cm, milli, um, nm ->
             assertEquals(Long.MAX_VALUE, gm)
             assertEquals(Long.MAX_VALUE, mega)
             assertEquals(Long.MAX_VALUE, km)
@@ -41,7 +43,7 @@ class LengthTest {
 
     @Test
     fun to_metric_components_negative_infinity_min_value_every_component() {
-        Length.NEGATIVE_INFINITY.toInternationalComponents { gm, mega, km, m, cm, milli, um, nm ->
+        NEGATIVE_INFINITY.nanometers.toInternationalComponents { gm, mega, km, m, cm, milli, um, nm ->
             assertEquals(Long.MIN_VALUE, gm)
             assertEquals(Long.MIN_VALUE, mega)
             assertEquals(Long.MIN_VALUE, km)
@@ -66,7 +68,7 @@ class LengthTest {
 
     @Test
     fun to_imperial_components_positive_infinity_max_value_every_component() {
-        Length.POSITIVE_INFINITY.toUnitedStatesCustomaryComponents { miles, yards, feet, inches ->
+        POSITIVE_INFINITY.nanometers.toUnitedStatesCustomaryComponents { miles, yards, feet, inches ->
             assertEquals(Long.MAX_VALUE, miles)
             assertEquals(Long.MAX_VALUE, yards)
             assertEquals(Long.MAX_VALUE, feet)
@@ -76,7 +78,7 @@ class LengthTest {
 
     @Test
     fun to_imperial_components_negative_infinity_min_value_every_component() {
-        Length.NEGATIVE_INFINITY.toUnitedStatesCustomaryComponents { miles, yards, feet, inches ->
+        NEGATIVE_INFINITY.nanometers.toUnitedStatesCustomaryComponents { miles, yards, feet, inches ->
             assertEquals(Long.MIN_VALUE, miles)
             assertEquals(Long.MIN_VALUE, yards)
             assertEquals(Long.MIN_VALUE, feet)
@@ -95,8 +97,8 @@ class LengthTest {
 
     @Test
     fun to_string_infinity() {
-        assertEquals("Infinity", Length.POSITIVE_INFINITY.toString())
-        assertEquals("-Infinity", Length.NEGATIVE_INFINITY.toString())
+        assertEquals("Infinity", POSITIVE_INFINITY.nanometers.toString())
+        assertEquals("-Infinity", NEGATIVE_INFINITY.nanometers.toString())
     }
 
     @Test
@@ -113,15 +115,15 @@ class LengthTest {
 
     @Test
     fun length_mul_length_gigameters_is_infinite() {
-        assertEquals(Area.POSITIVE_INFINITY, 1.gigameters * 1.gigameters)
-        assertEquals(Area.NEGATIVE_INFINITY, 1.gigameters * (-1).gigameters)
-        assertEquals(Area.POSITIVE_INFINITY, (-1).gigameters * (-1).gigameters)
-        assertEquals(Area.NEGATIVE_INFINITY, (-1).gigameters * 1.gigameters)
+        assertEquals(POSITIVE_INFINITY.mm2, 1.gigameters * 1.gigameters)
+        assertEquals(NEGATIVE_INFINITY.mm2, 1.gigameters * (-1).gigameters)
+        assertEquals(POSITIVE_INFINITY.mm2, (-1).gigameters * (-1).gigameters)
+        assertEquals(NEGATIVE_INFINITY.mm2, (-1).gigameters * 1.gigameters)
     }
 
     @Test
     fun length_mul_length_megameter_overflow() {
-        assertEquals(Area.POSITIVE_INFINITY, 100.megameters * 10.megameters)
+        assertEquals(POSITIVE_INFINITY.mm2, 100.megameters * 10.megameters)
     }
 
     @Test
@@ -143,25 +145,25 @@ class LengthTest {
     @Test
     fun infinite_length_div_infinite_time_throws() {
         assertFailsWith<IllegalArgumentException> {
-            Length.POSITIVE_INFINITY / Duration.INFINITE
+            POSITIVE_INFINITY.nanometers / Duration.INFINITE
         }
         assertFailsWith<IllegalArgumentException> {
-            Length.NEGATIVE_INFINITY / Duration.INFINITE
+            NEGATIVE_INFINITY.nanometers / Duration.INFINITE
         }
         assertFailsWith<IllegalArgumentException> {
-            Length.POSITIVE_INFINITY / -Duration.INFINITE
+            POSITIVE_INFINITY.nanometers / -Duration.INFINITE
         }
         assertFailsWith<IllegalArgumentException> {
-            Length.NEGATIVE_INFINITY / -Duration.INFINITE
+            NEGATIVE_INFINITY.nanometers / -Duration.INFINITE
         }
     }
 
     @Test
     fun infinite_length_div_finite_time() {
-        assertEquals(Velocity.POSITIVE_INFINITY, Length.POSITIVE_INFINITY / 1.seconds)
-        assertEquals(Velocity.NEGATIVE_INFINITY, Length.NEGATIVE_INFINITY / 1.seconds)
-        assertEquals(Velocity.NEGATIVE_INFINITY, Length.POSITIVE_INFINITY / (-1).seconds)
-        assertEquals(Velocity.POSITIVE_INFINITY, Length.NEGATIVE_INFINITY / (-1).seconds)
+        assertEquals(POSITIVE_INFINITY.nmPerSecond, POSITIVE_INFINITY.nanometers / 1.seconds)
+        assertEquals(NEGATIVE_INFINITY.nmPerSecond, NEGATIVE_INFINITY.nanometers / 1.seconds)
+        assertEquals(NEGATIVE_INFINITY.nmPerSecond, POSITIVE_INFINITY.nanometers / (-1).seconds)
+        assertEquals(POSITIVE_INFINITY.nmPerSecond, NEGATIVE_INFINITY.nanometers / (-1).seconds)
     }
 
     @Test

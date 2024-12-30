@@ -255,11 +255,6 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
     }
 
     // endregion
-
-    public companion object {
-        public val POSITIVE_INFINITY: Energy = Energy(SaturatingLong.POSITIVE_INFINITY)
-        public val NEGATIVE_INFINITY: Energy = Energy(SaturatingLong.NEGATIVE_INFINITY)
-    }
 }
 
 // region Scalar to Energy Conversions
@@ -280,6 +275,7 @@ public fun Double.toEnergy(unit: EnergyUnit): Energy {
 
 public inline val Int.millijoules: Energy get() = toEnergy(EnergyUnit.International.Millijoule)
 public inline val Long.millijoules: Energy get() = toEnergy(EnergyUnit.International.Millijoule)
+internal inline val SaturatingLong.millijoules get() = Energy(this)
 
 public inline val Int.joules: Energy get() = toEnergy(EnergyUnit.International.Joule)
 public inline val Long.joules: Energy get() = toEnergy(EnergyUnit.International.Joule)
