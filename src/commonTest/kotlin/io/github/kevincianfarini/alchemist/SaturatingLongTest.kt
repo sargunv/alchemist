@@ -1,7 +1,8 @@
 package io.github.kevincianfarini.alchemist
 
-import io.github.kevincianfarini.alchemist.SaturatingLong.Companion.NEGATIVE_INFINITY
-import io.github.kevincianfarini.alchemist.SaturatingLong.Companion.POSITIVE_INFINITY
+import io.github.kevincianfarini.alchemist.internal.SaturatingLong.Companion.NEGATIVE_INFINITY
+import io.github.kevincianfarini.alchemist.internal.SaturatingLong.Companion.POSITIVE_INFINITY
+import io.github.kevincianfarini.alchemist.internal.saturated
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

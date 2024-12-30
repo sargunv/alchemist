@@ -1,6 +1,8 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.isPreciseToNanosecond
+import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
 import kotlin.time.Duration

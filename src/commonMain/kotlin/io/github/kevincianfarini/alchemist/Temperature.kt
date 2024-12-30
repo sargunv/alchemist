@@ -1,5 +1,7 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.internal.SaturatingLong
+import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
 import kotlin.text.Typography.nbsp
@@ -167,12 +169,13 @@ private inline val SaturatingLong.fahrenheit get() = Temperature(
 
 @RequiresOptIn(
     message = """
-        TemperatureUnit exposes SaturatingLong, an integer type which might produce unexpected arithmetic results. 
-        Implementors should use caution when converting between their custom temperature units and nanokelvins. 
+        Implementing TemperatureUnit requires detecting integer overflow detection, which normal Long values don't 
+        expose. Implementors should exercise caution when converting between their custom temperature units and 
+        nanokelvins. 
     """,
     level = RequiresOptIn.Level.ERROR,
 )
-public annotation class DelicateTemperatureUnit()
+public annotation class DelicateTemperatureUnit
 
 /**
  * A unit of temperature precise to the nanokelvin.
@@ -188,48 +191,48 @@ public interface TemperatureUnit {
     /**
      * Convert the degrees of this [TemperatureUnit] to nanokelvins.
      */
-    public fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong
+    public fun convertToNanokelvin(degrees: Long): Long
 
     /**
-     * Convert the amount of [nanokelvins] of this degrees in this [TemperatureUnit].
+     * Convert the amount of [nanokelvins] of this temperature in this [TemperatureUnit].
      */
-    public fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double
+    public fun convertNanokelvinsToThis(nanokelvins: Long): Double
 
     public enum class International(override val symbol: String) : TemperatureUnit {
         Nanokelvin("${nbsp}nK") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong = degrees
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double = nanokelvins.toDouble()
+            override fun convertToNanokelvin(degrees: Long): Long = degrees
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double = nanokelvins.toDouble()
         },
         Microkelvin("${nbsp}μK") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong = degrees * 1_000
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double = nanokelvins.toDouble() / 1_000
+            override fun convertToNanokelvin(degrees: Long): Long = (degrees.saturated * 1_000).rawValue
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double = nanokelvins.saturated.toDouble() / 1_000
         },
         Millikelvin("${nbsp}mK") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong = degrees * 1_000_000
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double = nanokelvins.toDouble() / 1_000_000
+            override fun convertToNanokelvin(degrees: Long): Long = (degrees.saturated * 1_000_000).rawValue
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double = nanokelvins.saturated.toDouble() / 1_000_000
         },
         Kelvin("${nbsp}K") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong = degrees * 1_000_000_000
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double = nanokelvins.toDouble() / 1_000_000_000
+            override fun convertToNanokelvin(degrees: Long): Long = (degrees.saturated * 1_000_000_000).rawValue
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double = nanokelvins.saturated.toDouble() / 1_000_000_000
         },
         Kilokelvin("${nbsp}kK") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong = degrees * 1_000_000_000_000
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double = nanokelvins.toDouble() / 1_000_000_000_000
+            override fun convertToNanokelvin(degrees: Long): Long = (degrees.saturated * 1_000_000_000_000).rawValue
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double = nanokelvins.saturated.toDouble() / 1_000_000_000_000
         },
         Megakelvin("${nbsp}MK") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong = degrees * 1_000_000_000_000_000
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double = nanokelvins.toDouble() / 1_000_000_000_000_000
+            override fun convertToNanokelvin(degrees: Long): Long = (degrees.saturated * 1_000_000_000_000_000).rawValue
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double = nanokelvins.saturated.toDouble() / 1_000_000_000_000_000
         },
         Gigakelvin("${nbsp}GK") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong = degrees * 1_000_000_000_000_000_000
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double = nanokelvins.toDouble() / 1_000_000_000_000_000_000
+            override fun convertToNanokelvin(degrees: Long): Long = (degrees.saturated * 1_000_000_000_000_000_000).rawValue
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double = nanokelvins.saturated.toDouble() / 1_000_000_000_000_000_000
         },
         Celsius("°C") {
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong {
-                return (degrees * 1_000_000_000) + 273_150_000_000
+            override fun convertToNanokelvin(degrees: Long): Long {
+                return ((degrees.saturated * 1_000_000_000) + 273_150_000_000).rawValue
             }
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double {
-                return (nanokelvins.toDouble() - 273_150_000_000) / 1_000_000_000
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double {
+                return (nanokelvins.saturated.toDouble() - 273_150_000_000) / 1_000_000_000
             }
         },
     }
@@ -237,17 +240,25 @@ public interface TemperatureUnit {
     public companion object {
         public val Fahrenheit: TemperatureUnit = object : TemperatureUnit {
             override val symbol: String get() = "°F"
-            override fun convertToNanokelvin(degrees: SaturatingLong): SaturatingLong {
-                val accurate = (((degrees * 1_000_000_000) + 459_670_000_000) * 5) / 9
+            override fun convertToNanokelvin(degrees: Long): Long {
+                val accurate = (((degrees.saturated * 1_000_000_000) + 459_670_000_000) * 5) / 9
                 return if (accurate.isFinite()) {
-                    accurate
+                    accurate.rawValue
                 } else {
-                    (degrees * 555_555_556) + 255_372_222_222
+                    ((degrees.saturated * 555_555_556) + 255_372_222_222).rawValue
                 }
             }
-            override fun convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double {
-                return (nanokelvins - 255_372_222_222).toDouble() / 555_555_556.toDouble()
+            override fun convertNanokelvinsToThis(nanokelvins: Long): Double {
+                return (nanokelvins.saturated - 255_372_222_222).toDouble() / 555_555_556.toDouble()
             }
         }
     }
+}
+
+private fun TemperatureUnit.convertToNanokelvin(value: SaturatingLong): SaturatingLong {
+    return convertToNanokelvin(value.rawValue).saturated
+}
+
+private fun TemperatureUnit.convertNanokelvinsToThis(nanokelvins: SaturatingLong): Double {
+    return convertNanokelvinsToThis(nanokelvins.rawValue)
 }

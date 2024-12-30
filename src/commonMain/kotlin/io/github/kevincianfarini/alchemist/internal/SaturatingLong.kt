@@ -1,4 +1,4 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.internal
 
 import kotlin.jvm.JvmInline
 import kotlin.math.absoluteValue
@@ -14,9 +14,9 @@ import kotlin.math.sign
  * LLVM for more details.
  */
 @JvmInline
-public value class SaturatingLong internal constructor(internal val rawValue: Long) : Comparable<SaturatingLong> {
+internal value class SaturatingLong(val rawValue: Long) : Comparable<SaturatingLong> {
 
-    internal operator fun plus(other: SaturatingLong): SaturatingLong = when {
+    operator fun plus(other: SaturatingLong): SaturatingLong = when {
         isInfinite() && isPositive() && other.isInfinite() && other.isPositive() -> POSITIVE_INFINITY
         isInfinite() && isNegative() && other.isInfinite() && other.isNegative() -> NEGATIVE_INFINITY
         isInfinite() && other.isFinite() -> this
@@ -36,23 +36,23 @@ public value class SaturatingLong internal constructor(internal val rawValue: Lo
         }
     }
 
-    public operator fun plus(other: Long): SaturatingLong {
+    operator fun plus(other: Long): SaturatingLong {
         return this + SaturatingLong(other)
     }
 
-    internal operator fun minus(other: SaturatingLong): SaturatingLong = this + (-other)
+    operator fun minus(other: SaturatingLong): SaturatingLong = this + (-other)
 
-    public operator fun minus(other: Long): SaturatingLong {
+    operator fun minus(other: Long): SaturatingLong {
         return this - SaturatingLong(other)
     }
 
-    public operator fun unaryMinus(): SaturatingLong = when {
+    operator fun unaryMinus(): SaturatingLong = when {
         isInfinite() && isPositive() -> NEGATIVE_INFINITY
         isInfinite() && isNegative() -> POSITIVE_INFINITY
         else -> SaturatingLong(-rawValue)
     }
 
-    internal operator fun times(other: SaturatingLong): SaturatingLong = when {
+    operator fun times(other: SaturatingLong): SaturatingLong = when {
         isInfinite() || other.isInfinite() -> when (rawValue.sign * other.rawValue.sign) {
             1 -> POSITIVE_INFINITY
             -1 -> NEGATIVE_INFINITY
@@ -69,17 +69,17 @@ public value class SaturatingLong internal constructor(internal val rawValue: Lo
         }
     }
 
-    internal val sign: Int get() = rawValue.sign
+    val sign: Int get() = rawValue.sign
 
-    public operator fun times(other: Long): SaturatingLong {
+    operator fun times(other: Long): SaturatingLong {
         return this * SaturatingLong(other)
     }
 
-    public operator fun times(other: Int): SaturatingLong {
+    operator fun times(other: Int): SaturatingLong {
         return times(other.toLong())
     }
 
-    internal operator fun div(other: SaturatingLong): SaturatingLong = when {
+    operator fun div(other: SaturatingLong): SaturatingLong = when {
         isInfinite() && other.isInfinite() -> {
             throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
@@ -88,15 +88,15 @@ public value class SaturatingLong internal constructor(internal val rawValue: Lo
         else -> SaturatingLong(rawValue / other.rawValue)
     }
 
-    public operator fun div(other: Long): SaturatingLong {
+    operator fun div(other: Long): SaturatingLong {
         return this / SaturatingLong(other)
     }
 
-    public operator fun div(other: Int): SaturatingLong {
+    operator fun div(other: Int): SaturatingLong {
         return div(other.toLong())
     }
 
-    internal operator fun rem(other: SaturatingLong): SaturatingLong = when {
+    operator fun rem(other: SaturatingLong): SaturatingLong = when {
         isInfinite() && other.isInfinite() -> {
             throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
@@ -105,50 +105,51 @@ public value class SaturatingLong internal constructor(internal val rawValue: Lo
         else -> SaturatingLong(rawValue % other.rawValue)
     }
 
-    public operator fun rem(other: Long): SaturatingLong {
+    operator fun rem(other: Long): SaturatingLong {
         return this % SaturatingLong(other)
     }
 
-    public override fun compareTo(other: SaturatingLong): Int {
+    override fun compareTo(other: SaturatingLong): Int {
         return rawValue.compareTo(other.rawValue)
     }
 
-    public operator fun compareTo(other: Long): Int {
+    operator fun compareTo(other: Long): Int {
         return compareTo(SaturatingLong(other))
     }
 
-    public operator fun compareTo(other: Int): Int {
+    operator fun compareTo(other: Int): Int {
         return compareTo(SaturatingLong(other.toLong()))
     }
 
-    public override fun toString(): String = when {
+    override fun toString(): String = when {
         isInfinite() && isPositive() -> "Infinity"
         isInfinite() && isNegative() -> "-Infinity"
         else -> rawValue.toString()
     }
 
-    public fun isInfinite(): Boolean {
+    fun isInfinite(): Boolean {
         return this == POSITIVE_INFINITY || this == NEGATIVE_INFINITY
     }
 
-    public fun isFinite(): Boolean = !isInfinite()
+    fun isFinite(): Boolean = !isInfinite()
 
     private fun isPositive(): Boolean = rawValue > 0
 
     private fun isNegative(): Boolean = rawValue < 0
 
-    internal val absoluteValue: SaturatingLong get() = when {
+    val absoluteValue: SaturatingLong
+        get() = when {
         isInfinite() -> POSITIVE_INFINITY
         else -> SaturatingLong(rawValue.absoluteValue)
     }
 
-    public fun toDouble(): Double = when (this) {
+    fun toDouble(): Double = when (this) {
         POSITIVE_INFINITY -> Double.POSITIVE_INFINITY
         NEGATIVE_INFINITY -> Double.NEGATIVE_INFINITY
         else -> rawValue.toDouble()
     }
 
-    internal companion object {
+    companion object {
         val POSITIVE_INFINITY = SaturatingLong(Long.MAX_VALUE)
         val NEGATIVE_INFINITY = SaturatingLong(Long.MIN_VALUE)
     }
