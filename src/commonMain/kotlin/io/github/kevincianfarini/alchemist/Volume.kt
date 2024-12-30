@@ -106,7 +106,7 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
         val lengthUnit = LengthUnit.International.entries.asReversed().firstOrNull { cubicUnit ->
             toDouble(cubicUnit) >= 1.0
         }
-        return toString(lengthUnit ?: LengthUnit.International.Nanometer, decimals = 2)
+        return toString(lengthUnit ?: LengthUnit.International.Centimeter, decimals = 2)
     }
 
     // endregion

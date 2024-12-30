@@ -4,6 +4,8 @@ import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import kotlin.jvm.JvmInline
+import kotlin.math.pow
+import kotlin.math.roundToLong
 
 /**
  * Represents a measure of area and is capable of storing ±9.22 million kilometers² at millimeter² precision.
@@ -85,14 +87,6 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
 
     // region Area to Scalar Conversions
 
-    /**
-     * Returns the value of this area expressed as a [Double] number of the specified [unit]. Infinite values are
-     * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
-     */
-    public fun toDouble(unit: AreaUnit): Double {
-        return this / unit.millimetersSquaredScale.mm2
-    }
-
     public fun <T> toInternationalComponents(
         action: (
             megametersSquared: Long,
@@ -102,18 +96,31 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
             millimetersSquared: Long,
         ) -> T,
     ): T {
-        val mega = rawMillimetersSquared / AreaUnit.International.MegameterSquared.millimetersSquaredScale
-        val megaRemainder = rawMillimetersSquared % AreaUnit.International.MegameterSquared.millimetersSquaredScale
-        val kilo = megaRemainder / AreaUnit.International.KilometerSquared.millimetersSquaredScale
-        val kiloRemainder = megaRemainder % AreaUnit.International.KilometerSquared.millimetersSquaredScale
-        val meters = kiloRemainder / AreaUnit.International.MeterSquared.millimetersSquaredScale
-        val metersRemainder = kiloRemainder % AreaUnit.International.MeterSquared.millimetersSquaredScale
-        val centi = metersRemainder / AreaUnit.International.CentimeterSquared.millimetersSquaredScale
-        val milli = metersRemainder % AreaUnit.International.CentimeterSquared.millimetersSquaredScale
+        val mega = rawMillimetersSquared / 1_000_000_000_000_000_000
+        val megaRemainder = rawMillimetersSquared % 1_000_000_000_000_000_000
+        val kilo = megaRemainder / 1_000_000_000_000
+        val kiloRemainder = megaRemainder % 1_000_000_000_000
+        val meters = kiloRemainder / 1_000_000
+        val metersRemainder = kiloRemainder % 1_000_000
+        val centi = metersRemainder / 100
+        val milli = metersRemainder % 100
         return action(mega.rawValue, kilo.rawValue, meters.rawValue, centi.rawValue, milli.rawValue)
     }
 
-    public fun toString(unit: AreaUnit, decimals: Int = 0): String = when (rawMillimetersSquared.isInfinite()) {
+    /**
+     * Returns the value of this area expressed as a [Double] number of the specified [unit]. Infinite values are
+     * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
+     */
+    public fun toDouble(unit: AreaUnit): Double {
+        return this / unit.millimetersSquaredScale.mm2
+    }
+
+    public fun toDouble(squareUnit: LengthUnit): Double {
+        val nm2 = rawMillimetersSquared.toDouble() * 1_000_000_000_000
+        return nm2 / squareUnit.nanometerScale.toDouble().pow(2)
+    }
+
+    public fun toString(unit: AreaUnit, decimals: Int = 0): String = when (isInfinite()) {
         true -> rawMillimetersSquared.toString()
         false -> buildString {
             append(toDouble(unit).toDecimalString(decimals))
@@ -121,11 +128,20 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
         }
     }
 
-    public override fun toString(): String {
-        val largestUnit = AreaUnit.International.entries.asReversed().firstOrNull { unit ->
-            rawMillimetersSquared.absoluteValue / unit.millimetersSquaredScale > 0
+    public fun toString(squareUnit: LengthUnit, decimals: Int = 0): String = when (isInfinite()) {
+        true -> rawMillimetersSquared.toString()
+        false -> buildString {
+            append(toDouble(squareUnit).toDecimalString(decimals))
+            append(squareUnit.symbol)
+            append("²")
         }
-        return toString(largestUnit ?: AreaUnit.International.MillimeterSquared, decimals = 2)
+    }
+
+    public override fun toString(): String {
+        val largestUnit = LengthUnit.International.entries.asReversed().firstOrNull { squareUnit ->
+            toDouble(squareUnit) >= 1.0
+        }
+        return toString(largestUnit ?: LengthUnit.International.Millimeter, decimals = 2)
     }
 
     // endregion
@@ -143,6 +159,44 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     // endregion
 }
 
+// region Scalar to Area Conversions
+
+public inline val Int.decimilliares: Area get() = toArea(AreaUnit.Metric.Decimilliare)
+public inline val Long.decimilliares: Area get() = toArea(AreaUnit.Metric.Decimilliare)
+public inline val Double.decimilliares: Area get() = toArea(AreaUnit.Metric.Decimilliare)
+
+public inline val Int.centiares: Area get() = toArea(AreaUnit.Metric.Centiare)
+public inline val Long.centiares: Area get() = toArea(AreaUnit.Metric.Centiare)
+public inline val Double.centiarea: Area get() = toArea(AreaUnit.Metric.Centiare)
+
+public inline val Int.deciares: Area get() = toArea(AreaUnit.Metric.Deciare)
+public inline val Long.deciares: Area get() = toArea(AreaUnit.Metric.Deciare)
+public inline val Double.deciares: Area get() = toArea(AreaUnit.Metric.Deciare)
+
+public inline val Int.ares: Area get() = toArea(AreaUnit.Metric.Are)
+public inline val Long.ares: Area get() = toArea(AreaUnit.Metric.Are)
+public inline val Double.ares: Area get() = toArea(AreaUnit.Metric.Are)
+
+public inline val Int.decares: Area get() = toArea(AreaUnit.Metric.Decare)
+public inline val Long.decares: Area get() = toArea(AreaUnit.Metric.Decare)
+public inline val Double.decares: Area get() = toArea(AreaUnit.Metric.Decare)
+
+public inline val Int.hectares: Area get() = toArea(AreaUnit.Metric.Hectare)
+public inline val Long.hectares: Area get() = toArea(AreaUnit.Metric.Hectare)
+public inline val Double.hectares: Area get() = toArea(AreaUnit.Metric.Hectare)
+
+public fun Int.toArea(unit: AreaUnit): Area = toLong().toArea(unit)
+
+public fun Long.toArea(unit: AreaUnit): Area = Area(saturated * unit.millimetersSquaredScale)
+
+public fun Double.toArea(unit: AreaUnit): Area {
+    val valueInMillimeters2 = this * unit.millimetersSquaredScale
+    require(!valueInMillimeters2.isNaN()) { "Area value cannot be NaN." }
+    return Area(valueInMillimeters2.roundToLong().saturated)
+}
+
+// endregion
+
 public interface AreaUnit {
 
     /**
@@ -156,15 +210,13 @@ public interface AreaUnit {
      */
     public val symbol: String
 
-    public enum class International(
-        override val millimetersSquaredScale: Long,
-        override val symbol: String,
-    ) : AreaUnit {
-        MillimeterSquared(1, "mm²"),
-        CentimeterSquared(100, "cm²"),
-        MeterSquared(1_000_000, "m²"),
-        KilometerSquared(1_000_000_000_000, "km²"),
-        MegameterSquared(1_000_000_000_000_000_000, "Mm²"),
+    public enum class Metric(override val symbol: String, override val millimetersSquaredScale: Long) : AreaUnit {
+        Decimilliare("dma", 100),
+        Centiare("ca", 1_000_000),
+        Deciare("da", 10_000_000),
+        Are("a", 100_000_000),
+        Decare("daa", 1_000_000_000),
+        Hectare("ha", 10_000_000_000),
     }
 }
 

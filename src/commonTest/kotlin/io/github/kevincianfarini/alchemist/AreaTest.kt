@@ -113,10 +113,10 @@ class AreaTest {
     fun area_to_double_is_correct() {
         val scale = 123_456_789_987_654_321
         val area = scale.mm2
-        assertEquals(scale.toDouble(), area.toDouble(AreaUnit.International.MillimeterSquared))
-        assertEquals(scale.toDouble() / 1_000_000, area.toDouble(AreaUnit.International.MeterSquared))
-        assertEquals(scale.toDouble() / 1_000_000_000_000, area.toDouble(AreaUnit.International.KilometerSquared))
-        assertEquals(scale.toDouble() / 1_000_000_000_000_000_000, area.toDouble(AreaUnit.International.MegameterSquared))
+        assertEquals(scale.toDouble(), area.toDouble(LengthUnit.International.Millimeter))
+        assertEquals(scale.toDouble() / 1_000_000, area.toDouble(LengthUnit.International.Meter))
+        assertEquals(scale.toDouble() / 1_000_000_000_000, area.toDouble(LengthUnit.International.Kilometer))
+        assertEquals(scale.toDouble() / 1_000_000_000_000_000_000, area.toDouble(LengthUnit.International.Megameter))
     }
 
     @Test
