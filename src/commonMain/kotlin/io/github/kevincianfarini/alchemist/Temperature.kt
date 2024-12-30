@@ -68,26 +68,26 @@ public value class Temperature internal constructor(private val rawNanokelvin: S
         return toString(toStringUnit(), decimals = 2)
     }
 
-    private fun toStringUnit(): TemperatureUnit {
-        if (TemperatureUnit.International.Gigakelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0) {
-            return TemperatureUnit.International.Gigakelvin
+    private fun toStringUnit(): TemperatureUnit = when {
+        TemperatureUnit.International.Gigakelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0 -> {
+            TemperatureUnit.International.Gigakelvin
         }
-        if (TemperatureUnit.International.Megakelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0) {
-            return TemperatureUnit.International.Megakelvin
+        TemperatureUnit.International.Megakelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0 -> {
+            TemperatureUnit.International.Megakelvin
         }
-        if (TemperatureUnit.International.Kilokelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0) {
-            return TemperatureUnit.International.Kilokelvin
+        TemperatureUnit.International.Kilokelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0 -> {
+            TemperatureUnit.International.Kilokelvin
         }
-        if (TemperatureUnit.International.Kelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0) {
-            return TemperatureUnit.International.Kelvin
+        TemperatureUnit.International.Kelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0 -> {
+            TemperatureUnit.International.Kelvin
         }
-        if (TemperatureUnit.International.Millikelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0) {
-            return TemperatureUnit.International.Millikelvin
+        TemperatureUnit.International.Millikelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0 -> {
+            TemperatureUnit.International.Millikelvin
         }
-        if (TemperatureUnit.International.Microkelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0) {
-            return TemperatureUnit.International.Microkelvin
+        TemperatureUnit.International.Microkelvin.convertNanokelvinsToThis(rawNanokelvin) >= 1.0 -> {
+            TemperatureUnit.International.Microkelvin
         }
-        return TemperatureUnit.International.Nanokelvin
+        else -> TemperatureUnit.International.Nanokelvin
     }
 
     // endregion
