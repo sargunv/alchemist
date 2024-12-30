@@ -13,7 +13,17 @@ val force: Force = acceleration * mass
 val energy: Energy = force * length 
 val power: Power = energy / time
 val area: Area = length * length 
-val volume: Volume = length * length * length 
+val volume: Volume = length * length * length
+```
+
+## Download
+
+```toml
+[versions]
+alchemist = "0.1.0-SNAPSHOT"
+
+[libraries]
+alchemist = { module = "io.github.kevincianfarini.alchemist:alchemist", version.ref = "alchemist" }
 ```
 
 ## Alchemist's Goals 
