@@ -29,7 +29,16 @@ public value class Acceleration internal constructor(
      * @throws IllegalArgumentException if this acceleration is infinite and [duration] is zero, or if this acceleration
      * is zero and [duration] is infinite.
      */
-    public operator fun times(duration: Duration): Velocity = TODO()
+    public operator fun times(duration: Duration): Velocity = duration.toComponents { seconds, nanoseconds ->
+        val secondComponent = (rawNanometersPerSecondSquared * seconds).nmPerSecond
+        val preciseNanosecondComponent = ((rawNanometersPerSecondSquared * nanoseconds) / 1_000_000_000).nmPerSecond
+        if (preciseNanosecondComponent.isFinite()) {
+            secondComponent + preciseNanosecondComponent
+        } else {
+            val coarseNanosecondComponent = ((rawNanometersPerSecondSquared / 1_000_000_000) * nanoseconds).nmPerSecond
+            secondComponent + coarseNanosecondComponent
+        }
+    }
 
     /**
      * Returns the resulting [Force] after multiplying this acceleration by the specified [mass].

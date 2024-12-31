@@ -3,6 +3,8 @@ package io.github.kevincianfarini.alchemist
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.text.Typography.nbsp
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
 class AccelerationTest {
@@ -24,6 +26,14 @@ class AccelerationTest {
                 durationUnit = DurationUnit.HOURS,
                 decimals = 2,
             )
+        )
+    }
+
+    @Test
+    fun acceleration_mul_time_simple() {
+        assertEquals(
+            expected = 12_340_000_000.nmPerSecond,
+            actual = 10_000_000_000.nmPerSecond2 * 1_234.milliseconds,
         )
     }
 }
