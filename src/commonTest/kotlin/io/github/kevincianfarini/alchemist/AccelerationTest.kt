@@ -1,10 +1,14 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.scalar.grams
+import io.github.kevincianfarini.alchemist.scalar.nanonewtons
+import io.github.kevincianfarini.alchemist.scalar.nmPerSecond
+import io.github.kevincianfarini.alchemist.scalar.nmPerSecond2
+import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.text.Typography.nbsp
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
 class AccelerationTest {

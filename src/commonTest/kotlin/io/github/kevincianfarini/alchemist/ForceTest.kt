@@ -1,5 +1,8 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.scalar.millijoules
+import io.github.kevincianfarini.alchemist.scalar.nanometers
+import io.github.kevincianfarini.alchemist.scalar.nanonewtons
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

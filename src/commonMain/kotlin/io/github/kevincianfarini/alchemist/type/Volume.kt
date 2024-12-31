@@ -1,12 +1,11 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.type
 
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
-import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
+import io.github.kevincianfarini.alchemist.unit.LengthUnit
+import io.github.kevincianfarini.alchemist.unit.VolumeUnit
 import kotlin.jvm.JvmInline
 import kotlin.math.pow
-import kotlin.math.roundToLong
-import kotlin.text.Typography.nbsp
 
 @JvmInline
 public value class Volume internal constructor(private val rawCubicCentimeters: SaturatingLong) : Comparable<Volume> {
@@ -120,64 +119,4 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
     override fun compareTo(other: Volume): Int = rawCubicCentimeters.compareTo(other.rawCubicCentimeters)
 
     // endregion
-}
-
-// region Scalar to Volume Conversions
-
-public inline val Int.milliliters: Volume get() = toVolume(VolumeUnit.Metric.Milliliter)
-public inline val Long.milliliters: Volume get() = toVolume(VolumeUnit.Metric.Milliliter)
-
-public inline val Int.liters: Volume get() = toVolume(VolumeUnit.Metric.Liter)
-public inline val Long.liters: Volume get() = toVolume(VolumeUnit.Metric.Liter)
-public inline val Double.liters: Volume get() = toVolume(VolumeUnit.Metric.Liter)
-
-public inline val Int.kiloliters: Volume get() = toVolume(VolumeUnit.Metric.Kiloliter)
-public inline val Long.kiloliters: Volume get() = toVolume(VolumeUnit.Metric.Kiloliter)
-public inline val Double.kiloliters: Volume get() = toVolume(VolumeUnit.Metric.Kiloliter)
-
-public inline val Int.megaliters: Volume get() = toVolume(VolumeUnit.Metric.Megaliter)
-public inline val Long.megaliters: Volume get() = toVolume(VolumeUnit.Metric.Megaliter)
-public inline val Double.megaliters: Volume get() = toVolume(VolumeUnit.Metric.Megaliter)
-
-public inline val Int.gigaliters: Volume get() = toVolume(VolumeUnit.Metric.Gigaliter)
-public inline val Long.gigaliters: Volume get() = toVolume(VolumeUnit.Metric.Gigaliter)
-public inline val Double.gigaliters: Volume get() = toVolume(VolumeUnit.Metric.Gigaliter)
-
-public inline val Int.teraliters: Volume get() = toVolume(VolumeUnit.Metric.Teraliter)
-public inline val Long.teraliters: Volume get() = toVolume(VolumeUnit.Metric.Teraliter)
-public inline val Double.teraliters: Volume get() = toVolume(VolumeUnit.Metric.Teraliter)
-
-public inline val Int.petaliters: Volume get() = toVolume(VolumeUnit.Metric.Petaliter)
-public inline val Long.petaliters: Volume get() = toVolume(VolumeUnit.Metric.Petaliter)
-public inline val Double.petaliters: Volume get() = toVolume(VolumeUnit.Metric.Petaliter)
-
-public fun Int.toVolume(unit: VolumeUnit): Volume = toLong().toVolume(unit)
-
-public fun Long.toVolume(unit: VolumeUnit): Volume {
-    return Volume(saturated * unit.cubicCentimetersScale)
-}
-
-public fun Double.toVolume(unit: VolumeUnit): Volume {
-    val valueInCubicCentis = this * unit.cubicCentimetersScale
-    require(!valueInCubicCentis.isNaN()) { "Volume value cannot be NaN." }
-    return Volume(valueInCubicCentis.roundToLong().saturated)
-}
-
-// endregion
-
-public interface VolumeUnit {
-
-    public val symbol: String
-
-    public val cubicCentimetersScale: Long
-
-    public enum class Metric(override val symbol: String, override val cubicCentimetersScale: Long) : VolumeUnit {
-        Milliliter("${nbsp}mL", 1),
-        Liter("${nbsp}L", 1_000),
-        Kiloliter("${nbsp}kL", 1_000_000),
-        Megaliter("${nbsp}ML", 1_000_000_000),
-        Gigaliter("${nbsp}GL", 1_000_000_000_000),
-        Teraliter("${nbsp}TL", 1_000_000_000_000_000),
-        Petaliter("${nbsp}PL", 1_000_000_000_000_000_000),
-    }
 }

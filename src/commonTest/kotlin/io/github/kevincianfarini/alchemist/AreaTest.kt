@@ -2,6 +2,11 @@ package io.github.kevincianfarini.alchemist
 
 import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
 import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
+import io.github.kevincianfarini.alchemist.scalar.kilometers
+import io.github.kevincianfarini.alchemist.scalar.millimeters
+import io.github.kevincianfarini.alchemist.scalar.mm2
+import io.github.kevincianfarini.alchemist.scalar.nanometers
+import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

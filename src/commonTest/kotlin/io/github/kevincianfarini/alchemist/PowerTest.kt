@@ -2,6 +2,8 @@ package io.github.kevincianfarini.alchemist
 
 import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
 import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
+import io.github.kevincianfarini.alchemist.scalar.microwatts
+import io.github.kevincianfarini.alchemist.scalar.millijoules
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration

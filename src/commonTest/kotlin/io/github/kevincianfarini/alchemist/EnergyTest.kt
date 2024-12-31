@@ -2,6 +2,22 @@ package io.github.kevincianfarini.alchemist
 
 import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
 import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
+import io.github.kevincianfarini.alchemist.scalar.gigajoules
+import io.github.kevincianfarini.alchemist.scalar.gigawattHours
+import io.github.kevincianfarini.alchemist.scalar.joules
+import io.github.kevincianfarini.alchemist.scalar.kilojoules
+import io.github.kevincianfarini.alchemist.scalar.kilowattHours
+import io.github.kevincianfarini.alchemist.scalar.megajoules
+import io.github.kevincianfarini.alchemist.scalar.megawattHours
+import io.github.kevincianfarini.alchemist.scalar.microwatts
+import io.github.kevincianfarini.alchemist.scalar.millijoules
+import io.github.kevincianfarini.alchemist.scalar.milliwattHours
+import io.github.kevincianfarini.alchemist.scalar.petajoules
+import io.github.kevincianfarini.alchemist.scalar.terawattHours
+import io.github.kevincianfarini.alchemist.scalar.tetrajoules
+import io.github.kevincianfarini.alchemist.scalar.wattHours
+import io.github.kevincianfarini.alchemist.scalar.watts
+import io.github.kevincianfarini.alchemist.unit.EnergyUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

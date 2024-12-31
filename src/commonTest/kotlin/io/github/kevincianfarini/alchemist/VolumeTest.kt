@@ -1,5 +1,9 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.scalar.kiloliters
+import io.github.kevincianfarini.alchemist.scalar.milliliters
+import io.github.kevincianfarini.alchemist.unit.LengthUnit
+import io.github.kevincianfarini.alchemist.unit.VolumeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.text.Typography.nbsp

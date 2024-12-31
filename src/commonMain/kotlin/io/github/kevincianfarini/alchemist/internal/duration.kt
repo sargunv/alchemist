@@ -1,6 +1,6 @@
 package io.github.kevincianfarini.alchemist.internal
 
-import io.github.kevincianfarini.alchemist.Energy
+import io.github.kevincianfarini.alchemist.type.Energy
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 import kotlin.time.Duration.Companion.milliseconds

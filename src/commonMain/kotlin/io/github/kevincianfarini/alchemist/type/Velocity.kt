@@ -1,4 +1,4 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.type
 
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.isPreciseToNanosecond
@@ -7,6 +7,9 @@ import io.github.kevincianfarini.alchemist.internal.secondScale
 import io.github.kevincianfarini.alchemist.internal.shortName
 import io.github.kevincianfarini.alchemist.internal.sign
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
+import io.github.kevincianfarini.alchemist.scalar.nanometers
+import io.github.kevincianfarini.alchemist.scalar.nmPerSecond2
+import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import kotlin.jvm.JvmInline
 import kotlin.text.Typography.nbsp
 import kotlin.time.Duration
@@ -193,12 +196,4 @@ public value class Velocity internal constructor(
     // endregion
 }
 
-// region Duration Extensions
-
 public fun Duration.times(velocity: Velocity): Length = velocity * this
-
-// endregion
-
-internal val Int.nmPerSecond: Velocity get() = Velocity(toLong().saturated)
-internal val Long.nmPerSecond: Velocity get() = Velocity(saturated)
-internal val SaturatingLong.nmPerSecond: Velocity get() = Velocity(this)

@@ -1,5 +1,9 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.scalar.meters
+import io.github.kevincianfarini.alchemist.scalar.nanometers
+import io.github.kevincianfarini.alchemist.scalar.nmPerSecond2
+import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.text.Typography.nbsp

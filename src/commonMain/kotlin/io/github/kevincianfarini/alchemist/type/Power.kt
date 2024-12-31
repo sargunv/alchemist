@@ -1,13 +1,13 @@
-package io.github.kevincianfarini.alchemist
+package io.github.kevincianfarini.alchemist.type
 
 import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
-import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.sign
 import io.github.kevincianfarini.alchemist.internal.toDecimalComponents
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
+import io.github.kevincianfarini.alchemist.scalar.microwatts
+import io.github.kevincianfarini.alchemist.unit.PowerUnit
 import kotlin.jvm.JvmInline
-import kotlin.math.roundToLong
 import kotlin.time.Duration
 
 /**
@@ -144,59 +144,6 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
     // endregion
 }
 
-// region Scalar to Power Conversions
-
-public inline val Int.terawatts: Power get() = toPower(PowerUnit.International.Terawatt)
-public inline val Long.terawatts: Power get() = toPower(PowerUnit.International.Terawatt)
-public inline val Double.terawatts: Power get() = toPower(PowerUnit.International.Terawatt)
-
-public inline val Int.gigawatts: Power get() = toPower(PowerUnit.International.Gigawatt)
-public inline val Long.gigawatts: Power get() = toPower(PowerUnit.International.Gigawatt)
-public inline val Double.gigawatts: Power get() = toPower(PowerUnit.International.Gigawatt)
-
-public inline val Int.megawatts: Power get() = toPower(PowerUnit.International.Megawatt)
-public inline val Long.megawatts: Power get() = toPower(PowerUnit.International.Megawatt)
-public inline val Double.megawatts: Power get() = toPower(PowerUnit.International.Megawatt)
-
-public inline val Int.kilowatts: Power get() = toPower(PowerUnit.International.Kilowatt)
-public inline val Long.kilowatts: Power get() = toPower(PowerUnit.International.Kilowatt)
-public inline val Double.kilowatts: Power get() = toPower(PowerUnit.International.Kilowatt)
-
-public inline val Int.watts: Power get() = toPower(PowerUnit.International.Watt)
-public inline val Long.watts: Power get() = toPower(PowerUnit.International.Watt)
-public inline val Double.watts: Power get() = toPower(PowerUnit.International.Watt)
-
-public inline val Int.milliwatts: Power get() = toPower(PowerUnit.International.Milliwatt)
-public inline val Long.milliwatts: Power get() = toPower(PowerUnit.International.Milliwatt)
-public inline val Double.milliwatts: Power get() = toPower(PowerUnit.International.Milliwatt)
-
-public inline val Int.microwatts: Power get() = toPower(PowerUnit.International.Microwatt)
-public inline val Long.microwatts: Power get() = toPower(PowerUnit.International.Microwatt)
-
-internal inline val SaturatingLong.megawatts get() = rawValue.toPower(PowerUnit.International.Megawatt)
-internal inline val SaturatingLong.kilowatts get() = rawValue.toPower(PowerUnit.International.Kilowatt)
-internal inline val SaturatingLong.watts get() = rawValue.toPower(PowerUnit.International.Watt)
-internal inline val SaturatingLong.milliwatts get() = rawValue.toPower(PowerUnit.International.Milliwatt)
-internal inline val SaturatingLong.microwatts get() = rawValue.toPower(PowerUnit.International.Microwatt)
-
-public fun Int.toPower(unit: PowerUnit): Power {
-    return toLong().toPower(unit)
-}
-
-public fun Long.toPower(unit: PowerUnit): Power {
-    return Power(saturated * unit.microwattScale)
-}
-
-public fun Double.toPower(unit: PowerUnit): Power {
-    val valueInMicrowatts = this * unit.microwattScale
-    require(!valueInMicrowatts.isNaN()) { "Mass value cannot be NaN." }
-    return Power(valueInMicrowatts.roundToLong().saturated)
-}
-
-// endregion
-
-// region Duration Extensions
-
 /**
  * Returns the resulting [Energy] from applying the specified [power] over this duration.
  *
@@ -207,35 +154,3 @@ public fun Double.toPower(unit: PowerUnit): Power {
  * [power] is infinite.
  */
 public operator fun Duration.times(power: Power): Energy = power * this
-
-// endregion
-
-/**
- * A unit of power precise to the microwatt.
- */
-public interface PowerUnit {
-
-    /**
-     * The amount of microwatts in this unit. Implementations of [PowerUnit] should be perfectly divisible by a
-     * quantity of microwatts.
-     */
-    public val microwattScale: Long
-
-    /**
-     * The symbol of this unit.
-     */
-    public val symbol: String
-
-    public enum class International(
-        override val microwattScale: Long,
-        override val symbol: String,
-    ) : PowerUnit {
-        Microwatt(1, "μW"),
-        Milliwatt(1_000, "mW"),
-        Watt(1_000_000, "W"),
-        Kilowatt(1_000_000_000, "kW"),
-        Megawatt(1_000_000_000_000, "MW"),
-        Gigawatt(1_000_000_000_000_000, "GW"),
-        Terawatt(1_000_000_000_000_000_000, "TW"),
-    }
-}

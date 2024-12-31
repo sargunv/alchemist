@@ -1,5 +1,10 @@
 package io.github.kevincianfarini.alchemist
 
+import io.github.kevincianfarini.alchemist.scalar.celsius
+import io.github.kevincianfarini.alchemist.scalar.fahrenheit
+import io.github.kevincianfarini.alchemist.scalar.kelvins
+import io.github.kevincianfarini.alchemist.scalar.nanokelvins
+import io.github.kevincianfarini.alchemist.unit.TemperatureUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.text.Typography.nbsp
