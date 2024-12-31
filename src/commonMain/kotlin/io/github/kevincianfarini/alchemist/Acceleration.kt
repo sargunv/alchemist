@@ -211,6 +211,21 @@ public value class Acceleration internal constructor(
     // endregion
 }
 
+// region Duration Extensions
+
+/**
+ * Returns the resulting [Velocity] after multiplying the specified [acceleration] by this duration.
+ *
+ * This operation attempts to retain precision, but for sufficiently large values of this duration or the
+ * specified [acceleration] some precision may be lost.
+ *
+ * @throws IllegalArgumentException if this duration is infinite and [acceleration] is zero, or if this duration
+ * is zero and [acceleration] is infinite.
+ */
+public fun Duration.times(acceleration: Acceleration): Velocity = acceleration * this
+
+// endregion
+
 internal val Int.nmPerSecond2: Acceleration get() = toLong().nmPerSecond2
 internal val Long.nmPerSecond2: Acceleration get() = Acceleration(saturated)
 internal val SaturatingLong.nmPerSecond2: Acceleration get() = Acceleration(this)

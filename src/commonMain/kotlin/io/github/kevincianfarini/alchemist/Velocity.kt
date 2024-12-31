@@ -193,6 +193,12 @@ public value class Velocity internal constructor(
     // endregion
 }
 
+// region Duration Extensions
+
+public fun Duration.times(velocity: Velocity): Length = velocity * this
+
+// endregion
+
 internal val Int.nmPerSecond: Velocity get() = Velocity(toLong().saturated)
 internal val Long.nmPerSecond: Velocity get() = Velocity(saturated)
 internal val SaturatingLong.nmPerSecond: Velocity get() = Velocity(this)
