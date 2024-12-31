@@ -178,6 +178,16 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     }
 
     /**
+     * Returns the amount of [Energy] required to apply the specified [force] over this length.
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this length or the
+     * specified [force], some precision may be lost.
+     *
+     * @throws IllegalArgumentException when this length is [infinite][isInfinite] and [force] is 0 or vice versa.
+     */
+    public operator fun times(force: Force): Energy = force * this
+
+    /**
      * Returns an [Area] representing a square with two dimensions of this length.
      *
      * This operation attempts to retain precision, but for sufficiently large values of either this length some
