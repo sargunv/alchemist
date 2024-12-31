@@ -180,6 +180,17 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     }
 
     /**
+     * Returns the resulting [Volume] after applying this length over the specified [area].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of this length or the
+     * specified [area] some precision may be lost.
+     *
+     * @throws IllegalArgumentException if this length is [infinite][isInfinite] and [area] is zero, or if this length
+     * is zero and [area] is infinite.
+     */
+    public operator fun times(area: Area): Volume = area * this
+
+    /**
      * Returns the amount of [Energy] required to apply the specified [force] over this length.
      *
      * This operation attempts to retain precision, but for sufficiently large values of either this length or the

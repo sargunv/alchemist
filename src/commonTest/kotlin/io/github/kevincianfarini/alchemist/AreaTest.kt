@@ -3,6 +3,9 @@ package io.github.kevincianfarini.alchemist
 import io.github.kevincianfarini.alchemist.internal.NEGATIVE_INFINITY
 import io.github.kevincianfarini.alchemist.internal.POSITIVE_INFINITY
 import io.github.kevincianfarini.alchemist.scalar.kilometers
+import io.github.kevincianfarini.alchemist.scalar.liters
+import io.github.kevincianfarini.alchemist.scalar.meters
+import io.github.kevincianfarini.alchemist.scalar.milliliters
 import io.github.kevincianfarini.alchemist.scalar.millimeters
 import io.github.kevincianfarini.alchemist.scalar.mm2
 import io.github.kevincianfarini.alchemist.scalar.nanometers
@@ -204,5 +207,13 @@ class AreaTest {
         assertFalse(Long.MIN_VALUE.mm2.isFinite())
         assertFalse(POSITIVE_INFINITY.mm2.isFinite())
         assertFalse(NEGATIVE_INFINITY.mm2.isFinite())
+    }
+
+    @Test
+    fun area_mul_length_simple() {
+        assertEquals(
+            expected = 1_219_251.milliliters,
+            actual = 123_456_000_000.mm2 * 9_876.nanometers,
+        )
     }
 }

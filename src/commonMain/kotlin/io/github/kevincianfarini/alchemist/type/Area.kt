@@ -49,7 +49,40 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
      * @throws IllegalArgumentException if this area is [infinite][isInfinite] and [length] is zero, or if this area
      * is zero and [length] is infinite.
      */
-    public operator fun times(length: Length): Volume = TODO()
+    public operator fun times(length: Length): Volume {
+        return length.toInternationalComponents { giga, mega, kilo, meters, centi, milli, micro, nano ->
+            // Try to find the right level which we can perform this operation at without losing precision.
+            // --------------------------------------------------------------------------------------------
+            // 1 millimeter² * 1 nm is 1 picoliter.
+            // 1 millimeter² * 1 μm is 1 nanoliter.
+            // 1 millimeter² * 1 mm is 1 microliter.
+            // 1 millimeter² * 1 cm is 10 microliters.
+            // 1 millimeter² * 1 m is 1 milliliter.
+            // 1 millimeter² * 1 km is 1 liter.
+            // 1 millimeter² * 1 Mm is 1 kiloliter.
+            // 1 millimeter² * 1 Gm is 1 megaliter.
+            // --------------------------------------------------------------------------------------------
+            val megaliters = rawMillimetersSquared * giga
+            val kiloliters = rawMillimetersSquared * mega
+            val liters = rawMillimetersSquared * kilo
+            val milliliters = rawMillimetersSquared * meters
+            val microliters = (rawMillimetersSquared * centi * 10) + (rawMillimetersSquared * milli)
+            val nanoliters = rawMillimetersSquared * micro
+            val picoliters = rawMillimetersSquared * nano
+            // ----------- Try picoliter precision. ------------------------------------------------------
+            val picoL = picoliters + (nanoliters * 1_000) + (microliters * 1_000_000) + (milliliters * 1_000_000_000) + (liters * 1_000_000_000_000) + (kiloliters * 1_000_000_000_000_000) + (megaliters * 1_000_000_000_000_000_000)
+            if (picoL.isFinite()) return@toInternationalComponents Volume(picoL / 1_000_000_000)
+            // ----------- Try nanoliter precision. ------------------------------------------------------
+            val nanoL = (picoliters / 1_000) + nanoliters + (microliters * 1_000) + (milliliters * 1_000_000) + (liters * 1_000_000_000) + (kiloliters * 1_000_000_000_000) + (megaliters * 1_000_000_000_000_000)
+            if (nanoL.isFinite()) return@toInternationalComponents Volume(nanoL / 1_000_000)
+            // ----------- Try microliter precision. -----------------------------------------------------
+            val microL = (picoliters / 1_000_000) + (nanoliters / 1_000) + microliters + (milliliters * 1_000) + (liters * 1_000_000) + (kiloliters * 1_000_000_000) + (megaliters * 1_000_000_000_000)
+            if (microL.isFinite()) return@toInternationalComponents Volume(microL / 1_000)
+            // ----------- Default milliliter precision. -------------------------------------------------
+            val milliL = (picoliters / 1_000_000_000) + (nanoliters / 1_000_000) + (microliters / 1_000) + milliliters + (liters * 1_000) + (kiloliters * 1_000_000) + (megaliters * 1_000_000_000)
+            Volume(milliL)
+        }
+    }
 
     // endregion
 
