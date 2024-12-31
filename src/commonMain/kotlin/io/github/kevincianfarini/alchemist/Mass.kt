@@ -15,7 +15,7 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
     /**
      * Returns the [Force] required to apply to this mass to achieve the specified [acceleration].
      */
-    public operator fun times(acceleration: Acceleration): Force = TODO()
+    public operator fun times(acceleration: Acceleration): Force = acceleration * this
 
     // endregion
 

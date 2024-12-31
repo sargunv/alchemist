@@ -32,7 +32,7 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
             duration.isInfinite() || rawMicrowatts.isInfinite() -> {
                 Energy(POSITIVE_INFINITY * duration.sign * rawMicrowatts)
             }
-            else -> duration.toDecimalComponents { thousandSeconds, secondsRemainder, millis, micros, nanos ->
+            else -> duration.toDecimalComponents { kiloseconds, seconds, millis, micros, nanos ->
                 // Try to find the right level which we can perform this operation at without losing precision.
                 // --------------------------------------------------------------------------------------------
                 // 1 microwatt * 1 nanosecond is 1 femtojoule.
@@ -41,8 +41,8 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
                 // 1 microwatt * 1 second is 1 microjoule.
                 // 1 microwatt * 1,000 seconds is 1 millijoule.
                 // --------------------------------------------------------------------------------------------
-                val millijoules = rawMicrowatts * thousandSeconds
-                val microjoules = rawMicrowatts * secondsRemainder
+                val millijoules = rawMicrowatts * kiloseconds
+                val microjoules = rawMicrowatts * seconds
                 val nanojoules = rawMicrowatts * millis
                 val picojoules = rawMicrowatts * micros
                 val femtojoules = rawMicrowatts * nanos

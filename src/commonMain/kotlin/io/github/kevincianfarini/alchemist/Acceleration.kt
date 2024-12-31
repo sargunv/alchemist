@@ -49,7 +49,39 @@ public value class Acceleration internal constructor(
      * @throws IllegalArgumentException if this acceleration is infinite and [mass] is zero, or if this acceleration
      * is zero and [mass] is infinite.
      */
-    public operator fun times(mass: Mass): Force = TODO()
+    public operator fun times(mass: Mass): Force {
+        return mass.toInternationalComponents { tera, giga, mega, kilo, grams, milli, micro ->
+            // Try to find the right level which we can perform this operation at without losing precision.
+            // --------------------------------------------------------------------------------------------
+            // 1 nm/s² * 1 microgram is 1 attonewton.
+            // 1 nm/s² * 1 milligram is 1 femtonewton.
+            // 1 nm/s² * 1 gram is 1 piconewton.
+            // 1 nm/s² * 1 kilogram is 1 nanonewton.
+            // 1 nm/s² * 1 megagram is 1 micronewton.
+            // 1 nm/s² * 1 gigagram is 1 millinewton.
+            // 1 nm/s² * 1 teragram is 1 newton.
+            // --------------------------------------------------------------------------------------------
+            val newtons = rawNanometersPerSecondSquared * tera
+            val millinewtons = rawNanometersPerSecondSquared * giga
+            val micronewtons = rawNanometersPerSecondSquared * mega
+            val nanonewtons = rawNanometersPerSecondSquared * kilo
+            val piconewtons = rawNanometersPerSecondSquared * grams
+            val femtonewtons = rawNanometersPerSecondSquared * milli
+            val attonewtons = rawNanometersPerSecondSquared * micro
+            // ----------- Try attonewton precision. ------------------------------------------------------
+            val attoN = attonewtons + (femtonewtons * 1_000) + (piconewtons * 1_000_000) + (nanonewtons * 1_000_000_000) + (micronewtons * 1_000_000_000_000) + (millinewtons * 1_000_000_000_000_000) + (newtons * 1_000_000_000_000_000_000)
+            if (attoN.isFinite()) return@toInternationalComponents Force(attoN / 1_000_000_000)
+            // ----------- Try femtonewton precision. ------------------------------------------------------
+            val femtoN = (attonewtons / 1_000) + femtonewtons + (piconewtons * 1_000) + (nanonewtons * 1_000_000) + (micronewtons * 1_000_000_000) + (millinewtons * 1_000_000_000_000) + (newtons * 1_000_000_000_000_000)
+            if (femtoN.isFinite()) return@toInternationalComponents Force(femtoN / 1_000_000)
+            // ----------- Try piconewton precision. ------------------------------------------------------
+            val picoN = (attonewtons / 1_000_000) + (femtonewtons / 1_000) + piconewtons + (nanonewtons * 1_000) + (micronewtons * 1_000_000) + (millinewtons * 1_000_000_000) + (newtons * 1_000_000_000_000)
+            if (picoN.isFinite()) return@toInternationalComponents Force(picoN / 1_000)
+            // ----------- Default nanonewton precision. --------------------------------------------------
+            val nanoN = (attonewtons / 1_000_000_000) + (femtonewtons / 1_000_000) + (piconewtons / 1_000) + nanonewtons + (micronewtons * 1_000) + (millinewtons * 1_000_000) + (newtons * 1_000_000_000)
+            Force(nanoN)
+        }
+    }
 
     // endregion
 

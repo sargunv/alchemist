@@ -36,4 +36,13 @@ class AccelerationTest {
             actual = 10_000_000_000.nmPerSecond2 * 1_234.milliseconds,
         )
     }
+
+    @Test
+    fun acceleration_mul_mass_simple() {
+        // 152345677.626 nanonewtons, but we lose precision.
+        assertEquals(
+            expected = 152_345_677.nanonewtons,
+            actual = 123_456_789.nmPerSecond2 * 1_234.grams,
+        )
+    }
 }
