@@ -267,6 +267,14 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
     }
 
     /**
+     * Returns the value of this energy expressed as a [Long] number of the specified [unit]. Infinite values are
+     * converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: EnergyUnit): Long {
+        return (rawMillijoules / unit.millijouleScale).rawValue
+    }
+
+    /**
      * Returns the value of this area expressed as a [Double] number of the specified [unit]. Infinite values are
      * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
      */

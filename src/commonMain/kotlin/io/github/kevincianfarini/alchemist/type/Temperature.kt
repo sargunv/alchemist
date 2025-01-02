@@ -5,6 +5,7 @@ import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import io.github.kevincianfarini.alchemist.unit.TemperatureUnit
 import io.github.kevincianfarini.alchemist.unit.convertNanokelvinsToThis
 import kotlin.jvm.JvmInline
+import kotlin.math.roundToLong
 
 /**
  * Represents a temperature and is capable of storing ±9.2 billion Kelvin (±9.2 billion °C, ±16.6 billion °F) at
@@ -55,6 +56,14 @@ public value class Temperature internal constructor(private val rawNanokelvin: S
     // endregion
 
     // region Temperature to Scalar Conversions
+
+    /**
+     * Returns the value of this temperature expressed as a [Long] number of the specified [unit]. Infinite values are
+     * converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: TemperatureUnit): Long = toDouble(unit).roundToLong()
+
+    public fun toDouble(unit: TemperatureUnit): Double = unit.convertNanokelvinsToThis(rawNanokelvin)
 
     public fun toString(unit: TemperatureUnit, decimals: Int = 0): String {
         return buildString {

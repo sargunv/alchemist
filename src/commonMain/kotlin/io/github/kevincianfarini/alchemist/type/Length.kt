@@ -371,6 +371,14 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     }
 
     /**
+     * Returns the value of this length expressed as a [Long] number of the specified [unit]. Infinite values are
+     * converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: LengthUnit): Long {
+        return (rawNanometers / unit.nanometerScale).rawValue
+    }
+
+    /**
      * Returns the value of this length expressed as a [Double] number of the specified [unit]. Infinite values are
      * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
      */

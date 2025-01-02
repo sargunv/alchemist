@@ -173,6 +173,41 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     }
 
     /**
+     * Returns the value of this area expressed as a [Long] number of the specified [unit]. Infinite values are
+     * converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: AreaUnit): Long {
+        return (rawMillimetersSquared / unit.millimetersSquaredScale).rawValue
+    }
+
+    /**
+     * Returns the value of this area expressed as a [Long] number of the specified [squareUnit]². Infinite
+     * values are converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(squareUnit: LengthUnit): Long {
+        val nm2 = rawMillimetersSquared * 1_000_000_000_000
+        val nm2Scale = squareUnit.nanometerScale.saturated * squareUnit.nanometerScale
+        return if (nm2.isFinite() && nm2Scale.isFinite()) {
+            nm2 / nm2Scale
+        } else {
+            val um2 = rawMillimetersSquared * 1_000_000
+            val um2Unit = squareUnit.nanometerScale.saturated / 1_000
+            val um2Scale = um2Unit * um2Unit
+            if (um2.isFinite() && um2Scale.isFinite()) {
+                um2 / um2Scale
+            } else {
+                val mm2Unit = squareUnit.nanometerScale.saturated / 1_000_000
+                val mm2Scale = mm2Unit * mm2Unit
+                if (rawMillimetersSquared.isFinite() && mm2Scale.isFinite()) {
+                    rawMillimetersSquared / mm2Scale
+                } else {
+                    0L.saturated
+                }
+            }
+        }.rawValue
+    }
+
+    /**
      * Returns the value of this area expressed as a [Double] number of the specified [unit]. Infinite values are
      * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
      */

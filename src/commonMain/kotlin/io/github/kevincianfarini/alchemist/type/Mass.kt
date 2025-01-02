@@ -93,6 +93,14 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
         )
     }
 
+    /**
+     * Returns the value of this mass expressed as a [Long] number of the specified [unit]. Infinite values are
+     * converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: MassUnit): Long {
+        return (rawMicrograms / unit.microgramScale).rawValue
+    }
+
     public fun toDouble(unit: MassUnit): Double {
         return rawMicrograms.toDouble() / unit.microgramScale.toDouble()
     }

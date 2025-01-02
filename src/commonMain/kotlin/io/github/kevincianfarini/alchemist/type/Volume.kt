@@ -6,6 +6,7 @@ import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import io.github.kevincianfarini.alchemist.unit.VolumeUnit
 import kotlin.jvm.JvmInline
 import kotlin.math.pow
+import kotlin.math.roundToLong
 
 @JvmInline
 public value class Volume internal constructor(private val rawCubicCentimeters: SaturatingLong) : Comparable<Volume> {
@@ -66,6 +67,22 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
     // endregion
 
     // region Volume to Scalar Conversions
+
+    /**
+     * Returns the value of this velocity expressed as a [Long] number of the specified [unit]. Infinite values
+     * are converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: VolumeUnit): Long {
+        return (rawCubicCentimeters / unit.cubicCentimetersScale).rawValue
+    }
+
+    /**
+     * Returns the value of this velocity expressed as a [Long] number of the specified [LengthUnit]³. Infinite values
+     * are converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(cubicUnit: LengthUnit): Long {
+        return toDouble(cubicUnit).roundToLong()
+    }
 
     /**
      * Returns the value of this volume expressed as a [Double] number of the specified [unit]. Infinite values

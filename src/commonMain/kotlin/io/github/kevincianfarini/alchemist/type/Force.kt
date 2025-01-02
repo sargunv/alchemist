@@ -107,6 +107,14 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
 
     // region Force to Scalar Conversions
 
+    /**
+     * Returns the value of this force expressed as a [Long] number of the specified [unit]. Infinite values are
+     * converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: ForceUnit): Long {
+        return (rawNanonewtons / unit.nanonewtonScale).rawValue
+    }
+
     public fun toDouble(unit: ForceUnit): Double {
         return rawNanonewtons.toDouble() / unit.nanonewtonScale
     }

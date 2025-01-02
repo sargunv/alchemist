@@ -7,6 +7,7 @@ import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import io.github.kevincianfarini.alchemist.scalar.nmPerSecond
 import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import kotlin.jvm.JvmInline
+import kotlin.math.roundToLong
 import kotlin.text.Typography.nbsp
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -150,7 +151,16 @@ public value class Acceleration internal constructor(
     // region Acceleration to Scalar Conversions
 
     /**
-     * Returns the value of this acceleration expressed as a [Double] number of the specific [lengthUnit] per
+     * Returns the value of this acceleration expressed as a [Long] number of the specified [lengthUnit] per
+     * [durationUnit]². Infinite values are converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its
+     * sign.
+     */
+    public fun toLong(lengthUnit: LengthUnit, durationUnit: DurationUnit): Long {
+        return toDouble(lengthUnit, durationUnit).roundToLong()
+    }
+
+    /**
+     * Returns the value of this acceleration expressed as a [Double] number of the specified [lengthUnit] per
      * [durationUnit]². Infinite values are converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY]
      * depending on its sign.
      */

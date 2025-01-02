@@ -110,6 +110,14 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
 
     // region Power to Scalar Conversions
 
+    /**
+     * Returns the value of this power expressed as a [Long] number of the specified [unit]. Infinite values are
+     * converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(unit: PowerUnit): Long {
+        return (rawMicrowatts / unit.microwattScale).rawValue
+    }
+
     public fun toDouble(unit: PowerUnit): Double {
         return this / unit.microwattScale.microwatts
     }

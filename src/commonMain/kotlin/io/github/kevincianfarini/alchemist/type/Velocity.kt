@@ -11,6 +11,7 @@ import io.github.kevincianfarini.alchemist.scalar.nanometers
 import io.github.kevincianfarini.alchemist.scalar.nmPerSecond2
 import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import kotlin.jvm.JvmInline
+import kotlin.math.roundToLong
 import kotlin.text.Typography.nbsp
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -145,6 +146,14 @@ public value class Velocity internal constructor(
     // endregion
 
     // region Velocity to Scalar Conversions
+
+    /**
+     * Returns the value of this velocity expressed as a [Long] number of the specified [lengthUnit] per [durationUnit].
+     * Infinite values are converted to either [Long.MAX_VALUE] or [Long.MIN_VALUE] depending on its sign.
+     */
+    public fun toLong(lengthUnit: LengthUnit, durationUnit: DurationUnit): Long {
+        return toDouble(lengthUnit, durationUnit).roundToLong()
+    }
 
     /**
      * Returns the value of this velocity expressed as a [Double] number of the specific [lengthUnit] per
