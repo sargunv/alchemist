@@ -204,5 +204,3 @@ public value class Velocity internal constructor(
 
     // endregion
 }
-
-public fun Duration.times(velocity: Velocity): Length = velocity * this

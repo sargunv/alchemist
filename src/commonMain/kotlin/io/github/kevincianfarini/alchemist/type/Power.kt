@@ -151,14 +151,3 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
 
     // endregion
 }
-
-/**
- * Returns the resulting [Energy] from applying the specified [power] over this duration.
- *
- * This operation attempts to retain precision, but for sufficiently large values of either this duration or [power],
- * some precision may be lost.
- *
- * @throws IllegalArgumentException if this duration is infinite and [power] is zero, or if this duration is zero and
- * [power] is infinite.
- */
-public operator fun Duration.times(power: Power): Energy = power * this

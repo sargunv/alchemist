@@ -221,14 +221,3 @@ public value class Acceleration internal constructor(
     }
     // endregion
 }
-
-/**
- * Returns the resulting [Velocity] after multiplying this duration by the specified [acceleration].
- *
- * This operation attempts to retain precision, but for sufficiently large values of this duration or the
- * specified [acceleration] some precision may be lost.
- *
- * @throws IllegalArgumentException if this duration is infinite and [acceleration] is zero, or if this duration
- * is zero and [acceleration] is infinite.
- */
-public fun Duration.times(acceleration: Acceleration): Velocity = acceleration * this
