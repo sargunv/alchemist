@@ -73,3 +73,9 @@ mavenPublishing {
     publishToMavenCentral(host = SonatypeHost.S01, automaticRelease = true)
     signAllPublications()
 }
+
+dokka {
+    dokkaSourceSets.commonMain {
+        includes.from("ModuleDocumentation.md")
+    }
+}
