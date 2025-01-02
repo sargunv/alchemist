@@ -49,6 +49,11 @@ public value class Mass internal constructor(private val rawMicrograms: Saturati
     public operator fun div(other: Mass): Double = rawMicrograms.toDouble() / other.rawMicrograms.toDouble()
 
     /**
+     * Returns the negative of this mass value.
+     */
+    public operator fun unaryMinus(): Mass = Mass(-rawMicrograms)
+
+    /**
      * Returns a mass whose value is the difference between this and the [other] mass value.
      *
      * @throws IllegalArgumentException if this mass and the [other] mass are both

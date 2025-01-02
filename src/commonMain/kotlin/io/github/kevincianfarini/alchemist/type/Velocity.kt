@@ -133,6 +133,11 @@ public value class Velocity internal constructor(
     public operator fun div(scale: Long): Velocity = Velocity(rawNanometersPerSecond / scale)
 
     /**
+     * Returns the negative of this velocity value.
+     */
+    public operator fun unaryMinus(): Velocity = Velocity(-rawNanometersPerSecond)
+
+    /**
      * Returns a velocity whose value is the difference between this and the [other] velocity value.
      *
      * @throws IllegalArgumentException if this velocity and the [other] velocity are both

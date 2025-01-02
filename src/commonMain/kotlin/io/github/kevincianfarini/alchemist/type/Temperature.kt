@@ -39,6 +39,11 @@ public value class Temperature internal constructor(private val rawNanokelvin: S
     public operator fun div(scale: Long): Temperature = Temperature(rawNanokelvin / scale)
 
     /**
+     * Returns the negative of this temperature value.
+     */
+    public operator fun unaryMinus(): Temperature = Temperature(-rawNanokelvin)
+
+    /**
      * Returns a temperature whose value is the difference between this and the [other] temperature value.
      *
      * @throws IllegalArgumentException if this temperature and the [other] temperature are both

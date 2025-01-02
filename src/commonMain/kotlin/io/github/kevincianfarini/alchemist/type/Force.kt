@@ -97,6 +97,11 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
     public operator fun div(scale: Long): Force = Force(rawNanonewtons / scale)
 
     /**
+     * Returns the negative of this force value.
+     */
+    public operator fun unaryMinus(): Force = Force(-rawNanonewtons)
+
+    /**
      * Returns a force whose value is the difference between this and the [other] force value.
      *
      * @throws IllegalArgumentException if this force and the [other] force are both

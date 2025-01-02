@@ -139,6 +139,11 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
     }
 
     /**
+     * Returns the negative of this energy value.
+     */
+    public operator fun unaryMinus(): Energy = Energy(-rawMillijoules)
+
+    /**
      * Returns an energy whose value is the difference between this and the [other] energy value.
      *
      * @throws IllegalArgumentException if this energy and the [other] energy are both

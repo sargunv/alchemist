@@ -92,6 +92,11 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
     public operator fun div(scale: Long): Power = Power(rawMicrowatts / scale)
 
     /**
+     * Returns the negative of this power value.
+     */
+    public operator fun unaryMinus(): Power = Power(-rawMicrowatts)
+
+    /**
      * Returns a power whose value is the difference between this and the [other] power value.
      *
      * @throws IllegalArgumentException if this power and the [other] power are both

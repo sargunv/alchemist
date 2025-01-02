@@ -111,6 +111,11 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     }
 
     /**
+     * Returns the negative of this area value.
+     */
+    public operator fun unaryMinus(): Area = Area(-rawMillimetersSquared)
+
+    /**
      * Returns an area whose value is the difference between this and the [other] area value.
      *
      * @throws IllegalArgumentException if this area and the [other] area are both

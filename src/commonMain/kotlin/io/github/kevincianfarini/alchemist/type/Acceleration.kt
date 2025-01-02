@@ -112,6 +112,11 @@ public value class Acceleration internal constructor(
     public operator fun div(scale: Long): Acceleration = Acceleration(rawNanometersPerSecondSquared / scale)
 
     /**
+     * Returns the negative of this acceleration value.
+     */
+    public operator fun unaryMinus(): Acceleration = Acceleration(-rawNanometersPerSecondSquared)
+
+    /**
      * Returns an acceleration whose value is the difference between this and the [other] acceleration value.
      *
      * @throws IllegalArgumentException if this acceleration and the [other] acceleration are both

@@ -247,6 +247,11 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     }
 
     /**
+     * Returns the negative of this length value.
+     */
+    public operator fun unaryMinus(): Length = Length(-rawNanometers)
+
+    /**
      * Returns a length whose value is the difference between this and the [other] length value.
      *
      * @throws IllegalArgumentException if this length and the [other] length are both

@@ -64,6 +64,11 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
     public operator fun div(scale: Long): Volume = Volume(rawCubicCentimeters / scale)
 
     /**
+     * Returns the negative of this volume value.
+     */
+    public operator fun unaryMinus(): Volume = Volume(-rawCubicCentimeters)
+
+    /**
      * Returns a volume whose value is the difference between this and the [other] volume value.
      *
      * @throws IllegalArgumentException if this volume and the [other] volume are both
