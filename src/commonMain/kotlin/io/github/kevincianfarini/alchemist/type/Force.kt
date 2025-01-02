@@ -5,6 +5,9 @@ import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import io.github.kevincianfarini.alchemist.unit.ForceUnit
 import kotlin.jvm.JvmInline
 
+/**
+ * Represents a measure of force and is capable of storing ±9.2 billion newtons at nanonewton precision.
+ */
 @JvmInline
 public value class Force internal constructor(private val rawNanonewtons: SaturatingLong) : Comparable<Force> {
 
@@ -12,6 +15,11 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
 
     /**
      * Returns the resulting [Acceleration] from applying this force to the specified [mass].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this force or the
+     * other [mass], some precision may be lost.
+     *
+     * @throws IllegalArgumentException if both this force and [mass] are infinite.
      */
     public operator fun div(mass: Mass): Acceleration = TODO()
 
@@ -70,6 +78,8 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
 
     /**
      * Returns the number that is the ratio of this and the [other] force value.
+     *
+     * @throws IllegalArgumentException when both this and the [other] force are [infinite][isInfinite].
      */
     public operator fun div(other: Force): Double = rawNanonewtons.toDouble() / other.rawNanonewtons.toDouble()
 
@@ -80,26 +90,40 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
 
     /**
      * Returns a force whose value is this force value divided by the specified [scale].
+     *
+     * @throws IllegalArgumentException when [scale] is equal to [Long.MAX_VALUE] or [Long.MIN_VALUE] and this
+     * force is [infinite][isInfinite].
      */
     public operator fun div(scale: Long): Force = Force(rawNanonewtons / scale)
 
     /**
      * Returns a force whose value is the difference between this and the [other] force value.
+     *
+     * @throws IllegalArgumentException if this force and the [other] force are both
+     * [infinite][isInfinite] but have equivalent signs.
      */
     public operator fun minus(other: Force): Force = Force(rawNanonewtons - other.rawNanonewtons)
 
     /**
      * Returns a force whose value is the sum between this and the [other] force value.
+     *
+     * @throws IllegalArgumentException if this force and the [other] force are both
+     * [infinite][isInfinite] but have differing signs.
      */
     public operator fun plus(other: Force): Force = Force(rawNanonewtons + other.rawNanonewtons)
 
     /**
      * Returns a force whose value is multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this force is [infinite][isInfinite] and [scale] is 0.
      */
     public operator fun times(scale: Int): Force = times(scale.toLong())
 
     /**
      * Returns a force whose value is multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this force is [infinite][isInfinite] and [scale] is 0, or when this
+     * force is 0 and scale is [Long.MAX_VALUE] or [Long.MIN_VALUE].
      */
     public operator fun times(scale: Long): Force = Force(rawNanonewtons * scale)
 
@@ -115,10 +139,18 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
         return (rawNanonewtons / unit.nanonewtonScale).rawValue
     }
 
+    /**
+     * Returns the value of this force expressed as a [Double] number of the specified [unit]. Infinite values are
+     * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
+     */
     public fun toDouble(unit: ForceUnit): Double {
         return rawNanonewtons.toDouble() / unit.nanonewtonScale
     }
 
+    /**
+     * Returns a fractional string representation of this force expressed in the specified [ForceUnit] and is rounded
+     * to the specified [decimals].
+     */
     public fun toString(unit: ForceUnit, decimals: Int = 0): String = when {
         isInfinite() -> rawNanonewtons.toString()
         else -> buildString {
@@ -127,6 +159,10 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
         }
     }
 
+    /**
+     * Returns a fractional string representation of this force expressed in the largest [ForceUnit.International]
+     * quantity which is greater than or equal to 1.
+     */
     public override fun toString(): String {
         val largestUnit = ForceUnit.International.entries.asReversed().firstOrNull { unit ->
             rawNanonewtons / unit.nanonewtonScale > 0
@@ -138,10 +174,21 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
 
     // region Comparisons
 
+    /**
+     * Returns true if this area value is infinite.
+     */
     public fun isInfinite(): Boolean = rawNanonewtons.isInfinite()
 
+    /**
+     * Returns true if this area value is finite.
+     */
     public fun isFinite(): Boolean = rawNanonewtons.isFinite()
 
+    /**
+     * Compares this force with the [other] force. Returns zero if this force is equal
+     * to the specified [other] force, a negative number if it's less than [other], or a positive number
+     * if it's greater than [other].
+     */
     override fun compareTo(other: Force): Int = rawNanonewtons.compareTo(other.rawNanonewtons)
 
     // endregion

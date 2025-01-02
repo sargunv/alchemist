@@ -71,6 +71,8 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
 
     /**
      * Returns the number that is the ratio of this and the [other] power value.
+     *
+     * @throws IllegalArgumentException when both this and the [other] power are [infinite][isInfinite].
      */
     public operator fun div(other: Power): Double {
         return rawMicrowatts.toDouble() / other.rawMicrowatts.toDouble()
@@ -83,26 +85,40 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
 
     /**
      * Returns a power whose value is this power value divided by the specified [scale].
+     *
+     * @throws IllegalArgumentException when [scale] is equal to [Long.MAX_VALUE] or [Long.MIN_VALUE] and this
+     * power is [infinite][isInfinite].
      */
     public operator fun div(scale: Long): Power = Power(rawMicrowatts / scale)
 
     /**
      * Returns a power whose value is the difference between this and the [other] power value.
+     *
+     * @throws IllegalArgumentException if this power and the [other] power are both
+     * [infinite][isInfinite] but have equivalent signs.
      */
     public operator fun minus(other: Power): Power = Power(rawMicrowatts - other.rawMicrowatts)
 
     /**
      * Returns a power whose value is the sum between this and the [other] power value.
+     *
+     * @throws IllegalArgumentException if this power and the [other] power are both
+     * [infinite][isInfinite] but have differing signs.
      */
     public operator fun plus(other: Power): Power = Power(rawMicrowatts + other.rawMicrowatts)
 
     /**
      * Returns a power whose value is this power multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this power is [infinite][isInfinite] and [scale] is 0.
      */
     public operator fun times(scale: Int): Power = times(scale.toLong())
 
     /**
      * Returns a power whose value is this power multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this power is [infinite][isInfinite] and [scale] is 0, or when this
+     * power is 0 and scale is [Long.MAX_VALUE] or [Long.MIN_VALUE].
      */
     public operator fun times(scale: Long): Power = Power(rawMicrowatts * scale)
 
@@ -118,10 +134,18 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
         return (rawMicrowatts / unit.microwattScale).rawValue
     }
 
+    /**
+     * Returns the value of this power expressed as a [Double] number of the specified [unit]. Infinite values are
+     * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
+     */
     public fun toDouble(unit: PowerUnit): Double {
         return this / unit.microwattScale.microwatts
     }
 
+    /**
+     * Returns a fractional string representation of this power expressed in the specified [unit] and is rounded
+     * to the specified [decimals].
+     */
     public fun toString(unit: PowerUnit, decimals: Int = 0): String = when (rawMicrowatts.isInfinite()) {
         true -> rawMicrowatts.toString()
         false -> buildString {
@@ -130,6 +154,10 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
         }
     }
 
+    /**
+     * Returns a fractional string representation of this power expressed in the largest [PowerUnit.International]
+     * quantity which is greater than or equal to 1.
+     */
     override fun toString(): String {
         val largestUnit = PowerUnit.International.entries.asReversed().firstOrNull { unit ->
             rawMicrowatts.absoluteValue / unit.microwattScale > 0
@@ -141,10 +169,21 @@ public value class Power internal constructor(private val rawMicrowatts: Saturat
 
     // region Comparisons
 
+    /**
+     * Returns true if this area value is infinite.
+     */
     public fun isInfinite(): Boolean = rawMicrowatts.isInfinite()
 
+    /**
+     * Returns true if this area value is finite.
+     */
     public fun isFinite(): Boolean = rawMicrowatts.isFinite()
 
+    /**
+     * Compares this power with the [other] power. Returns zero if this power is equal
+     * to the specified [other] power, a negative number if it's less than [other], or a positive number
+     * if it's greater than [other].
+     */
     public override fun compareTo(other: Power): Int {
         return rawMicrowatts.compareTo(other.rawMicrowatts)
     }

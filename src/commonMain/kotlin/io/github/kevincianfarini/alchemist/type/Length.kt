@@ -150,7 +150,7 @@ public value class Length internal constructor(internal val rawNanometers: Satur
      * This operation attempts to retain precision, but for sufficiently large values of either this length or the
      * [other] length, some precision may be lost.
      *
-     * @throws IllegalArgumentException when this energy is [infinite][isInfinite] and [other] is 0 or vice versa.
+     * @throws IllegalArgumentException when this length is [infinite][isInfinite] and [other] is 0 or vice versa.
      */
     public operator fun times(other: Length): Area {
         // Omit micrometer and nanometer components for now. The maximum value these components could ever produce is
@@ -399,7 +399,7 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     }
 
     /**
-     * Returns a fractional string representation of this energy expressed in the largest [LengthUnit.International]
+     * Returns a fractional string representation of this length expressed in the largest [LengthUnit.International]
      * quantity which is greater than or equal to 1.
      */
     public override fun toString(): String {
@@ -414,12 +414,12 @@ public value class Length internal constructor(internal val rawNanometers: Satur
     // region Comparisons
 
     /**
-     * Returns true if this area value is infinite.
+     * Returns true if this length value is infinite.
      */
     public fun isInfinite(): Boolean = rawNanometers.isInfinite()
 
     /**
-     * Returns true if this area value is finite.
+     * Returns true if this length value is finite.
      */
     public fun isFinite(): Boolean = rawNanometers.isFinite()
 

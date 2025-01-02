@@ -275,7 +275,7 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
     }
 
     /**
-     * Returns the value of this area expressed as a [Double] number of the specified [unit]. Infinite values are
+     * Returns the value of this energy expressed as a [Double] number of the specified [unit]. Infinite values are
      * converted to either [Double.POSITIVE_INFINITY] or [Double.NEGATIVE_INFINITY] depending on its sign.
      */
     public fun toDouble(unit: EnergyUnit): Double {

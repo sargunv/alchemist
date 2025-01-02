@@ -237,8 +237,8 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     }
 
     /**
-     * Returns a fractional string representation of this area expressed in the specified [LengthUnit.International]²
-     * and is rounded to the specified [decimals].
+     * Returns a fractional string representation of this area expressed in the specified [LengthUnit]² and is rounded
+     * to the specified [decimals].
      */
     public fun toString(squareUnit: LengthUnit, decimals: Int = 0): String = when (isInfinite()) {
         true -> rawMillimetersSquared.toString()
@@ -250,8 +250,8 @@ public value class Area internal constructor(private val rawMillimetersSquared: 
     }
 
     /**
-     * Returns a fractional string representation of this acceleration expressed in the largest [LengthUnit]² quantity
-     * which is greater than or equal to 1.
+     * Returns a fractional string representation of this area expressed in the largest [LengthUnit]² quantity which is
+     * greater than or equal to 1.
      */
     public override fun toString(): String {
         val largestUnit = LengthUnit.International.entries.asReversed().firstOrNull { squareUnit ->

@@ -16,6 +16,9 @@ import kotlin.text.Typography.nbsp
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
+/**
+ * Represents a measure of velocity and is capable of storing ±9.2 million km/s at nm/s precision.
+ */
 @JvmInline
 public value class Velocity internal constructor(
     internal val rawNanometersPerSecond: SaturatingLong
@@ -86,6 +89,11 @@ public value class Velocity internal constructor(
 
     /**
      * Returns the [Length] traveled at this velocity for the specified [duration].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this velocity or
+     * [duration], some precision may be lost.
+     *
+     * @throws IllegalArgumentException when this velocity is [infinite][isInfinite] and [duration] is 0 or vice versa.
      */
     public operator fun times(duration: Duration): Length = duration.toComponents { seconds, nanoseconds ->
         val secondComponent = (rawNanometersPerSecond * seconds).nanometers
@@ -104,6 +112,8 @@ public value class Velocity internal constructor(
 
     /**
      * Returns the number that is the ratio of this and the [other] velocity value.
+     *
+     * @throws IllegalArgumentException when both this and the [other] velocity are [infinite][isInfinite].
      */
     public operator fun div(other: Velocity): Double {
         return rawNanometersPerSecond.toDouble() / other.rawNanometersPerSecond.toDouble()
@@ -116,11 +126,17 @@ public value class Velocity internal constructor(
 
     /**
      * Returns a velocity whose value is this velocity value divided by the specified [scale].
+     *
+     * @throws IllegalArgumentException when [scale] is equal to [Long.MAX_VALUE] or [Long.MIN_VALUE] and this
+     * velocity is [infinite][isInfinite].
      */
     public operator fun div(scale: Long): Velocity = Velocity(rawNanometersPerSecond / scale)
 
     /**
      * Returns a velocity whose value is the difference between this and the [other] velocity value.
+     *
+     * @throws IllegalArgumentException if this velocity and the [other] velocity are both
+     * [infinite][isInfinite] but have equivalent signs.
      */
     public operator fun minus(other: Velocity): Velocity {
         return Velocity(rawNanometersPerSecond - other.rawNanometersPerSecond)
@@ -128,6 +144,9 @@ public value class Velocity internal constructor(
 
     /**
      * Returns a velocity whose value is the sum between this and the [other] velocity value.
+     *
+     * @throws IllegalArgumentException if this velocity and the [other] velocity are both
+     * [infinite][isInfinite] but have differing signs.
      */
     public operator fun plus(other: Velocity): Velocity {
         return Velocity(rawNanometersPerSecond + other.rawNanometersPerSecond)
@@ -135,11 +154,16 @@ public value class Velocity internal constructor(
 
     /**
      * Returns a velocity whose value is multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this velocity is [infinite][isInfinite] and [scale] is 0.
      */
     public operator fun times(scale: Int): Velocity = times(scale.toLong())
 
     /**
      * Returns a velocity whose value is multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this velocity is [infinite][isInfinite] and [scale] is 0, or when this
+     * velocity is 0 and scale is [Long.MAX_VALUE] or [Long.MIN_VALUE].
      */
     public operator fun times(scale: Long): Velocity = Velocity(rawNanometersPerSecond * scale)
 
@@ -185,6 +209,10 @@ public value class Velocity internal constructor(
         }
     }
 
+    /**
+     * Returns a fractional string representation of this velocity expressed in the largest [LengthUnit.International]
+     * per [second][DurationUnit.SECONDS] which is greater than or equal to 1.
+     */
     override fun toString(): String {
         val lengthUnit = LengthUnit.International.entries.asReversed().firstOrNull { unit ->
             rawNanometersPerSecond.absoluteValue / unit.nanometerScale > 0
@@ -196,10 +224,21 @@ public value class Velocity internal constructor(
 
     // region Comparisons
 
+    /**
+     * Returns true if this velocity value is infinite.
+     */
     public fun isFinite(): Boolean = rawNanometersPerSecond.isFinite()
 
+    /**
+     * Returns true if this velocity value is finite.
+     */
     public fun isInfinite(): Boolean = rawNanometersPerSecond.isInfinite()
 
+    /**
+     * Compares this velocity with the [other] velocity. Returns zero if this velocity is equal
+     * to the specified [other] velocity, a negative number if it's less than [other], or a positive number
+     * if it's greater than [other].
+     */
     override fun compareTo(other: Velocity): Int = rawNanometersPerSecond.compareTo(other.rawNanometersPerSecond)
 
     // endregion

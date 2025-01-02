@@ -12,7 +12,7 @@ import kotlin.time.Duration
  * @throws IllegalArgumentException if this duration is infinite and [acceleration] is zero, or if this duration
  * is zero and [acceleration] is infinite.
  */
-public fun Duration.times(acceleration: Acceleration): Velocity = acceleration * this
+public operator fun Duration.times(acceleration: Acceleration): Velocity = acceleration * this
 
 /**
  * Returns the resulting [Energy] from applying the specified [power] over this duration.
@@ -34,4 +34,4 @@ public operator fun Duration.times(power: Power): Energy = power * this
  * @throws IllegalArgumentException if this duration is infinite and [velocity] is zero, or if this duration is zero and
  * [velocity] is infinite.
  */
-public fun Duration.times(velocity: Velocity): Length = velocity * this
+public operator fun Duration.times(velocity: Velocity): Length = velocity * this

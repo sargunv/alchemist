@@ -8,6 +8,10 @@ import kotlin.jvm.JvmInline
 import kotlin.math.pow
 import kotlin.math.roundToLong
 
+/**
+ * Represents a measure of volume and is capable of storing ±9.2 trillion meters³ (±9.2 quadrillion liters) at
+ * centimeter³ (milliliter) precision.
+ */
 @JvmInline
 public value class Volume internal constructor(private val rawCubicCentimeters: SaturatingLong) : Comparable<Volume> {
 
@@ -15,11 +19,21 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
 
     /**
      * Returns the resulting [Length] after dividing this volume over the specified [area].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this volume or
+     * [area], some precision may be lost.
+     *
+     * @throws IllegalArgumentException if both this volume and [area] are infinite.
      */
     public operator fun div(area: Area): Length = TODO()
 
     /**
      * Returns the resulting [Area] after dividing this volume over the specified [length].
+     *
+     * This operation attempts to retain precision, but for sufficiently large values of either this volume or
+     * [length], some precision may be lost.
+     *
+     * @throws IllegalArgumentException if both this volume and [length] are infinite.
      */
     public operator fun div(length: Length): Area = TODO()
 
@@ -29,6 +43,8 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
 
     /**
      * Returns the number that is the ratio of this and the [other] volume value.
+     *
+     * @throws IllegalArgumentException when both this and the [other] volume are [infinite][isInfinite].
      */
     public operator fun div(other: Volume): Double {
         return rawCubicCentimeters.toDouble() / other.rawCubicCentimeters.toDouble()
@@ -41,26 +57,40 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
 
     /**
      * Returns a volume whose value is this volume value divided by the specified [scale].
+     *
+     * @throws IllegalArgumentException when [scale] is equal to [Long.MAX_VALUE] or [Long.MIN_VALUE] and this
+     * volume is [infinite][isInfinite].
      */
     public operator fun div(scale: Long): Volume = Volume(rawCubicCentimeters / scale)
 
     /**
      * Returns a volume whose value is the difference between this and the [other] volume value.
+     *
+     * @throws IllegalArgumentException if this volume and the [other] volume are both
+     * [infinite][isInfinite] but have equivalent signs.
      */
     public operator fun minus(other: Volume): Volume = Volume(rawCubicCentimeters - other.rawCubicCentimeters)
 
     /**
      * Returns a volume whose value is the sum between this and the [other] volume value.
+     *
+     * @throws IllegalArgumentException if this volume and the [other] volume are both
+     * [infinite][isInfinite] but have differing signs.
      */
     public operator fun plus(other: Volume): Volume = Volume(rawCubicCentimeters + other.rawCubicCentimeters)
 
     /**
      * Returns a volume whose value is multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this volume is [infinite][isInfinite] and [scale] is 0.
      */
     public operator fun times(scale: Int): Volume = times(scale.toLong())
 
     /**
      * Returns a volume whose value is multiplied by the specified [scale].
+     *
+     * @throws IllegalArgumentException when this volume is [infinite][isInfinite] and [scale] is 0, or when this
+     * volume is 0 and scale is [Long.MAX_VALUE] or [Long.MIN_VALUE].
      */
     public operator fun times(scale: Long): Volume = Volume(rawCubicCentimeters * scale)
 
@@ -101,6 +131,10 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
         return cubicNanos / cubicUnit.nanometerScale.toDouble().pow(3)
     }
 
+    /**
+     * Returns a fractional string representation of this volume expressed in the specified [unit] and is rounded
+     * to the specified [decimals].
+     */
     public fun toString(unit: VolumeUnit, decimals: Int = 0): String = when {
         isInfinite() -> rawCubicCentimeters.toString()
         else -> buildString {
@@ -109,6 +143,10 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
         }
     }
 
+    /**
+     * Returns a fractional string representation of this volume expressed in the specified [LengthUnit]³
+     * and is rounded to the specified [decimals].
+     */
     public fun toString(cubicUnit: LengthUnit, decimals: Int = 0): String = when {
         isInfinite() -> rawCubicCentimeters.toString()
         else -> buildString {
@@ -118,6 +156,10 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
         }
     }
 
+    /**
+     * Returns a fractional string representation of this volume expressed in the largest [LengthUnit]³ quantity
+     * which is greater than or equal to 1.
+     */
     public override fun toString(): String {
         val lengthUnit = LengthUnit.International.entries.asReversed().firstOrNull { cubicUnit ->
             toDouble(cubicUnit) >= 1.0
@@ -129,10 +171,21 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
 
     // region Comparisons
 
+    /**
+     * Returns true if this volume value is infinite.
+     */
     public fun isInfinite(): Boolean = rawCubicCentimeters.isInfinite()
 
+    /**
+     * Returns true if this volume value is finite.
+     */
     public fun isFinite(): Boolean = rawCubicCentimeters.isFinite()
 
+    /**
+     * Compares this volume with the [other] volume. Returns zero if this volume is equal
+     * to the specified [other] volume, a negative number if it's less than [other], or a positive number
+     * if it's greater than [other].
+     */
     override fun compareTo(other: Volume): Int = rawCubicCentimeters.compareTo(other.rawCubicCentimeters)
 
     // endregion
