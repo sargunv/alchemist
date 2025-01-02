@@ -16,6 +16,9 @@ public interface EnergyUnit {
      */
     public val symbol: String
 
+    /**
+     * An International System of Units standard representation of energy.
+     */
     public enum class International(
         override val millijouleScale: Long,
         override val symbol: String,
@@ -29,6 +32,9 @@ public interface EnergyUnit {
         Petajoule(1_000_000_000_000_000_000, "PJ"),
     }
 
+    /**
+     * A non-standard representation of energy commonly used to measure electrical energy.
+     */
     public enum class Electricity(
         override val millijouleScale: Long,
         override val symbol: String,

@@ -17,6 +17,9 @@ public interface AreaUnit {
      */
     public val symbol: String
 
+    /**
+     * A non-standard representation of area commonly used as part of the metric system.
+     */
     public enum class Metric(override val symbol: String, override val millimetersSquaredScale: Long) : AreaUnit {
         Decimilliare("dma", 100),
         Centiare("ca", 1_000_000),

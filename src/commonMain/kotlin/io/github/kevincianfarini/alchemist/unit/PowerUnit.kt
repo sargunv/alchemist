@@ -16,6 +16,9 @@ public interface PowerUnit {
      */
     public val symbol: String
 
+    /**
+     * An International System of Units standard representation of power.
+     */
     public enum class International(
         override val microwattScale: Long,
         override val symbol: String,

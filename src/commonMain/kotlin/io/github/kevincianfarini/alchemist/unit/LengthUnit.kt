@@ -16,6 +16,9 @@ public interface LengthUnit {
      */
     public val symbol: String
 
+    /**
+     * An International System of Units standard representation of length.
+     */
     public enum class International(
         override val nanometerScale: Long,
         override val symbol: String,
@@ -30,6 +33,9 @@ public interface LengthUnit {
         Gigameter(1_000_000_000_000_000_000, "Gm"),
     }
 
+    /**
+     * A non-standard representation of length commonly used in the United States.
+     */
     public enum class UnitedStatesCustomary(
         override val nanometerScale: Long,
         override val symbol: String,

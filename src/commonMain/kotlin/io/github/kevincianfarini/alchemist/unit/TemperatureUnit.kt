@@ -5,6 +5,9 @@ import io.github.kevincianfarini.alchemist.internal.saturated
 import kotlin.math.roundToLong
 import kotlin.text.Typography.nbsp
 
+/**
+ * Marks [TemperatureUnit] as delicate for implementation.
+ */
 @RequiresOptIn(
     message = """
         Implementing TemperatureUnit requires detecting integer overflow detection, which normal Long values don't 
@@ -42,6 +45,9 @@ public interface TemperatureUnit {
      */
     public fun convertNanokelvinsToThis(nanokelvins: Long): Double
 
+    /**
+     * An International System of Units standard representation of temperature.
+     */
     public enum class International(override val symbol: String) : TemperatureUnit {
         Nanokelvin("${nbsp}nK") {
             override fun convertToNanokelvin(degrees: Long): Long = degrees
@@ -120,6 +126,9 @@ public interface TemperatureUnit {
         },
     }
 
+    /**
+     * A non-standard unit of temperature used in the United States.
+     */
     public object Fahrenheit : TemperatureUnit {
         override val symbol: String get() = "°F"
         override fun convertToNanokelvin(degrees: Long): Long {
