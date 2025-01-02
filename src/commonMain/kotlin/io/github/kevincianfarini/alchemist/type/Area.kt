@@ -14,7 +14,7 @@ import kotlin.math.roundToLong
  * Represents a measure of area and is capable of storing ±9.22 million kilometers² at millimeter² precision.
  */
 @JvmInline
-public value class Area internal constructor(private val rawMillimetersSquared: SaturatingLong) : Comparable<Area> {
+public value class Area internal constructor(internal val rawMillimetersSquared: SaturatingLong) : Comparable<Area> {
 
     // region SI Arithmetic
 

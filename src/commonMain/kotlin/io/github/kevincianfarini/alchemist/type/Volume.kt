@@ -2,6 +2,8 @@ package io.github.kevincianfarini.alchemist.type
 
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
+import io.github.kevincianfarini.alchemist.scalar.centimeters
+import io.github.kevincianfarini.alchemist.scalar.mm2
 import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import io.github.kevincianfarini.alchemist.unit.VolumeUnit
 import kotlin.jvm.JvmInline
@@ -25,7 +27,10 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
      *
      * @throws IllegalArgumentException if both this volume and [area] are infinite.
      */
-    public operator fun div(area: Area): Length = TODO()
+    public operator fun div(area: Area): Length {
+        // TODO This is simplistic and we should attempt to retain precision in the future.
+        return ((rawCubicCentimeters / area.rawMillimetersSquared) * 100).centimeters
+    }
 
     /**
      * Returns the resulting [Area] after dividing this volume over the specified [length].
@@ -35,7 +40,10 @@ public value class Volume internal constructor(private val rawCubicCentimeters: 
      *
      * @throws IllegalArgumentException if both this volume and [length] are infinite.
      */
-    public operator fun div(length: Length): Area = TODO()
+    public operator fun div(length: Length): Area {
+        // TODO This is simplistic and we should attempt to retain precision in the future.
+        return ((rawCubicCentimeters / length.rawNanometers) * 1_000_000_000).mm2
+    }
 
     // endregion
 

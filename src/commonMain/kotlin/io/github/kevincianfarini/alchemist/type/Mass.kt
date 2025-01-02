@@ -10,7 +10,7 @@ import kotlin.text.Typography.nbsp
  * Represents a measure of mass and is capable of storing ±9.2 billion kilograms at microgram precision.
  */
 @JvmInline
-public value class Mass internal constructor(private val rawMicrograms: SaturatingLong) : Comparable<Mass> {
+public value class Mass internal constructor(internal val rawMicrograms: SaturatingLong) : Comparable<Mass> {
 
     // region SI Arithmetic
 

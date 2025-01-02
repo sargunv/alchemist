@@ -2,6 +2,7 @@ package io.github.kevincianfarini.alchemist.type
 
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
+import io.github.kevincianfarini.alchemist.scalar.nmPerSecond2
 import io.github.kevincianfarini.alchemist.unit.ForceUnit
 import kotlin.jvm.JvmInline
 
@@ -21,7 +22,11 @@ public value class Force internal constructor(private val rawNanonewtons: Satura
      *
      * @throws IllegalArgumentException if both this force and [mass] are infinite.
      */
-    public operator fun div(mass: Mass): Acceleration = TODO()
+    public operator fun div(mass: Mass): Acceleration {
+        // 1 nanonewton / 1 microgram is 100 centimeters/second².
+        // TODO This is simplistic and we should attempt to retain precision in the future.
+        return ((rawNanonewtons / mass.rawMicrograms) * 1_000_000_000).nmPerSecond2
+    }
 
     /**
      * Returns the amount of [Energy] required to apply this force over the specified [length].

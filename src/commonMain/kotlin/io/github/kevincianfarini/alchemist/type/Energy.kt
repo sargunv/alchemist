@@ -4,6 +4,7 @@ import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.isPreciseToNanosecond
 import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
+import io.github.kevincianfarini.alchemist.scalar.kilonewtons
 import io.github.kevincianfarini.alchemist.scalar.kilowatts
 import io.github.kevincianfarini.alchemist.scalar.megawatts
 import io.github.kevincianfarini.alchemist.scalar.microwatts
@@ -31,7 +32,10 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
      *
      * @throws IllegalArgumentException if both this energy and [length] are infinite.
      */
-    public operator fun div(length: Length): Force = TODO()
+    public operator fun div(length: Length): Force {
+        // TODO This is simplistic and we should attempt to retain precision in the future.
+        return ((rawMillijoules / length.rawNanometers) * 1_000).kilonewtons
+    }
 
     /**
      * Returns the constant [Power] applied over the specified [duration] to generate this amount of energy.

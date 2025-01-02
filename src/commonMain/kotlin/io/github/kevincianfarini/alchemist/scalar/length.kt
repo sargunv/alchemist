@@ -63,6 +63,8 @@ public inline val Int.centimeters: Length get() = toLength(LengthUnit.Internatio
  */
 public inline val Long.centimeters: Length get() = toLength(LengthUnit.International.Centimeter)
 
+internal inline val SaturatingLong.centimeters: Length get() = rawValue.toLength(LengthUnit.International.Centimeter)
+
 /**
  * Returns a [Length] equal to [Double] number of centimeters. Depending on its magnitude, some precision may be lost.
  */

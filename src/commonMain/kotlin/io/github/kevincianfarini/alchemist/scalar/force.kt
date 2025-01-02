@@ -1,5 +1,6 @@
 package io.github.kevincianfarini.alchemist.scalar
 
+import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.type.Force
 import io.github.kevincianfarini.alchemist.unit.ForceUnit
@@ -144,3 +145,5 @@ public fun Double.toForce(unit: ForceUnit): Force {
     require(!valueInNanonewtons.isNaN()) { "Force value cannot be NaN." }
     return Force(valueInNanonewtons.roundToLong().saturated)
 }
+
+internal inline val SaturatingLong.kilonewtons: Force get() = rawValue.toForce(ForceUnit.International.Kilonewton)
