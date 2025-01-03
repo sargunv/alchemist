@@ -5,6 +5,7 @@ import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.isPreciseToNanosecond
 import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.sign
+import io.github.kevincianfarini.alchemist.internal.throwIllegalArgumentException
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import io.github.kevincianfarini.alchemist.scalar.nanometers
 import io.github.kevincianfarini.alchemist.scalar.nmPerSecond
@@ -34,7 +35,7 @@ public value class Length internal constructor(internal val rawNanometers: Satur
      */
     public operator fun div(duration: Duration): Velocity = when {
         rawNanometers.isInfinite() && duration.isInfinite() ->  {
-            throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
+            throwIllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
         rawNanometers.isInfinite() -> Velocity(rawNanometers * duration.sign)
         duration.isInfinite() -> Velocity(0L.saturated)
@@ -101,7 +102,7 @@ public value class Length internal constructor(internal val rawNanometers: Satur
      */
     public operator fun div(velocity: Velocity): Duration = when {
         isInfinite() && velocity.isInfinite() -> {
-            throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
+            throwIllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
         isInfinite() -> Duration.INFINITE / velocity.rawNanometersPerSecond.sign / rawNanometers.sign
         velocity.isInfinite() -> Duration.ZERO

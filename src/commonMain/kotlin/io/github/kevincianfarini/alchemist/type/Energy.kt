@@ -3,6 +3,7 @@ package io.github.kevincianfarini.alchemist.type
 import io.github.kevincianfarini.alchemist.internal.SaturatingLong
 import io.github.kevincianfarini.alchemist.internal.isPreciseToNanosecond
 import io.github.kevincianfarini.alchemist.internal.saturated
+import io.github.kevincianfarini.alchemist.internal.throwIllegalArgumentException
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import io.github.kevincianfarini.alchemist.scalar.kilonewtons
 import io.github.kevincianfarini.alchemist.scalar.kilowatts
@@ -47,7 +48,7 @@ public value class Energy internal constructor(private val rawMillijoules: Satur
      */
     public operator fun div(duration: Duration): Power = when {
         rawMillijoules.isInfinite() && duration.isInfinite() -> {
-            throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
+            throwIllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
         rawMillijoules.isInfinite() -> Power(rawMillijoules)
         duration.isInfinite() -> Power(0L.saturated)

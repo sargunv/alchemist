@@ -14,7 +14,7 @@ import kotlin.math.sign
  * LLVM for more details.
  */
 @JvmInline
-internal value class SaturatingLong(val rawValue: Long) : Comparable<SaturatingLong> {
+internal value class SaturatingLong(val rawValue: Long) {
 
     operator fun plus(other: SaturatingLong): SaturatingLong = when {
         isInfinite() -> when {
@@ -120,7 +120,7 @@ internal value class SaturatingLong(val rawValue: Long) : Comparable<SaturatingL
         return this % SaturatingLong(other)
     }
 
-    override fun compareTo(other: SaturatingLong): Int {
+    operator fun compareTo(other: SaturatingLong): Int {
         return rawValue.compareTo(other.rawValue)
     }
 
@@ -158,10 +158,7 @@ internal value class SaturatingLong(val rawValue: Long) : Comparable<SaturatingL
 }
 
 internal inline val Long.saturated get() = SaturatingLong(this)
-internal inline val POSITIVE_INFINITY get() = SaturatingLong(Long.MAX_VALUE)
-internal inline val NEGATIVE_INFINITY get() = SaturatingLong(Long.MIN_VALUE)
 
-// TODO: Supply a ProGuard rule to keep this method so it's not inlined
-internal fun throwIllegalArgumentException(message: String): Nothing {
-    throw IllegalArgumentException(message)
-}
+// Inline the constants versus using `MIN_VALUE` and `MAX_VALUE` to avoid accessing Long's companion.
+internal inline val POSITIVE_INFINITY get() = SaturatingLong(9223372036854775807L)
+internal inline val NEGATIVE_INFINITY get() = SaturatingLong(-9223372036854775807L - 1L)

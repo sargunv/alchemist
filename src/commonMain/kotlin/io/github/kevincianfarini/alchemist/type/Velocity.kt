@@ -6,6 +6,7 @@ import io.github.kevincianfarini.alchemist.internal.saturated
 import io.github.kevincianfarini.alchemist.internal.secondScale
 import io.github.kevincianfarini.alchemist.internal.shortName
 import io.github.kevincianfarini.alchemist.internal.sign
+import io.github.kevincianfarini.alchemist.internal.throwIllegalArgumentException
 import io.github.kevincianfarini.alchemist.internal.toDecimalString
 import io.github.kevincianfarini.alchemist.scalar.nanometers
 import io.github.kevincianfarini.alchemist.scalar.nmPerSecond2
@@ -36,7 +37,7 @@ public value class Velocity internal constructor(
      */
     public operator fun div(duration: Duration): Acceleration = when {
         isInfinite() && duration.isInfinite() -> {
-            throw IllegalArgumentException("Dividing two infinite values yields an undefined result.")
+            throwIllegalArgumentException("Dividing two infinite values yields an undefined result.")
         }
         isInfinite() -> Acceleration(rawNanometersPerSecond * duration.sign)
         duration.isInfinite() -> Acceleration(0L.saturated)
