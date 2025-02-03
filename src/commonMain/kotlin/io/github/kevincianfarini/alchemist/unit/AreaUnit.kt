@@ -45,5 +45,6 @@ public interface AreaUnit {
             override val symbol: String = "ha"
             override val millimetersSquaredScale: Long = 10_000_000_000
         }
+        public val entries: List<AreaUnit> = listOf(Decimilliare, Centiare, Deciare, Are, Decare, Hectare)
     }
 }

@@ -48,6 +48,7 @@ public interface EnergyUnit {
             override val millijouleScale: Long = 1_000_000_000_000_000_000
             override val symbol: String = "PJ"
         }
+        public val entries: List<EnergyUnit> = listOf(Millijoule, Joule, Kilojoule, Megajoule, Gigajoule, Tetrajoule, Petajoule)
     }
 
     /**
@@ -78,5 +79,6 @@ public interface EnergyUnit {
             override val millijouleScale: Long = 3_600_000_000_000_000_000
             override val symbol: String = "TWh"
         }
+        public val entries: List<EnergyUnit> = listOf(MilliwattHour, WattHour, KilowattHour, MegawattHour, GigawattHour, TerawattHour)
     }
 }

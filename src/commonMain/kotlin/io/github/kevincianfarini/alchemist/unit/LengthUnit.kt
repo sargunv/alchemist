@@ -52,6 +52,7 @@ public interface LengthUnit {
             override val nanometerScale: Long = 1_000_000_000_000_000_000
             override val symbol: String = "Gm"
         }
+        public val entries: List<LengthUnit> = listOf(Nanometer, Micrometer, Millimeter, Centimeter, Meter, Kilometer, Megameter, Gigameter)
     }
 
     /**

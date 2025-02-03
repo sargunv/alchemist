@@ -48,5 +48,6 @@ public interface ForceUnit {
             override val symbol: String = "GN"
             override val nanonewtonScale: Long = 1_000_000_000_000_000_000
         }
+        public val entries: List<ForceUnit> = listOf(Nanonewton, Micronewton, Millinewton, Newton, Kilonewton, Meganewton, Giganewton)
     }
 }

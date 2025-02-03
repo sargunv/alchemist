@@ -139,6 +139,16 @@ public interface TemperatureUnit {
                 return (nanokelvins.saturated.toDouble() - 273_150_000_000) / 1_000_000_000
             }
         }
+
+        public val entries: List<TemperatureUnit> = listOf(
+            Nanokelvin,
+            Microkelvin,
+            Millikelvin,
+            Kelvin,
+            Kilokelvin,
+            Megakelvin,
+            Gigakelvin,
+        )
     }
 
     /**

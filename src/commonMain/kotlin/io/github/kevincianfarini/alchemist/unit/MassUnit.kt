@@ -48,5 +48,6 @@ public interface MassUnit {
             override val microgramScale: Long = 1_000_000_000_000_000_000
             override val symbol: String = "Tg"
         }
+        public val entries: List<MassUnit> = listOf(Microgram, Milligram, Gram, Kilogram, Megagram, Gigagram, Teragram)
     }
 }

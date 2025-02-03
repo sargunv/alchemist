@@ -48,5 +48,6 @@ public interface PowerUnit {
             override val microwattScale: Long = 1_000_000_000_000_000_000
             override val symbol: String = "TW"
         }
+        public val entries: List<PowerUnit> = listOf(Microwatt, Milliwatt, Watt, Kilowatt, Megawatt, Gigawatt, Terawatt)
     }
 }

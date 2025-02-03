@@ -50,5 +50,6 @@ public interface VolumeUnit {
             override val symbol: String = "${nbsp}PL"
             override val cubicCentimetersScale: Long = 1_000_000_000_000_000_000
         }
+        public val entries: List<VolumeUnit> = listOf(Milliliter, Liter, Kiloliter, Megaliter, Gigaliter, Teraliter, Petaliter)
     }
 }
