@@ -3,7 +3,7 @@ package io.github.kevincianfarini.alchemist.unit
 /**
  * A unit of power precise to the microwatt.
  */
-public interface PowerUnit {
+public interface PowerUnit : Comparable<PowerUnit> {
 
     /**
      * The amount of microwatts in this unit. Implementations of [PowerUnit] should be perfectly divisible by a
@@ -15,6 +15,8 @@ public interface PowerUnit {
      * The symbol of this unit.
      */
     public val symbol: String
+
+    override fun compareTo(other: PowerUnit): Int = microwattScale.compareTo(other.microwattScale)
 
     /**
      * An International System of Units standard representation of power.

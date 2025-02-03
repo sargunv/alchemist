@@ -5,7 +5,7 @@ import kotlin.text.Typography.nbsp
 /**
  * A unit of volume precise to the centimeter³.
  */
-public interface VolumeUnit {
+public interface VolumeUnit : Comparable<VolumeUnit> {
 
     /**
      * The symbol of this unit.
@@ -17,6 +17,8 @@ public interface VolumeUnit {
      * quantity of centimeter³.
      */
     public val cubicCentimetersScale: Long
+
+    override fun compareTo(other: VolumeUnit): Int = cubicCentimetersScale.compareTo(other.cubicCentimetersScale)
 
     /**
      * A non-standard representation of volume commonly used as part of the metric system.

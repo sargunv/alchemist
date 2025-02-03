@@ -3,7 +3,7 @@ package io.github.kevincianfarini.alchemist.unit
 /**
  * A unit of length precise to the nanometer.
  */
-public interface LengthUnit {
+public interface LengthUnit : Comparable<LengthUnit> {
 
     /**
      * The amount of nanometers in this unit. Implementations of [LengthUnit] should be perfectly divisible by a
@@ -15,6 +15,8 @@ public interface LengthUnit {
      * The symbol of this unit.
      */
     public val symbol: String
+
+    override fun compareTo(other: LengthUnit): Int = nanometerScale.compareTo(other.nanometerScale)
 
     /**
      * An International System of Units standard representation of length.

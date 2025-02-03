@@ -4,7 +4,7 @@ package io.github.kevincianfarini.alchemist.unit
 /**
  * A unit of area precise to the millimeter².
  */
-public interface AreaUnit {
+public interface AreaUnit : Comparable<AreaUnit> {
 
     /**
      * The amount of millimeters² in this unit. Implementations of [AreaUnit] should be perfectly divisible by a
@@ -16,6 +16,8 @@ public interface AreaUnit {
      * The symbol of this unit.
      */
     public val symbol: String
+
+    override fun compareTo(other: AreaUnit): Int = millimetersSquaredScale.compareTo(other.millimetersSquaredScale)
 
     /**
      * A non-standard representation of area commonly used as part of the metric system.

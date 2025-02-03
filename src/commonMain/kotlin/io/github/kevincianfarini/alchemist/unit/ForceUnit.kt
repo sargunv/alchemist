@@ -3,7 +3,7 @@ package io.github.kevincianfarini.alchemist.unit
 /**
  * A unit of force precise to the nanonewton.
  */
-public interface ForceUnit {
+public interface ForceUnit : Comparable<ForceUnit> {
 
     /**
      * The symbol of this unit.
@@ -15,6 +15,8 @@ public interface ForceUnit {
      * quantity of nanonewtons.
      */
     public val nanonewtonScale: Long
+
+    override fun compareTo(other: ForceUnit): Int = nanonewtonScale.compareTo(other.nanonewtonScale)
 
     /**
      * An International System of Units standard representation of force.

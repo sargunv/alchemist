@@ -3,7 +3,7 @@ package io.github.kevincianfarini.alchemist.unit
 /**
  * A unit of energy precise to the millijoule.
  */
-public interface EnergyUnit {
+public interface EnergyUnit : Comparable<EnergyUnit> {
 
     /**
      * The amount of millijoules in this unit. Implementations of [EnergyUnit] should be perfectly divisible by a
@@ -15,6 +15,8 @@ public interface EnergyUnit {
      * The symbol of this unit.
      */
     public val symbol: String
+
+    override fun compareTo(other: EnergyUnit): Int = millijouleScale.compareTo(other.millijouleScale)
 
     /**
      * An International System of Units standard representation of energy.

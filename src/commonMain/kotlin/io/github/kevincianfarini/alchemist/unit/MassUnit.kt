@@ -3,7 +3,7 @@ package io.github.kevincianfarini.alchemist.unit
 /**
  * A unit of mass precise to the microgram.
  */
-public interface MassUnit {
+public interface MassUnit : Comparable<MassUnit> {
 
     /**
      * The amount of micrograms in this unit. Implementations of [MassUnit] should be perfectly divisible by a
@@ -15,6 +15,8 @@ public interface MassUnit {
      * The symbol of this unit.
      */
     public val symbol: String
+
+    override fun compareTo(other: MassUnit): Int = microgramScale.compareTo(other.microgramScale)
 
     /**
      * An International System of Units standard representation of mass.
