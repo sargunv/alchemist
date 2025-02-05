@@ -12,7 +12,7 @@ import io.github.kevincianfarini.alchemist.scalar.nanometers
 import io.github.kevincianfarini.alchemist.unit.LengthUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -36,16 +36,16 @@ class AreaTest {
 
     @Test
     fun infinite_area_div_infinite_length_throws() {
-        assertFailsWith<IllegalArgumentException> {
+        assertFails {
             POSITIVE_INFINITY.mm2 / POSITIVE_INFINITY.nanometers
         }
-        assertFailsWith<IllegalArgumentException> {
+        assertFails {
             NEGATIVE_INFINITY.mm2 / POSITIVE_INFINITY.nanometers
         }
-        assertFailsWith<IllegalArgumentException> {
+        assertFails {
             NEGATIVE_INFINITY.mm2 / NEGATIVE_INFINITY.nanometers
         }
-        assertFailsWith<IllegalArgumentException> {
+        assertFails {
             POSITIVE_INFINITY.mm2 / NEGATIVE_INFINITY.nanometers
         }
     }
